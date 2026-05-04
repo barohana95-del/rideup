@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1A2238; /* Dark Wedding Blue */
+  --color-accent: #C5A059;  /* Soft Gold/Silver */
+  --color-bg-soft: #F8F9FA;
+  
+  --font-sans: "Assistant", "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    direction: rtl;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    @apply bg-bg-soft text-primary;
+  }
+}
+
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+}
+
+.glass-dark {
+  @apply bg-primary/80 backdrop-blur-md border border-white/10 shadow-2xl;
+}
+
+/* Custom scrollbar for admin tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-accent/30 rounded-full hover:bg-accent/50;
+}
+
+
+@layer utilities {
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+  }
+}

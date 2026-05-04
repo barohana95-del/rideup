@@ -1,0 +1,32 @@
+# Env
+.env
+.env.local
+.env.*.local
+*.local
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Build artifacts
+frontend/dist/
+build/
+
+# PHP
+vendor/
+composer.lock
+
+# Hostinger / FTP
+.ftpconfig
+.hostinger-deploy
