@@ -1,0 +1,25 @@
+# =====================================================================
+# RideUp — Apache config (Hostinger Shared)
+# =====================================================================
+
+# UTF-8
+AddDefaultCharset UTF-8
+
+# הסתרת קבצים רגישים (.env, .git, וכו')
+<FilesMatch "^\.(env|gitignore|gitattributes|htaccess)|composer\.(json|lock)$">
+    Require all denied
+</FilesMatch>
+
+# חסימת גישה לתיקיות שלא אמורות להיות נגישות מ-web.
+RedirectMatch 404 ^/lib/.*$
+RedirectMatch 404 ^/migrations/.*$
+RedirectMatch 404 ^/frontend/.*$
+RedirectMatch 404 ^/docs/.*$
+RedirectMatch 404 ^/\.git/.*$
+RedirectMatch 404 ^/node_modules/.*$
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>

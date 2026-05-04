@@ -5,51 +5,50 @@
 ## מבנה הפרויקט
 
 ```
-rideup/
-├── frontend/        # React + Vite + TypeScript
-├── backend/         # PHP 8.1+ + MySQL (לרוץ על Hostinger Shared)
-└── docs/            # PRD, סכימת DB, roadmap
+rideup/                  # repo root = public_html/ on Hostinger
+├── api/                 # PHP endpoints (web-accessible)
+├── lib/                 # PHP helpers (denied via .htaccess)
+├── migrations/          # SQL migrations (denied)
+├── .htaccess
+├── .env                 # local only — NOT committed
+├── frontend/            # React + Vite (built locally, runs on localhost:3000)
+└── docs/                # PRD, schema, roadmap
 ```
 
 ## פיתוח מקומי
 
 ### דרישות
 - Node.js 18+
-- חשבון Hostinger Premium (לbackend + DB)
+- Hostinger Premium (לbackend + DB)
 
 ### גישה היברידית
-- **Frontend** רץ מקומית (`npm run dev` → `localhost:3000`).
-- **Backend (PHP)** חי על Hostinger בsubdomain dev (`dev.rideup.co.il`).
+- **Frontend** רץ מקומית: `cd frontend && npm run dev` → `http://localhost:3000`.
+- **Backend (PHP)** חי על Hostinger: `https://rideup.integrity-web.com/api/...`.
 - **DB (MySQL)** על Hostinger.
 
-### setup ראשון (Frontend)
+Frontend מקומי מדבר ל-backend על Hostinger דרך CORS (מוגדר ב-`.env`).
+
+### setup ראשון
+
+**Frontend:**
 ```bash
 cd frontend
-cp .env.example .env.local      # ערוך VITE_API_URL ו-VITE_BASE_DOMAIN
+cp .env.example .env.local
 npm install
-npm run dev                      # http://localhost:3000
+npm run dev
 ```
 
-### setup ראשון (Backend)
-1. ב-hPanel של Hostinger:
-   - צור MySQL DB.
-   - צור subdomain `dev.rideup.co.il`.
-   - צור wildcard `*.dev.rideup.co.il` (אותו document root).
-   - הפעל SSL.
-   - הרץ את `docs/02-DB-Schema.sql` ב-phpMyAdmin.
-2. העלה את כל תוכן `backend/` לתיקיית ה-document root של ה-subdomain (`public_html/dev/`).
-3. צור `.env` בתיקייה הראשית של ה-backend (העתק מ-`.env.example`).
-4. בדיקה: `https://dev.rideup.co.il/api/hello.php` צריך להחזיר JSON.
+**Backend:** ה-repo כולו מתפרס ל-`public_html/` על Hostinger דרך Git auto-deploy. צור קובץ `.env` באמצעות hPanel File Manager לפי `.env.example`.
 
-## אזורי האפליקציה (Multi-tenant routing)
+## Multi-tenant routing
 
-| Host | אזור | הסבר |
-|------|------|------|
-| `rideup.co.il`            | marketing | דף נחיתה |
-| `app.rideup.co.il`        | app       | פאנל ניהול לקוחות (after login) |
-| `<slug>.rideup.co.il`     | tenant    | אתר ציבורי של לקוח (RSVP) |
+| Host | אזור |
+|------|------|
+| `rideup.co.il`            | marketing (landing) |
+| `app.rideup.co.il`        | פאנל ניהול לקוחות |
+| `<slug>.rideup.co.il`     | אתר ציבורי של לקוח (RSVP) |
 
-ב-localhost נשתמש ב-`?tenant=<slug>` כ-override לבדיקת tenants.
+בפיתוח (לפני שיש דומיין `.co.il`): `?tenant=<slug>` כ-override.
 
 ## תיעוד
 
