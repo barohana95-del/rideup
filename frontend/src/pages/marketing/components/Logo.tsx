@@ -1,21 +1,24 @@
-// Logo wordmark — text + arrow.
-export default function Logo({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
+import React from 'react';
+
+interface LogoProps {
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+export default function Logo({ size = 'md', className = '' }: LogoProps) {
   const sizes = {
-    sm: 'text-xl',
-    md: 'text-2xl',
-    lg: 'text-4xl',
+    sm: 'h-6',
+    md: 'h-10',
+    lg: 'h-16'
   };
 
   return (
-    <div className={`flex items-center gap-1 ${sizes[size]} font-black`} dir="ltr" style={{ fontFamily: 'Heebo, system-ui, sans-serif' }}>
-      <span style={{ color: '#fff' }}>Ride</span>
-      <span style={{ color: '#1E63D6' }}>Up</span>
-      <span
-        className="text-[0.55em] inline-block -mt-2 -mr-0.5 font-black"
-        style={{ color: '#1E63D6' }}
-      >
-        ↗
-      </span>
+    <div className={`flex items-center gap-2 ${className}`}>
+      <img 
+        src="/images/logo.png" 
+        alt="RideUp" 
+        className={`${sizes[size]} w-auto object-contain`} 
+      />
     </div>
   );
 }

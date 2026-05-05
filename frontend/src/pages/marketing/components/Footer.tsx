@@ -1,137 +1,123 @@
-import { Instagram, Facebook, MessageCircle, ChevronLeft, Heart } from 'lucide-react';
-import Logo from './Logo';
+import './Footer.css'
+import { motion } from 'framer-motion'
+
+const marqueeItems = [
+  'ניהול הסעות חכם',
+  'אתרי RSVP מעוצבים',
+  'אוטומציה מלאה',
+  'דוחות בזמן אמת',
+  'תמיכה ב-WhatsApp',
+]
+
+const footerLinks = [
+  { label: 'ראשי', href: '#hero' },
+  { label: 'פיצ׳רים', href: '#about' },
+  { label: 'עיצובים', href: '#projects' },
+  { label: 'מחירים', href: '#pricing' },
+  { label: 'שאלות נפוצות', href: '#faq' },
+]
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#061331', color: 'rgba(255,255,255,0.6)' }} className="pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Top: 4 columns */}
-        <div className="grid md:grid-cols-12 gap-10 pb-12" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-          {/* Brand + email opt-in */}
-          <div className="md:col-span-5">
-            <Logo size="lg" />
-            <p className="mt-4 max-w-sm leading-relaxed text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
-              פלטפורמה לניהול הסעות באירועים. אתר RSVP מקצועי, פאנל ניהול חכם,
-              עיצובים מוכנים. הכל בעברית.
-            </p>
+    <footer className="footer">
+      {/* Marquee strip */}
+      <div className="footer__marquee">
+        <motion.div 
+          className="marquee-track"
+          animate={{ x: [0, -1000] }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        >
+          {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
+            <span key={i} className="footer__marquee-item">
+              <span className="footer__marquee-star">✦</span>
+              {item}
+            </span>
+          ))}
+        </motion.div>
+      </div>
 
-            <form className="mt-6 flex gap-2 max-w-sm">
-              <input
-                type="email"
-                placeholder="email@example.com"
-                className="flex-1 text-sm text-white placeholder-white/30 focus:outline-none transition-all px-4 py-2.5"
-                style={{
-                  background: 'rgba(255,255,255,0.07)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '100px',
-                  color: 'rgba(255,255,255,0.85)',
-                }}
-                onFocus={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#1E63D6'; }}
-                onBlur={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; }}
-              />
-              <button
-                type="button"
-                className="btn-lime text-sm px-5 py-2.5 shrink-0"
-              >
-                הירשם
-                <ChevronLeft className="w-3.5 h-3.5" />
-              </button>
-            </form>
-            <p className="text-xs mt-2" style={{ color: 'rgba(255,255,255,0.3)' }}>
-              עדכונים על פיצ'רים חדשים. לא ספאם, לא הבטחות.
-            </p>
+      {/* Main footer */}
+      <div className="footer__main">
+        <div className="container footer__grid">
+          {/* Col 1: Logo + hours */}
+          <div className="footer__col">
+            <div className="footer__logo">
+              <img src="/images/logo.png" alt="RideUp" className="h-8 mb-4" />
+            </div>
+            <h4 className="footer__col-title">שעות פעילות:</h4>
+            <div className="footer__hours">
+              <div>
+                <span>ראשון - חמישי:</span>
+                <span>09:00 - 18:00</span>
+              </div>
+              <div>
+                <span>שישי:</span>
+                <span>09:00 - 13:00</span>
+              </div>
+            </div>
           </div>
 
-          <FooterCol
-            title="המוצר"
-            links={[
-              { label: 'החבילות', href: '#pricing' },
-              { label: 'איך זה עובד', href: '#how' },
-              { label: 'עיצובים', href: '#themes' },
-              { label: "פיצ'רים", href: '#features' },
-              { label: 'שאלות נפוצות', href: '#faq' },
-            ]}
-          />
+          {/* Col 2: Contact */}
+          <div className="footer__col">
+            <h4 className="footer__col-title">צרו קשר</h4>
+            <p className="footer__address">הברזל 1, תל אביב</p>
+            <a href="tel:0501234567" className="footer__contact-link">
+              <i className="fas fa-phone" />
+              <div>
+                <span>טלפון:</span>
+                <strong>050-123-4567</strong>
+              </div>
+            </a>
+            <a href="mailto:info@rideup.co.il" className="footer__contact-link">
+              <i className="fas fa-envelope" />
+              <div>
+                <span>אימייל:</span>
+                <strong>info@rideup.co.il</strong>
+              </div>
+            </a>
+          </div>
 
-          <FooterCol
-            title="חברה"
-            links={[
-              { label: 'על RideUp', href: '/about' },
-              { label: 'בלוג', href: '/blog' },
-              { label: 'יצירת קשר', href: '/contact' },
-              { label: 'דרושים', href: '/careers' },
-            ]}
-          />
+          {/* Col 3: Newsletter */}
+          <div className="footer__col">
+            <h4 className="footer__col-title">הירשמו לעדכונים</h4>
+            <p className="footer__newsletter-desc">קבלו טיפים לניהול לוגיסטי חכם ועדכונים על פיצ׳רים חדשים.</p>
+            <form className="footer__form" onSubmit={e => e.preventDefault()}>
+              <input
+                type="email"
+                placeholder="כתובת אימייל*"
+                className="footer__input"
+              />
+              <button type="submit" className="footer__submit">הרשמה</button>
+            </form>
+          </div>
 
-          <FooterCol
-            title="משפטי"
-            links={[
-              { label: 'תקנון שימוש', href: '/terms' },
-              { label: 'מדיניות פרטיות', href: '/privacy' },
-              { label: 'Cookies', href: '/cookies' },
-            ]}
-          />
-        </div>
-
-        {/* Bottom: copyright + social */}
-        <div className="pt-6 flex flex-wrap items-center justify-between gap-4 text-sm">
-          <p className="flex items-center gap-1.5" style={{ color: 'rgba(255,255,255,0.4)' }}>
-            © 2026 RideUp · נבנה{' '}
-            <Heart className="w-3.5 h-3.5 fill-current" style={{ color: '#1E63D6' }} /> בישראל
-          </p>
-
-          <div className="flex items-center gap-3">
-            <SocialIcon icon={Instagram} href="#" />
-            <SocialIcon icon={Facebook} href="#" />
-            <SocialIcon icon={MessageCircle} href="#" />
+          {/* Col 4: Navigation + Social */}
+          <div className="footer__col">
+            <h4 className="footer__col-title">עקבו אחרינו:</h4>
+            <div className="footer__social">
+              {['fab fa-facebook-f', 'fab fa-linkedin-in', 'fab fa-instagram'].map(ic => (
+                <a key={ic} href="#" className="footer__social-link" aria-label={ic}>
+                  <i className={ic} />
+                </a>
+              ))}
+            </div>
+            <nav className="footer__nav">
+              {footerLinks.map(l => (
+                <a key={l.label} href={l.href} className="footer__nav-link">{l.label}</a>
+              ))}
+            </nav>
           </div>
         </div>
       </div>
+
+      {/* Bottom bar */}
+      <div className="footer__bottom">
+        <div className="container footer__bottom-inner">
+          <p>© 2026 כל הזכויות שמורות ל-RideUp.</p>
+          <p>הפתרון החכם לניהול הסעות לאירועים</p>
+        </div>
+      </div>
     </footer>
-  );
+  )
 }
 
-function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
-  return (
-    <div className="md:col-span-2">
-      <h4 className="font-bold text-base mb-4" style={{ color: 'rgba(255,255,255,0.9)' }}>{title}</h4>
-      <ul className="space-y-2.5">
-        {links.map((l) => (
-          <li key={l.href}>
-            <a
-              href={l.href}
-              className="text-sm transition-colors"
-              style={{ color: 'rgba(255,255,255,0.5)' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#1E63D6'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)'; }}
-            >
-              {l.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function SocialIcon({ icon: Icon, href }: { icon: React.ElementType; href: string }) {
-  return (
-    <a
-      href={href}
-      className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-      style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)' }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.background = '#1E63D6';
-        (e.currentTarget as HTMLElement).style.color = '#fff';
-        (e.currentTarget as HTMLElement).style.transform = 'scale(1.1)';
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)';
-        (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.6)';
-        (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
-      }}
-    >
-      <Icon className="w-4 h-4" />
-    </a>
-  );
-}

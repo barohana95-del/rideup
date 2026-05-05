@@ -1,139 +1,117 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Plus, Minus } from 'lucide-react';
+import './FAQ.css'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+
+const ArrowSvg = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="currentColor">
+    <path fillRule="evenodd" clipRule="evenodd" d="M16.8065 5.82872C14.3962 5.82872 12.1995 3.54151 12.1995 1.02981V0L10.2223 0V1.02981C10.2223 2.85669 10.9914 4.57028 12.1985 5.82872L0 5.82872L0 7.88833L12.1985 7.88833C10.9914 9.14676 10.2223 10.8604 10.2223 12.6872V13.717H12.1995V12.6872C12.1995 10.1755 14.3962 7.88833 16.8065 7.88833H17.7951V5.82872H16.8065Z"/>
+  </svg>
+)
 
 const faqs = [
   {
-    q: 'כמה זמן לוקח להקים אתר חדש?',
-    a: 'בממוצע 5-7 דקות. ה-onboarding wizard מנחה אותך שלב-שלב — בחירת חבילה, עיצוב, פרטי אירוע, ערים, משמרות חזרה. בסוף יש לך אתר חי.',
+    q: 'איך מתחילים לעבוד עם המערכת?',
+    a: 'פשוט לוחצים על "התחל עכשיו", ממלאים את פרטי האירוע (תאריך, מיקום), בוחרים את העיצוב המועדף עליכם והאתר שלכם באוויר תוך פחות מ-10 דקות.'
   },
   {
-    q: 'האם אני יכול לשנות את העיצוב אחרי שהקמתי?',
-    a: 'בהחלט. בפאנל הניהול יש Tab "עיצוב" שם תוכל להחליף theme, לשנות צבעים, להחליף לוגו ופונט — בכל זמן.',
+    q: 'האם האורחים צריכים להוריד אפליקציה?',
+    a: 'ממש לא. האורחים מקבלים קישור לאתר ה-RSVP האישי שלכם שנפתח בקלות מכל דפדפן בטלפון הנייד, ללא צורך בהתקנה מוקדמת.'
   },
   {
-    q: 'מה קורה אחרי האירוע?',
-    a: 'הנתונים שלך נשמרים לעד בארכיון. תוכל לגשת אליהם, לייצא Excel, ואפילו "להעתיק לאירוע חדש" כשתצטרך. האתר עצמו יורד לרוב 30 יום אחרי תאריך האירוע.',
+    q: 'איך הנהג מקבל את רשימת הנוסעים?',
+    a: 'ביום האירוע, המערכת מפיקה דוח PDF מסודר הכולל את כל שמות האורחים, תחנות האיסוף ומספרי הטלפון שלהם. הדוח נשלח אליכם ולנהג באופן אוטומטי.'
   },
   {
-    q: 'מה קורה אם אני רוצה לשנות את ה-slug (כתובת האתר)?',
-    a: 'אפשר לשנות בכל עת מהפאנל, חינם. רק זכור שהקישור הישן יפסיק לעבוד — כך שתצטרך להפיץ את החדש.',
+    q: 'האם המערכת תומכת בשליחת הודעות WhatsApp?',
+    a: 'כן! המערכת כוללת אפשרות לשליחת הודעות אישור הרשמה ותזכורות אוטומטיות ביום האירוע ישירות ל-WhatsApp של האורחים שלכם.'
   },
   {
-    q: 'האם אורחים צריכים להירשם / להתחבר כדי למלא?',
-    a: 'לא. אורחים פשוט נכנסים לקישור, ממלאים שם וטלפון, ומאשרים. בלי חשבון, בלי סיסמה.',
+    q: 'האם ניתן לבטל את המנוי בכל עת?',
+    a: 'בוודאי. המודל שלנו גמיש - ניתן לשלם על אירוע בודד או לבחור במנוי חודשי למפיקים שניתן להפסיק בכל שלב ללא התחייבות.'
   },
-  {
-    q: 'האם יש מגבלה על מספר האורחים?',
-    a: 'תלוי בחבילה. Trial: 100. Basic: 50. Pro: 250. Premium: ללא הגבלה. אפשר לשדרג בכל עת.',
-  },
-  {
-    q: 'איך זה עובד מבחינת תשלום?',
-    a: 'תשלום חד-פעמי פר-אירוע. בלי מנויים חודשיים, בלי הפתעות. מחיר אחד, אתר אחד. תומכים בכל כרטיסי האשראי הגדולים.',
-  },
-  {
-    q: 'האם זה רק לחתונות?',
-    a: 'לא. RideUp מתאים לחתונות, בר/בת מצווה, ימי הולדת, אירועי חברה — כל אירוע שצריך הסעות. בחירת סוג האירוע היא חלק מה-onboarding.',
-  },
-  {
-    q: 'איך אתם מתקשרים עם לקוחות לתמיכה?',
-    a: 'WhatsApp ו-Email בעיקר. מענה תוך 24 שעות (לרוב מהר יותר). חבילת Premium כוללת תמיכת VIP עם עדיפות.',
-  },
-  {
-    q: 'האם הנתונים שלי מאובטחים?',
-    a: 'כן. כל התקשורת ב-HTTPS, סיסמאות ב-Hashing, גישה רק דרך Google OAuth. אנחנו לא שולחים את הנתונים שלך לצד שלישי.',
-  },
-];
+]
+
+function AccordionItem({ q, a, open, onToggle }: any) {
+  return (
+    <div className={`faq-item${open ? ' open' : ''}`}>
+      <button className="faq-item__trigger" onClick={onToggle}>
+        <span className="faq-item__q">{q}</span>
+        <span className="faq-item__icon">
+          <i className={`fas fa-${open ? 'minus' : 'plus'}`} />
+        </span>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="faq-item__body"
+          >
+            <p style={{ paddingBottom: '1.25rem', paddingTop: '0.5rem' }}>{a}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
 
 export default function FAQ() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState(0)
 
   return (
-    <section id="faq" className="py-24 md:py-32 relative" style={{ background: '#EAF1FB' }}>
-      {/* Divider */}
-      <div
-        className="absolute top-0 inset-x-0 h-px"
-        style={{ background: 'linear-gradient(to right, transparent, rgba(30,99,214,0.15), transparent)' }}
-      />
-
-      <div className="max-w-3xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-14"
+    <section id="faq" className="faq section section--wrapped">
+      <div className="container faq__container">
+        {/* Left */}
+        <motion.div 
+          className="faq__info"
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <span
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mb-6"
-            style={{ background: 'rgba(30,99,214,0.1)', color: '#1E63D6', border: '1px solid rgba(30,99,214,0.2)' }}
-          >
-            שאלות נפוצות
-          </span>
-          <h2 className="display text-4xl md:text-6xl reveal-heading" style={{ color: '#0A1F44' }}>
-            יש שאלה?{' '}
-            <span style={{ color: '#1E63D6' }}>יש תשובה.</span>
+          <span className="eyebrow">שאלות נפוצות</span>
+          <h2 className="section-title">
+            יש לכם שאלות? אנחנו כאן עם כל התשובות
           </h2>
+          <p className="section-desc">
+            ריכזנו עבורכם את כל המידע שצריך לדעת כדי להתחיל לנהל את הלוגיסטיקה של האירוע שלכם בצורה חכמה ומקצועית.
+          </p>
+          <div className="faq__contact-box">
+            <div>
+              <i className="fas fa-phone" style={{ color: 'var(--color-blue)' }} />
+            </div>
+            <div>
+              <h4>צריכים עזרה אישית?</h4>
+              <p>050-123-4567</p>
+            </div>
+          </div>
+          <a href="/onboarding" className="btn btn-primary" style={{ marginTop: '1.5rem' }}>
+            התחילו עכשיו <ArrowSvg />
+          </a>
         </motion.div>
 
-        <div className="space-y-3">
-          {faqs.map((faq, i) => {
-            const isOpen = open === i;
-            return (
-              <div
-                key={i}
-                className="overflow-hidden transition-all duration-300"
-                style={{
-                  background: '#fff',
-                  borderRadius: '20px',
-                  border: isOpen ? '1px solid rgba(30,99,214,0.25)' : '1px solid rgba(30,99,214,0.08)',
-                  boxShadow: isOpen ? '0 8px 32px -8px rgba(30,99,214,0.15)' : 'none',
-                }}
-              >
-                <button
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  className="w-full flex items-center justify-between gap-4 p-5 md:p-6 text-right"
-                >
-                  <span className="font-bold text-lg md:text-xl flex-1" style={{ color: '#0A1F44' }}>
-                    {faq.q}
-                  </span>
-                  <span
-                    className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all"
-                    style={{
-                      background: isOpen ? '#1E63D6' : 'rgba(30,99,214,0.1)',
-                      color: isOpen ? '#fff' : '#1E63D6',
-                    }}
-                  >
-                    {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                  </span>
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeOut' }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-5 md:px-6 pb-6 pt-1 leading-relaxed" style={{ color: '#6B7C95' }}>
-                        {faq.a}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
-        </div>
-
-        <p className="text-center mt-10" style={{ color: '#6B7C95' }}>
-          לא מצאת?{' '}
-          <a href="#" className="font-bold underline underline-offset-4" style={{ color: '#1E63D6' }}>
-            שלח לנו ב-WhatsApp
-          </a>
-        </p>
+        {/* Accordion */}
+        <motion.div 
+          className="faq__accordion"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        >
+          {faqs.map((f, i) => (
+            <AccordionItem
+              key={i}
+              q={f.q}
+              a={f.a}
+              open={open === i}
+              onToggle={() => setOpen(open === i ? -1 : i)}
+            />
+          ))}
+        </motion.div>
       </div>
     </section>
-  );
+  )
 }
+

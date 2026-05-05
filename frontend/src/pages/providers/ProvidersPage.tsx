@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import {
   Star,
@@ -11,7 +11,7 @@ import {
   Search,
   TrendingUp,
 } from 'lucide-react';
-import Nav from '../marketing/components/Nav';
+import Navbar from '../marketing/components/Navbar';
 import Footer from '../marketing/components/Footer';
 
 // Mock providers — realistic Israeli companies with fake data
@@ -126,7 +126,7 @@ export default function ProvidersPage() {
 
   return (
     <div dir="rtl" className="bg-cream text-ink min-h-screen">
-      <Nav />
+      <Navbar />
 
       <main>
         {/* Hero */}

@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Plus, X, Clock } from 'lucide-react';
 import { useState } from 'react';
 

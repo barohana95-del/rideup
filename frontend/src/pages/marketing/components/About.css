@@ -1,0 +1,101 @@
+.about-v2 {
+  padding: var(--section-py) 0;
+  background: var(--color-white);
+  overflow: hidden;
+}
+
+.about-v2__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr; /* Revert to smaller visual side */
+  gap: 6rem;
+  align-items: center;
+}
+
+.about-v2__feature {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--color-pale);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition);
+}
+
+.about-v2__feature:hover {
+  border-color: var(--color-blue);
+  box-shadow: var(--shadow-hover);
+  transform: translateX(-5px);
+}
+
+.about-v2__icon-wrap {
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  background: var(--color-white);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.about-v2__feature-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-navy);
+  margin-bottom: 0.5rem;
+}
+
+.about-v2__feature-desc {
+  font-size: 0.95rem;
+  color: var(--color-slate);
+  line-height: 1.6;
+}
+
+.about-v2__checklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+.check-item svg { color: var(--color-blue); }
+
+/* Visual Column - Raw */
+.about-v2__visual-raw {
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+
+.about-v2__visual-raw img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .about-v2__grid { grid-template-columns: 1fr; gap: 4rem; }
+}
+
+@media (max-width: 768px) {
+  .about-v2 { padding: 4rem 0; }
+  .about-v2__grid { gap: 3rem; }
+  .about-v2__feature { padding: 1.25rem; gap: 1rem; }
+  .about-v2__feature-title { font-size: 1.1rem; }
+  .about-v2__feature-desc { font-size: 0.9rem; }
+  .about-v2__visual-raw { width: 100%; margin: 0; }
+  .about-v2__header { text-align: center; }
+  .about-v2__checklist { justify-content: center; margin-top: 2rem; gap: 1rem; }
+}

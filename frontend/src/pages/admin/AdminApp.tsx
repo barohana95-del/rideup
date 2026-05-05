@@ -3,7 +3,7 @@
 // Layout: sidebar (right in RTL) + main content with tabs.
 // =====================================================================
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   Users,

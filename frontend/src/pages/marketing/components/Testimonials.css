@@ -1,0 +1,75 @@
+.testimonials-v2 {
+  background: var(--color-navy);
+  padding: 6rem 0;
+  overflow: hidden;
+}
+
+.testimonials-v2__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.testimonials-v2__marquee {
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.testimonials-v2__track {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+  padding: 1rem 0;
+}
+
+.testi-pill {
+  flex-shrink: 0;
+  width: 400px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: var(--radius-xl);
+  transition: all var(--transition);
+}
+
+.testi-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-blue);
+  transform: translateY(-5px);
+}
+
+.testi-pill__stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 1rem;
+}
+
+.testi-pill__quote {
+  font-size: 1.05rem;
+  color: var(--color-white);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.testi-pill__author {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.testi-pill__author strong {
+  font-size: 0.95rem;
+  color: var(--color-blue-light);
+}
+
+.testi-pill__author span {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .testi-pill { width: 300px; padding: 1.5rem; }
+  .testi-pill__quote { font-size: 0.95rem; }
+}

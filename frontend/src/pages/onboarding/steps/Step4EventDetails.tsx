@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Heart, Cake, PartyPopper, Briefcase, Users, Star } from 'lucide-react';
 import type { EventType } from '../../../types';
 

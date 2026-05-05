@@ -1,44 +1,37 @@
-// RideUp marketing site — full cinematic landing.
+// RideUp marketing site — based on Renovex design.
 import { useEffect } from 'react';
-import Nav from './components/Nav';
+import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Stats from './components/Stats';
-import WhyRideUp from './components/WhyRideUp';
-import BigStatement from './components/BigStatement';
-import Approach from './components/Approach';
-import ThemeShowcase from './components/ThemeShowcase';
-import ProvidersCarousel from './components/ProvidersCarousel';
+import About from './components/About';
+import Services from './components/Services';
+import Projects from './components/Projects';
+import Testimonials from './components/Testimonials';
 import Pricing from './components/Pricing';
-import Features from './components/Features';
-import LiveProcess from './components/LiveProcess';
-import Reviews from './components/Reviews';
+import Suppliers from './components/Suppliers';
 import FAQ from './components/FAQ';
-import CTASection from './components/CTASection';
+import CTA from './components/CTA';
+import Simulation from './components/Simulation';
 import Footer from './components/Footer';
-import { initScrollAnimations } from '../../lib/scrollAnimations';
 
 export default function MarketingApp() {
   useEffect(() => {
-    initScrollAnimations();
+    window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div dir="rtl" className="min-h-screen" style={{ background: '#FFFFFF', color: '#3D4F6B' }}>
-      <Nav />
+    <div dir="rtl" className="min-h-screen overflow-x-hidden">
+      <Navbar />
       <main>
         <Hero />
-        <Stats />
-        <WhyRideUp />
-        <BigStatement />
-        <Approach />
-        <ThemeShowcase />
-        <ProvidersCarousel />
+        <About />
+        <Services />
+        <Projects />
+        <Simulation />
+        <Suppliers />
+        <Testimonials />
         <Pricing />
-        <Features />
-        <LiveProcess />
-        <Reviews />
+        <CTA />
         <FAQ />
-        <CTASection />
       </main>
       <Footer />
     </div>

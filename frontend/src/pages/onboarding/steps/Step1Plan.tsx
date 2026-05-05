@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Check, Sparkles } from 'lucide-react';
 import type { TenantPlan } from '../../../types';
 

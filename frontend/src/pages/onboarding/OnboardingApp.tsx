@@ -3,7 +3,7 @@
 // Uses mock auth until Stage 2 (real Google OAuth) replaces it.
 // =====================================================================
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, ExternalLink, AlertCircle } from 'lucide-react';
 import { useOnboarding, clearDraft } from './store';
 import { TOTAL_STEPS } from './types';

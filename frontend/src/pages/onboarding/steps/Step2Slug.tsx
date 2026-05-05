@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Check, X, Loader2, Globe } from 'lucide-react';
 import { onboardingApi } from '../../../lib/api';
 

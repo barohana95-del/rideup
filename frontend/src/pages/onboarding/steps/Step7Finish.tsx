@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Sparkles, Calendar, MapPin, Palette, Globe } from 'lucide-react';
 import type { OnboardingDraft } from '../types';
 

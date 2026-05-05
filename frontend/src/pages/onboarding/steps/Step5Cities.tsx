@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Plus, X, MapPin } from 'lucide-react';
 
 const DEFAULT_CITIES = [
