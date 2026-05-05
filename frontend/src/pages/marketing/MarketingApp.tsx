@@ -1,25 +1,46 @@
-// Marketing site — דף נחיתה. Placeholder ל-MVP.
-import { useEffect, useState } from 'react';
-import { systemApi } from '../../lib/api';
+// RideUp marketing site — full cinematic landing.
+import { useEffect } from 'react';
+import Nav from './components/Nav';
+import Hero from './components/Hero';
+import Stats from './components/Stats';
+import WhyRideUp from './components/WhyRideUp';
+import BigStatement from './components/BigStatement';
+import Approach from './components/Approach';
+import ThemeShowcase from './components/ThemeShowcase';
+import ProvidersCarousel from './components/ProvidersCarousel';
+import Pricing from './components/Pricing';
+import Features from './components/Features';
+import LiveProcess from './components/LiveProcess';
+import Reviews from './components/Reviews';
+import FAQ from './components/FAQ';
+import CTASection from './components/CTASection';
+import Footer from './components/Footer';
+import { initScrollAnimations } from '../../lib/scrollAnimations';
 
 export default function MarketingApp() {
-  const [hello, setHello] = useState<string>('...');
-
   useEffect(() => {
-    systemApi.hello().then((res) => {
-      if (res.success && res.data) setHello(`✓ ${res.data.message}`);
-      else setHello(`✗ ${res.error || 'no connection'}`);
-    });
+    initScrollAnimations();
   }, []);
 
   return (
-    <div dir="rtl" className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 to-pink-50 p-8">
-      <h1 className="text-5xl font-bold text-indigo-900 mb-4">RideUp</h1>
-      <p className="text-xl text-gray-700 mb-8">פלטפורמה לניהול הסעות לאירועים</p>
-      <div className="text-sm text-gray-500 bg-white px-4 py-2 rounded-md shadow">
-        Backend: {hello}
-      </div>
-      <p className="mt-12 text-gray-400 text-sm">דף נחיתה — בבנייה (שלב 6)</p>
+    <div dir="rtl" className="min-h-screen" style={{ background: '#FFFFFF', color: '#3D4F6B' }}>
+      <Nav />
+      <main>
+        <Hero />
+        <Stats />
+        <WhyRideUp />
+        <BigStatement />
+        <Approach />
+        <ThemeShowcase />
+        <ProvidersCarousel />
+        <Pricing />
+        <Features />
+        <LiveProcess />
+        <Reviews />
+        <FAQ />
+        <CTASection />
+      </main>
+      <Footer />
     </div>
   );
 }

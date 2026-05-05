@@ -10,6 +10,7 @@ import type {
   DashboardStats,
   Tenant,
 } from '../types';
+import { getMockUser } from './mockAuth';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost/api';
 
@@ -21,11 +22,14 @@ async function request<T>(
   options: RequestInit = {}
 ): Promise<ApiResponse<T>> {
   const token = localStorage.getItem(SESSION_KEY);
+  const mockUser = getMockUser();
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string> | undefined),
   };
   if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (mockUser) headers['X-Mock-User-Id'] = String(mockUser.id);
 
   try {
     const res = await fetch(`${API_BASE_URL}${path}`, {
@@ -51,10 +55,10 @@ async function request<T>(
 // --- Public (האתר של ה-tenant) ---
 // ה-host (subdomain) מזהה את ה-tenant; השרת מפענח אוטומטית.
 export const publicApi = {
-  getConfig: () => request<PublicTenantConfig>('/public/config.php'),
+  getConfig: (slug: string) => request<PublicTenantConfig>(`/public/config.php?tenant=${encodeURIComponent(slug)}`),
 
-  register: (data: RegistrationInput) =>
-    request<{ id: number }>('/public/register.php', {
+  register: (slug: string, data: RegistrationInput) =>
+    request<{ id: number }>(`/public/register.php?tenant=${encodeURIComponent(slug)}`, {
       method: 'POST',
       body: JSON.stringify(data),
     }),
