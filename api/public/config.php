@@ -46,4 +46,4 @@ $config = [
 ];
 
 require_once __DIR__ . '/../../lib/response.php';
-Response::json($config);
+Response::ok($config);

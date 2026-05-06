@@ -58,4 +58,4 @@ if ($id === 0) {
     $id = (int)$row['id'];
 }
 
-Response::json(['id' => $id]);
+Response::ok(['id' => $id]);
