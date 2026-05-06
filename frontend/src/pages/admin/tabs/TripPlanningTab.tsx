@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Bus, MapPin, Clock, Plus, Trash2, Loader2, AlertCircle,
-  RefreshCw, Users, TrendingUp, AlertTriangle,
+  RefreshCw, Users, TrendingUp, AlertTriangle, Download,
 } from 'lucide-react';
 import { adminApi } from '../../../lib/api';
 
@@ -23,6 +23,15 @@ export default function TripPlanningTab({ slug }: { slug: string }) {
   const [newCap, setNewCap] = useState<string>('');
   const [newLabel, setNewLabel] = useState<string>('');
   const [adding, setAdding] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  async function handleExport() {
+    setExporting(true);
+    setError(null);
+    const ok = await adminApi.exportCsv(slug, 'trip-plan');
+    setExporting(false);
+    if (!ok) setError('הייצוא נכשל');
+  }
 
   useEffect(() => { loadAll(); /* eslint-disable-next-line */ }, [slug]);
 
@@ -103,7 +112,15 @@ export default function TripPlanningTab({ slug }: { slug: string }) {
         onDelete={handleDeleteBus}
       />
 
-      {plan && <SummaryStrip summary={plan.summary} fleet={fleet} onRefresh={refreshPlan} recomputing={recomputing} />}
+      {plan && <SummaryStrip
+        summary={plan.summary}
+        fleet={fleet}
+        onRefresh={refreshPlan}
+        recomputing={recomputing}
+        onExport={handleExport}
+        exporting={exporting}
+        canExport={plan.groups.length > 0 && fleet.length > 0}
+      />}
 
       <PlanGrid plan={plan} fleet={fleet} />
     </div>
@@ -228,12 +245,15 @@ function FleetSection({
 
 /* ===== Summary Strip ===== */
 function SummaryStrip({
-  summary, fleet, onRefresh, recomputing,
+  summary, fleet, onRefresh, recomputing, onExport, exporting, canExport,
 }: {
   summary: NonNullable<Plan>['summary'];
   fleet: NonNullable<Fleet>;
   onRefresh: () => void;
   recomputing: boolean;
+  onExport: () => void;
+  exporting: boolean;
+  canExport: boolean;
 }) {
   const utilization = summary.totalCapacity > 0
     ? Math.round(((summary.totalCapacity - summary.totalSpare) / summary.totalCapacity) * 100)
@@ -248,7 +268,16 @@ function SummaryStrip({
       <SummaryItem icon={Users}    label="סך אורחים" value={summary.totalGuests.toLocaleString('he-IL')} />
       <SummaryItem icon={Bus}      label="אוטובוסים" value={summary.totalBuses.toString()} />
       <SummaryItem icon={TrendingUp} label="ניצולת" value={noFleet ? '—' : `${utilization}%`} accent={!noFleet && utilization >= 80 ? 'good' : 'mid'} />
-      <div className="flex items-end justify-end col-span-2 sm:col-span-1">
+      <div className="flex items-end justify-end col-span-2 sm:col-span-1 gap-2 flex-wrap">
+        <button
+          onClick={onExport}
+          disabled={!canExport || exporting}
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-full transition-all disabled:opacity-40"
+          style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}
+        >
+          {exporting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+          ייצא
+        </button>
         <button
           onClick={onRefresh}
           disabled={recomputing}
@@ -256,7 +285,7 @@ function SummaryStrip({
           style={{ background: '#1E63D6', color: '#fff' }}
         >
           {recomputing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
-          חישוב מחדש
+          חישוב
         </button>
       </div>
     </div>

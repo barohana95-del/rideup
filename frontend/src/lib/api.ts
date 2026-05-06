@@ -191,13 +191,77 @@ export const adminApi = {
       };
     }>(`/admin/trip-plan.php?slug=${slug}`),
 
-  exportExcel: async (slug: string): Promise<Blob | null> => {
+  /**
+   * Triggers a CSV download. Type can be 'registrations' or 'trip-plan'.
+   * Returns true on success.
+   */
+  exportCsv: async (slug: string, type: 'registrations' | 'trip-plan'): Promise<boolean> => {
+    const mockUser = getMockUser();
+    const headers: Record<string, string> = {};
     const token = localStorage.getItem(SESSION_KEY);
-    const res = await fetch(`${API_BASE_URL}/admin/export.php?slug=${slug}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return res.ok ? res.blob() : null;
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    if (mockUser) headers['X-Mock-User-Id'] = String(mockUser.id);
+
+    const res = await fetch(`${API_BASE_URL}/admin/export.php?slug=${slug}&type=${type}`, { headers });
+    if (!res.ok) return false;
+
+    const blob = await res.blob();
+    const filename = `${slug}_${type}_${new Date().toISOString().slice(0, 10)}.csv`;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    return true;
   },
+};
+
+// --- Super-Admin (platform owner only — requires is_admin=1) ---
+export const saApi = {
+  overview: () => request<{
+    totals: { tenants: number; users: number; registrations: number; guests: number };
+    byStatus: Record<string, number>;
+    byPlan: Record<string, number>;
+    recent: { newTenants: number; newUsers: number; newRegistrations: number };
+    latestTenants: Array<{
+      id: number; slug: string; status: string; plan: string;
+      event_title: string | null; event_date: string | null; created_at: string;
+      owner_email: string | null; owner_name: string | null;
+    }>;
+  }>('/sa/overview.php'),
+
+  listTenants: (filters?: { q?: string; plan?: string; status?: string }) => {
+    const qs = new URLSearchParams();
+    if (filters?.q) qs.set('q', filters.q);
+    if (filters?.plan) qs.set('plan', filters.plan);
+    if (filters?.status) qs.set('status', filters.status);
+    const tail = qs.toString();
+    return request<Array<{
+      id: number; slug: string; status: string; plan: string; theme: string;
+      event_type: string; event_title: string | null; event_date: string | null;
+      event_location: string | null; trial_ends_at: string | null;
+      paid_until: string | null; created_at: string; updated_at: string;
+      owner_id: number | null; owner_email: string | null; owner_name: string | null;
+      registrations: number; guests: number;
+    }>>(`/sa/tenants.php${tail ? '?' + tail : ''}`);
+  },
+
+  listUsers: (q?: string) =>
+    request<Array<{
+      id: number; email: string; display_name: string | null;
+      avatar_url: string | null; is_admin: number;
+      created_at: string; last_login_at: string | null;
+      tenants_count: number;
+    }>>(`/sa/users.php${q ? '?q=' + encodeURIComponent(q) : ''}`),
+
+  tenantAction: (tenantId: number, action: string, value?: unknown) =>
+    request<unknown>('/sa/tenant-action.php', {
+      method: 'POST',
+      body: JSON.stringify({ tenantId, action, value }),
+    }),
 };
 
 // --- Hello (לבדיקת חיבור) ---

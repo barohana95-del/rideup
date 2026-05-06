@@ -17,6 +17,7 @@ import AdminApp from './pages/admin/AdminApp';
 import TenantApp from './pages/public/TenantApp';
 import ProvidersPage from './pages/providers/ProvidersPage';
 import ExperiencePage from './pages/marketing/ExperiencePage';
+import SuperAdminApp from './pages/super-admin/SuperAdminApp';
 import NotFound from './pages/public/NotFound';
 
 // Slugs the platform reserves. Anything in this set under `/:slug` → 404
@@ -27,7 +28,7 @@ const RESERVED = new Set([
   'pricing', 'about', 'contact', 'help', 'support',
   'blog', 'docs', 'faq', 'terms', 'privacy', 'cookies',
   'www', 'mail', 'static', 'assets', 'public', 'cdn',
-  'rideup', 'experience',
+  'rideup', 'experience', 'super-admin', 'sa',
 ]);
 
 function isValidSlug(s: string): boolean {
@@ -72,6 +73,10 @@ export default function App() {
         <Route path="/admin" element={<AdminRoute />} />
         <Route path="/admin/:slug" element={<AdminRoute />} />
         <Route path="/admin/:slug/*" element={<AdminRoute />} />
+
+        {/* Platform owner (you) — Super-Admin */}
+        <Route path="/super-admin" element={<SuperAdminApp />} />
+        <Route path="/super-admin/*" element={<SuperAdminApp />} />
 
         {/* Tenant public site (must be after specific routes) */}
         <Route path="/:slug" element={<TenantRoute />} />

@@ -65,12 +65,29 @@ class Auth {
     }
 
     private static function ensureDemoUser(): void {
-        $exists = DB::one('SELECT id FROM users WHERE id = 1');
-        if ($exists) return;
+        $exists = DB::one('SELECT id, is_admin FROM users WHERE id = 1');
+        if ($exists) {
+            // Auto-upgrade existing demo user to platform admin so the
+            // Super-Admin panel works in dev.
+            if ((int) $exists['is_admin'] !== 1) {
+                DB::exec("UPDATE users SET is_admin = 1 WHERE id = 1");
+            }
+            return;
+        }
 
         DB::exec(
             "INSERT IGNORE INTO users (id, google_id, email, display_name, avatar_url, is_admin)
-             VALUES (1, 'demo_google_id', 'demo@rideup.co.il', 'משתמש דמו', NULL, 0)"
+             VALUES (1, 'demo_google_id', 'demo@rideup.co.il', 'משתמש דמו', NULL, 1)"
         );
+    }
+
+    /** Throws 403 unless the current user is a platform admin. */
+    public static function requireAdmin(): array {
+        $user = self::require();
+        if ((int) $user['is_admin'] !== 1) {
+            require_once __DIR__ . '/response.php';
+            Response::forbidden('Admin only');
+        }
+        return $user;
     }
 }
