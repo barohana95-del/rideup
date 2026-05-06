@@ -120,18 +120,18 @@ export default function DashboardTab({
                     className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
                     style={{ background: '#1E63D6', color: '#fff' }}
                   >
-                    {r.fullName[0]}
+                    {r.fullName?.[0] ?? '?'}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-sm truncate" style={{ color: '#0A1F44' }}>
-                      {r.fullName}
+                      {r.fullName ?? '—'}
                     </p>
                     <p className="text-xs" style={{ color: '#6B7C95' }}>
-                      {r.city ?? '—'} · {r.numGuests} אורחים
+                      {r.city ?? '—'} · {r.numGuests ?? 0} אורחים
                     </p>
                   </div>
                   <span className="text-xs font-mono" style={{ color: '#6B7C95' }}>
-                    {new Date(r.createdAt).toLocaleDateString('he-IL')}
+                    {r.createdAt ? new Date(r.createdAt).toLocaleDateString('he-IL') : '—'}
                   </span>
                 </li>
               ))}
