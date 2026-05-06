@@ -1,0 +1,132 @@
+.experience-page {
+  background-color: var(--color-white);
+  color: var(--color-navy);
+}
+
+.experience-page h1, 
+.experience-page h2, 
+.experience-page h3, 
+.experience-page h4 {
+  color: var(--color-navy);
+}
+
+.experience-main {
+  background: var(--color-white);
+}
+
+/* --- Island Wrappers --- */
+.exp-hero, 
+.exp-simulation-trigger,
+.tech-visual-card {
+  border-radius: var(--radius-section) !important;
+}
+
+/* --- Hero --- */
+.exp-hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  background: var(--color-navy-mid);
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.15);
+}
+
+.hero-bg-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: radial-gradient(circle at 70% 30%, rgba(125, 57, 235, 0.2) 0%, transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(198, 255, 51, 0.1) 0%, transparent 40%);
+  z-index: 1;
+}
+
+.exp-hero__title {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: #FFF !important;
+}
+
+.exp-hero__desc {
+  color: rgba(255,255,255,0.6);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-blue-light);
+  z-index: 10;
+  opacity: 0.5;
+}
+
+/* --- Simulation Section --- */
+.exp-simulation-trigger {
+  box-shadow: 0 50px 100px rgba(0,0,0,0.2);
+  height: 250vh; /* Tightened from 300vh */
+}
+
+
+.laptop-mockup {
+  transform-origin: center center;
+}
+
+.laptop-mockup__screen {
+  background: #000;
+  border: 12px solid #222;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+}
+
+/* --- Tech Specs --- */
+.tech-visual-card {
+  background: #0F172A;
+  padding: 3rem;
+  min-height: 400px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+}
+
+/* --- Process Timeline --- */
+.process-timeline {
+  max-width: 800px;
+  margin: 0 auto;
+  border-right: 2px solid #F1F5F9;
+  padding-right: 3rem;
+}
+
+/* --- Value Pillars --- */
+.experience-page .bg-pale {
+  background: #F8F9FA;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.value-card {
+  background: #FFF !important;
+  border: 1px solid rgba(0,0,0,0.05) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03) !important;
+}
+
+.value-card h3 { color: var(--color-navy) !important; }
+.value-card p { color: #64748B !important; }
+
+/* --- CTA Box --- */
+.cta-box {
+  background: var(--color-navy) !important;
+  box-shadow: 0 60px 120px rgba(0,0,0,0.3);
+}
+
+.text-blue-light { color: var(--color-blue-light); }
+
+@media (max-width: 768px) {
+  .exp-hero, .exp-simulation-trigger, .bg-pale, .cta-box {
+    border-radius: 32px !important;
+  }
+  .exp-hero__title { font-size: 2.8rem; }
+  .laptop-mockup { transform: scale(0.6) !important; }
+}

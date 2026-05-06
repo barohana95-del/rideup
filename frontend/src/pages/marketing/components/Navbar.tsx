@@ -7,6 +7,7 @@ const navLinks = [
   { label: 'איך זה עובד', href: '#services' },
   { label: 'פיצ׳רים', href: '#features' },
   { label: 'ספקים', href: '/providers' },
+  { label: 'המערכת בפעולה', href: '/experience' },
   { label: 'עיצובים', href: '#projects' },
   { label: 'מחירים', href: '#pricing' },
   { label: 'שאלות', href: '#faq' },

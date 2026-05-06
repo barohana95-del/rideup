@@ -10,7 +10,6 @@ import Pricing from './components/Pricing';
 import Suppliers from './components/Suppliers';
 import FAQ from './components/FAQ';
 import CTA from './components/CTA';
-import Simulation from './components/Simulation';
 import Footer from './components/Footer';
 
 export default function MarketingApp() {
@@ -26,7 +25,6 @@ export default function MarketingApp() {
         <About />
         <Services />
         <Projects />
-        <Simulation />
         <Suppliers />
         <Testimonials />
         <Pricing />

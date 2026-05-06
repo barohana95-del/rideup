@@ -23,15 +23,16 @@ import DashboardTab from './tabs/DashboardTab';
 import RegistrationsTab from './tabs/RegistrationsTab';
 import SettingsTab from './tabs/SettingsTab';
 import EditorTab from './tabs/EditorTab';
+import TripPlanningTab from './tabs/TripPlanningTab';
 
-type TabKey = 'dashboard' | 'registrations' | 'design' | 'settings' | 'trip';
+type TabKey = 'dashboard' | 'registrations' | 'design' | 'trip' | 'settings';
 
 const tabs: { key: TabKey; label: string; icon: React.ElementType; comingSoon?: boolean }[] = [
   { key: 'dashboard',     label: 'דשבורד',      icon: LayoutDashboard },
   { key: 'registrations', label: 'רישומים',     icon: Users },
+  { key: 'trip',          label: 'תכנון נסיעה', icon: Route },
   { key: 'design',        label: 'עיצוב',       icon: Palette },
   { key: 'settings',      label: 'הגדרות',      icon: SettingsIcon },
-  { key: 'trip',          label: 'תכנון נסיעה', icon: Route,          comingSoon: true },
 ];
 
 export default function AdminApp({ slug }: { slug: string }) {
@@ -261,6 +262,9 @@ export default function AdminApp({ slug }: { slug: string }) {
                     if (r.success) setRegistrations(r.data!);
                   }}
                 />
+              )}
+              {activeTab === 'trip' && (
+                <TripPlanningTab slug={slug!} />
               )}
               {activeTab === 'design' && (
                 <EditorTab

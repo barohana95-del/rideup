@@ -78,7 +78,7 @@ export default function Hero() {
               התחילו עכשיו חינם
               <ArrowSvg />
             </a>
-            <a href="#about" className="btn btn-outline-white">
+            <a href="/experience" className="btn btn-outline-white">
               איך זה עובד?
             </a>
           </motion.div>

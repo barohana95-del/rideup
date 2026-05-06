@@ -16,6 +16,7 @@ import OnboardingApp from './pages/onboarding/OnboardingApp';
 import AdminApp from './pages/admin/AdminApp';
 import TenantApp from './pages/public/TenantApp';
 import ProvidersPage from './pages/providers/ProvidersPage';
+import ExperiencePage from './pages/marketing/ExperiencePage';
 import NotFound from './pages/public/NotFound';
 
 // Slugs the platform reserves. Anything in this set under `/:slug` → 404
@@ -26,7 +27,7 @@ const RESERVED = new Set([
   'pricing', 'about', 'contact', 'help', 'support',
   'blog', 'docs', 'faq', 'terms', 'privacy', 'cookies',
   'www', 'mail', 'static', 'assets', 'public', 'cdn',
-  'rideup',
+  'rideup', 'experience',
 ]);
 
 function isValidSlug(s: string): boolean {
@@ -65,6 +66,7 @@ export default function App() {
         <Route path="/onboarding" element={<OnboardingApp />} />
         <Route path="/onboarding/*" element={<OnboardingApp />} />
         <Route path="/providers" element={<ProvidersPage />} />
+        <Route path="/experience" element={<ExperiencePage />} />
 
         {/* Admin */}
         <Route path="/admin" element={<AdminRoute />} />

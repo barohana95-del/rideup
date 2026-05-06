@@ -145,6 +145,52 @@ export const adminApi = {
       body: JSON.stringify(patch),
     }),
 
+  // ── Bus fleet ───────────────────────────────────────────────────
+  listBuses: (slug: string) =>
+    request<{ id: number; capacity: number; label: string | null; display_order: number }[]>(
+      `/admin/buses.php?slug=${slug}`
+    ),
+
+  addBus: (slug: string, capacity: number, label?: string) =>
+    request<{ id: number; capacity: number; label: string | null }>(
+      `/admin/buses.php?slug=${slug}`,
+      { method: 'POST', body: JSON.stringify({ capacity, label }) }
+    ),
+
+  updateBus: (slug: string, id: number, patch: { capacity?: number; label?: string }) =>
+    request<{ id: number }>(
+      `/admin/buses.php?slug=${slug}&id=${id}`,
+      { method: 'PATCH', body: JSON.stringify(patch) }
+    ),
+
+  deleteBus: (slug: string, id: number) =>
+    request<{ deleted: boolean }>(
+      `/admin/buses.php?slug=${slug}&id=${id}`,
+      { method: 'DELETE' }
+    ),
+
+  // ── Trip planning ───────────────────────────────────────────────
+  getTripPlan: (slug: string) =>
+    request<{
+      fleet: { id: number; capacity: number; label: string | null }[];
+      groups: {
+        city: string;
+        shift: string;
+        totalGuests: number;
+        totalRegistrations: number;
+        buses: { capacity: number; label: string | null }[];
+        capacityProvided: number;
+        spareSeats: number;
+        warning: string | null;
+      }[];
+      summary: {
+        totalGuests: number;
+        totalBuses: number;
+        totalCapacity: number;
+        totalSpare: number;
+      };
+    }>(`/admin/trip-plan.php?slug=${slug}`),
+
   exportExcel: async (slug: string): Promise<Blob | null> => {
     const token = localStorage.getItem(SESSION_KEY);
     const res = await fetch(`${API_BASE_URL}/admin/export.php?slug=${slug}`, {
