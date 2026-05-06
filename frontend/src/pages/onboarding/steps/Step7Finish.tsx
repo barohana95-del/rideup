@@ -53,9 +53,9 @@ export default function Step7Finish({
       {/* Summary card */}
       <div
         className="rounded-3xl p-6 mb-8"
-        style={{ background: '#EAF1FB', border: '1px solid rgba(30,99,214,0.15)' }}
+        style={{ background: '#F2EBFF', border: '1px solid rgba(125,57,235,0.15)' }}
       >
-        <p className="text-xs font-bold tracking-widest uppercase mb-4 flex items-center gap-2" style={{ color: '#1E63D6' }}>
+        <p className="text-xs font-bold tracking-widest uppercase mb-4 flex items-center gap-2" style={{ color: '#7D39EB' }}>
           <Sparkles className="w-4 h-4" />
           סיכום
         </p>
@@ -76,16 +76,16 @@ export default function Step7Finish({
           </SummaryRow>
         </div>
 
-        <div className="mt-4 pt-4 border-t flex flex-wrap gap-2 text-xs" style={{ borderColor: 'rgba(30,99,214,0.15)' }}>
-          <span className="px-2.5 py-1 rounded-full" style={{ background: '#fff', color: '#0A1F44' }}>
+        <div className="mt-4 pt-4 border-t flex flex-wrap gap-2 text-xs" style={{ borderColor: 'rgba(125,57,235,0.15)' }}>
+          <span className="px-2.5 py-1 rounded-full" style={{ background: '#fff', color: '#000000' }}>
             {draft.cities.length} ערים
           </span>
           {draft.useShifts && (
-            <span className="px-2.5 py-1 rounded-full" style={{ background: '#fff', color: '#0A1F44' }}>
+            <span className="px-2.5 py-1 rounded-full" style={{ background: '#fff', color: '#000000' }}>
               {draft.shifts.length} משמרות
             </span>
           )}
-          <span className="px-2.5 py-1 rounded-full font-bold" style={{ background: '#1E63D6', color: '#fff' }}>
+          <span className="px-2.5 py-1 rounded-full font-bold" style={{ background: '#7D39EB', color: '#fff' }}>
             חבילת {draft.plan}
           </span>
         </div>
@@ -119,7 +119,7 @@ export default function Step7Finish({
         />
       </div>
 
-      <p className="mt-6 text-xs text-center" style={{ color: '#6B7C95' }}>
+      <p className="mt-6 text-xs text-center" style={{ color: '#6B7280' }}>
         💡 שדות ריקים? נשתמש בטקסט ברירת המחדל. תוכל לשנות הכל אחרי הקמה.
       </p>
     </motion.div>
@@ -129,10 +129,10 @@ export default function Step7Finish({
 function SummaryRow({ icon: Icon, label, children }: { icon: React.ElementType; label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-2.5">
-      <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: '#1E63D6' }} />
+      <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: '#7D39EB' }} />
       <div className="flex-1 min-w-0">
-        <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#6B7C95' }}>{label}</p>
-        <p className="font-semibold truncate" style={{ color: '#0A1F44' }}>{children}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#6B7280' }}>{label}</p>
+        <p className="font-semibold truncate" style={{ color: '#000000' }}>{children}</p>
       </div>
     </div>
   );
@@ -155,7 +155,7 @@ function TextField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-bold mb-2" style={{ color: '#0A1F44' }}>{label}</label>
+      <label className="block text-sm font-bold mb-2" style={{ color: '#000000' }}>{label}</label>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -164,14 +164,14 @@ function TextField({
         className="w-full px-4 py-3 text-base focus:outline-none transition-all resize-none"
         style={{
           background: '#fff',
-          border: '1.5px solid rgba(30,99,214,0.15)',
+          border: '1.5px solid rgba(125,57,235,0.15)',
           borderRadius: '14px',
-          color: '#0A1F44',
+          color: '#000000',
         }}
-        onFocus={(e) => { (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#1E63D6'; }}
-        onBlur={(e) => { (e.currentTarget as HTMLTextAreaElement).style.borderColor = 'rgba(30,99,214,0.15)'; }}
+        onFocus={(e) => { (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#7D39EB'; }}
+        onBlur={(e) => { (e.currentTarget as HTMLTextAreaElement).style.borderColor = 'rgba(125,57,235,0.15)'; }}
       />
-      {hint && <p className="mt-1.5 text-xs" style={{ color: '#6B7C95' }}>{hint}</p>}
+      {hint && <p className="mt-1.5 text-xs" style={{ color: '#6B7280' }}>{hint}</p>}
     </div>
   );
 }

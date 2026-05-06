@@ -91,7 +91,7 @@ export default function AdminApp({ slug }: { slug: string }) {
   if (loading) {
     return (
       <FullPageMessage>
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#1E63D6' }} />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#7D39EB' }} />
       </FullPageMessage>
     );
   }
@@ -101,11 +101,11 @@ export default function AdminApp({ slug }: { slug: string }) {
   if (!tenant) return null;
 
   return (
-    <div dir="rtl" className="min-h-screen flex" style={{ background: '#EAF1FB' }}>
+    <div dir="rtl" className="min-h-screen flex" style={{ background: '#F2EBFF' }}>
       {/* Sidebar (right in RTL) */}
       <aside
         className="w-64 shrink-0 flex flex-col"
-        style={{ background: '#0A1F44', color: '#fff', minHeight: '100vh' }}
+        style={{ background: '#000000', color: '#fff', minHeight: '100vh' }}
       >
         {/* Logo */}
         <div className="px-6 pt-6 pb-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
@@ -124,8 +124,8 @@ export default function AdminApp({ slug }: { slug: string }) {
             <span
               className="text-[10px] font-bold px-2 py-0.5 rounded-full"
               style={{
-                background: tenant.status === 'trial' ? 'rgba(251,191,36,0.2)' : 'rgba(30,99,214,0.25)',
-                color: tenant.status === 'trial' ? '#FCD34D' : '#7DB1FF',
+                background: tenant.status === 'trial' ? 'rgba(251,191,36,0.2)' : 'rgba(125,57,235,0.25)',
+                color: tenant.status === 'trial' ? '#FCD34D' : '#C4A1FF',
               }}
             >
               {tenant.plan}
@@ -152,7 +152,7 @@ export default function AdminApp({ slug }: { slug: string }) {
                     disabled={disabled}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors text-right"
                     style={{
-                      background: active ? '#1E63D6' : 'transparent',
+                      background: active ? '#7D39EB' : 'transparent',
                       color: active ? '#fff' : disabled ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.7)',
                       cursor: disabled ? 'not-allowed' : 'pointer',
                     }}
@@ -199,7 +199,7 @@ export default function AdminApp({ slug }: { slug: string }) {
           <div className="flex items-center gap-2 px-3 py-2 mt-2">
             <div
               className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs"
-              style={{ background: '#1E63D6', color: '#fff' }}
+              style={{ background: '#7D39EB', color: '#fff' }}
             >
               {user.displayName[0]}
             </div>
@@ -215,20 +215,20 @@ export default function AdminApp({ slug }: { slug: string }) {
         {/* Top bar */}
         <div
           className="px-8 py-5 flex items-center justify-between border-b"
-          style={{ background: '#fff', borderColor: 'rgba(30,99,214,0.1)' }}
+          style={{ background: '#fff', borderColor: 'rgba(125,57,235,0.1)' }}
         >
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#1E63D6' }}>
+            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#7D39EB' }}>
               {tabs.find((t) => t.key === activeTab)?.label}
             </p>
-            <h1 className="display text-2xl mt-0.5" style={{ color: '#0A1F44' }}>
+            <h1 className="display text-2xl mt-0.5" style={{ color: '#000000' }}>
               ברוך שובך, {user.displayName.split(' ')[0]}
             </h1>
           </div>
           <a
             href="/onboarding"
             className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all"
-            style={{ background: '#EAF1FB', color: '#1E63D6' }}
+            style={{ background: '#F2EBFF', color: '#7D39EB' }}
           >
             <ArrowLeft className="w-4 h-4" />
             צור אתר נוסף
@@ -297,7 +297,7 @@ function FullPageMessage({ children }: { children: React.ReactNode }) {
     <div
       dir="rtl"
       className="min-h-screen flex items-center justify-center px-6 text-center"
-      style={{ background: '#EAF1FB', color: '#0A1F44' }}
+      style={{ background: '#F2EBFF', color: '#000000' }}
     >
       <div>{children}</div>
     </div>

@@ -90,14 +90,14 @@ export default function OnboardingApp() {
             {/* Hack: Logo is dark-bg-tuned. For light header we tweak via filter. */}
           </div>
         </a>
-        <div style={{ color: '#0A1F44' }}>
+        <div style={{ color: '#000000' }}>
           <Logo size="sm" />
         </div>
-        <div className="flex items-center gap-2 text-sm" style={{ color: '#6B7C95' }}>
+        <div className="flex items-center gap-2 text-sm" style={{ color: '#6B7280' }}>
           <span className="hidden sm:inline">{user.displayName}</span>
           <div
             className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm"
-            style={{ background: '#1E63D6', color: '#fff' }}
+            style={{ background: '#7D39EB', color: '#fff' }}
           >
             {user.displayName[0]}
           </div>
@@ -192,7 +192,7 @@ export default function OnboardingApp() {
         )}
 
         {/* Helper bar */}
-        <p className="text-center text-xs mt-6" style={{ color: '#6B7C95' }}>
+        <p className="text-center text-xs mt-6" style={{ color: '#6B7280' }}>
           💾 ההתקדמות נשמרת אוטומטית. תוכל לחזור בכל זמן.
         </p>
       </main>
@@ -214,7 +214,7 @@ function AuthGate() {
   return (
     <div
       className="min-h-screen flex items-center justify-center px-6"
-      style={{ background: '#0A1F44', direction: 'rtl' }}
+      style={{ background: '#000000', direction: 'rtl' }}
     >
       <div className="max-w-md w-full text-center">
         <div className="mb-8 inline-block">
@@ -225,10 +225,10 @@ function AuthGate() {
           className="rounded-3xl p-8 md:p-10"
           style={{ background: '#fff', boxShadow: '0 20px 60px -16px rgba(0,0,0,0.3)' }}
         >
-          <h1 className="display text-3xl mb-2" style={{ color: '#0A1F44' }}>
+          <h1 className="display text-3xl mb-2" style={{ color: '#000000' }}>
             התחברות
           </h1>
-          <p className="text-sm mb-8" style={{ color: '#6B7C95' }}>
+          <p className="text-sm mb-8" style={{ color: '#6B7280' }}>
             התחבר כדי להמשיך לבניית האתר שלך
           </p>
 
@@ -236,7 +236,7 @@ function AuthGate() {
             onClick={handleLogin}
             disabled={loading}
             className="w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all disabled:opacity-60"
-            style={{ background: '#1E63D6', color: '#fff' }}
+            style={{ background: '#7D39EB', color: '#fff' }}
           >
             {loading ? (
               <>טוען...</>
@@ -248,7 +248,7 @@ function AuthGate() {
             )}
           </button>
 
-          <p className="text-xs mt-5" style={{ color: '#6B7C95' }}>
+          <p className="text-xs mt-5" style={{ color: '#6B7280' }}>
             🔒 בקרוב — Google OAuth אמיתי. בינתיים זה Demo mode.
           </p>
         </div>
@@ -281,7 +281,7 @@ function SuccessScreen({ slug, onReset }: { slug: string; onReset: () => void })
   return (
     <div
       className="min-h-screen flex items-center justify-center px-6"
-      style={{ background: '#0A1F44', direction: 'rtl' }}
+      style={{ background: '#000000', direction: 'rtl' }}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -293,7 +293,7 @@ function SuccessScreen({ slug, onReset }: { slug: string; onReset: () => void })
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring' }}
           className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center"
-          style={{ background: '#1E63D6' }}
+          style={{ background: '#7D39EB' }}
         >
           <CheckCircle2 className="w-10 h-10 text-white" strokeWidth={2} />
         </motion.div>
@@ -311,7 +311,7 @@ function SuccessScreen({ slug, onReset }: { slug: string; onReset: () => void })
           style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}
         >
           <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>הקישור שלך:</span>
-          <code className="font-mono text-base font-bold" style={{ color: '#1E63D6' }}>
+          <code className="font-mono text-base font-bold" style={{ color: '#7D39EB' }}>
             {window.location.host}/{slug}
           </code>
         </div>
@@ -322,7 +322,7 @@ function SuccessScreen({ slug, onReset }: { slug: string; onReset: () => void })
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold transition-all"
-            style={{ background: '#1E63D6', color: '#fff' }}
+            style={{ background: '#7D39EB', color: '#fff' }}
           >
             <ExternalLink className="w-4 h-4" />
             צפה באתר שלי
@@ -330,7 +330,7 @@ function SuccessScreen({ slug, onReset }: { slug: string; onReset: () => void })
           <a
             href={`/admin/${slug}`}
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold transition-all"
-            style={{ background: '#fff', color: '#0A1F44' }}
+            style={{ background: '#fff', color: '#000000' }}
           >
             לפאנל ניהול
           </a>

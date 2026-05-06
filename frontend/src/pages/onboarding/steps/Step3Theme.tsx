@@ -29,8 +29,8 @@ export default function Step3Theme({
             onClick={() => onChange(theme.key)}
             className="relative text-right rounded-3xl overflow-hidden transition-all"
             style={{
-              border: selected ? '3px solid #1E63D6' : '2px solid rgba(30,99,214,0.1)',
-              boxShadow: selected ? '0 16px 40px -12px rgba(30,99,214,0.4)' : '0 2px 12px -4px rgba(10,31,68,0.08)',
+              border: selected ? '3px solid #7D39EB' : '2px solid rgba(125,57,235,0.1)',
+              boxShadow: selected ? '0 16px 40px -12px rgba(125,57,235,0.4)' : '0 2px 12px -4px rgba(0,0,0,0.08)',
               background: '#fff',
             }}
           >
@@ -61,10 +61,10 @@ export default function Step3Theme({
 
             {/* Label */}
             <div className="p-4 bg-white">
-              <p className="display text-lg" style={{ color: '#0A1F44' }}>
+              <p className="display text-lg" style={{ color: '#000000' }}>
                 {theme.name}
               </p>
-              <p className="text-xs mt-0.5" style={{ color: '#6B7C95' }}>
+              <p className="text-xs mt-0.5" style={{ color: '#6B7280' }}>
                 {theme.vibe}
               </p>
             </div>
@@ -73,7 +73,7 @@ export default function Step3Theme({
             {selected && (
               <div
                 className="absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ background: '#1E63D6' }}
+                style={{ background: '#7D39EB' }}
               >
                 <Check className="w-4 h-4 text-white" strokeWidth={3} />
               </div>

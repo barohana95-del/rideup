@@ -23,7 +23,7 @@ export default function DashboardTab({
           label="סך אורחים"
           value={stats?.totalGuests ?? 0}
           sub={`${stats?.totalRegistrations ?? 0} רישומים`}
-          color="#1E63D6"
+          color="#7D39EB"
         />
         <StatCard
           icon={MapPin}
@@ -52,13 +52,13 @@ export default function DashboardTab({
       {/* Quick share link */}
       <div
         className="rounded-2xl p-5 flex items-center justify-between gap-4 flex-wrap"
-        style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}
+        style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}
       >
         <div>
-          <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#6B7C95' }}>
+          <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#6B7280' }}>
             הקישור לשיתוף
           </p>
-          <code className="font-mono text-base font-bold" style={{ color: '#0A1F44' }}>
+          <code className="font-mono text-base font-bold" style={{ color: '#000000' }}>
             {slug}.rideup.co.il
           </code>
         </div>
@@ -68,7 +68,7 @@ export default function DashboardTab({
             navigator.clipboard?.writeText(url);
           }}
           className="px-5 py-2.5 rounded-full font-bold text-sm transition-all"
-          style={{ background: '#1E63D6', color: '#fff' }}
+          style={{ background: '#7D39EB', color: '#fff' }}
         >
           העתק קישור
         </button>
@@ -86,15 +86,15 @@ export default function DashboardTab({
                 return (
                   <li key={c.city} className="space-y-1.5">
                     <div className="flex items-center justify-between text-sm">
-                      <span style={{ color: '#0A1F44', fontWeight: 600 }}>{c.city}</span>
-                      <span style={{ color: '#6B7C95' }}>
+                      <span style={{ color: '#000000', fontWeight: 600 }}>{c.city}</span>
+                      <span style={{ color: '#6B7280' }}>
                         {c.guests} אורחים <span className="opacity-60">· {c.count} רישומים</span>
                       </span>
                     </div>
-                    <div className="h-2 rounded-full overflow-hidden" style={{ background: '#EAF1FB' }}>
+                    <div className="h-2 rounded-full overflow-hidden" style={{ background: '#F2EBFF' }}>
                       <div
                         className="h-full rounded-full transition-all"
-                        style={{ width: `${pct}%`, background: '#1E63D6' }}
+                        style={{ width: `${pct}%`, background: '#7D39EB' }}
                       />
                     </div>
                   </li>
@@ -114,23 +114,23 @@ export default function DashboardTab({
                 <li
                   key={r.id}
                   className="flex items-center justify-between gap-3 p-3 rounded-xl"
-                  style={{ background: '#EAF1FB' }}
+                  style={{ background: '#F2EBFF' }}
                 >
                   <div
                     className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
-                    style={{ background: '#1E63D6', color: '#fff' }}
+                    style={{ background: '#7D39EB', color: '#fff' }}
                   >
                     {r.fullName?.[0] ?? '?'}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm truncate" style={{ color: '#0A1F44' }}>
+                    <p className="font-bold text-sm truncate" style={{ color: '#000000' }}>
                       {r.fullName ?? '—'}
                     </p>
-                    <p className="text-xs" style={{ color: '#6B7C95' }}>
+                    <p className="text-xs" style={{ color: '#6B7280' }}>
                       {r.city ?? '—'} · {r.numGuests ?? 0} אורחים
                     </p>
                   </div>
-                  <span className="text-xs font-mono" style={{ color: '#6B7C95' }}>
+                  <span className="text-xs font-mono" style={{ color: '#6B7280' }}>
                     {r.createdAt ? new Date(r.createdAt).toLocaleDateString('he-IL') : '—'}
                   </span>
                 </li>
@@ -163,7 +163,7 @@ function StatCard({
   return (
     <div
       className="p-5 rounded-2xl"
-      style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}
+      style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}
     >
       <div className="flex items-center justify-between mb-3">
         <div
@@ -175,14 +175,14 @@ function StatCard({
       </div>
       <p
         className={isText ? 'display text-xl' : 'display text-3xl'}
-        style={{ color: '#0A1F44' }}
+        style={{ color: '#000000' }}
       >
         {value}
       </p>
-      <p className="text-xs font-bold mt-1" style={{ color: '#6B7C95' }}>
+      <p className="text-xs font-bold mt-1" style={{ color: '#6B7280' }}>
         {label}
       </p>
-      <p className="text-[10px] mt-0.5" style={{ color: '#6B7C95', opacity: 0.7 }}>
+      <p className="text-[10px] mt-0.5" style={{ color: '#6B7280', opacity: 0.7 }}>
         {sub}
       </p>
     </div>
@@ -193,11 +193,11 @@ function Panel({ title, icon: Icon, children }: { title: string; icon: React.Ele
   return (
     <div
       className="p-5 rounded-2xl"
-      style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}
+      style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}
     >
       <div className="flex items-center gap-2 mb-4">
-        <Icon className="w-4 h-4" style={{ color: '#1E63D6' }} />
-        <h2 className="font-bold" style={{ color: '#0A1F44' }}>{title}</h2>
+        <Icon className="w-4 h-4" style={{ color: '#7D39EB' }} />
+        <h2 className="font-bold" style={{ color: '#000000' }}>{title}</h2>
       </div>
       {children}
     </div>
@@ -205,5 +205,5 @@ function Panel({ title, icon: Icon, children }: { title: string; icon: React.Ele
 }
 
 function Empty({ children }: { children: React.ReactNode }) {
-  return <p className="text-center py-10 text-sm" style={{ color: '#6B7C95' }}>{children}</p>;
+  return <p className="text-center py-10 text-sm" style={{ color: '#6B7280' }}>{children}</p>;
 }

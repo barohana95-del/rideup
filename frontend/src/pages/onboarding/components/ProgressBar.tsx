@@ -14,7 +14,7 @@ export default function ProgressBar({ step, onStepClick }: { step: number; onSte
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          style={{ background: '#1E63D6' }}
+          style={{ background: '#7D39EB' }}
         />
       </div>
 
@@ -36,16 +36,16 @@ export default function ProgressBar({ step, onStepClick }: { step: number; onSte
               <span
                 className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all"
                 style={{
-                  background: done ? '#1E63D6' : active ? '#fff' : '#EAF1FB',
-                  color: done ? '#fff' : active ? '#1E63D6' : '#6B7C95',
-                  border: active ? '2px solid #1E63D6' : 'none',
+                  background: done ? '#7D39EB' : active ? '#fff' : '#F2EBFF',
+                  color: done ? '#fff' : active ? '#7D39EB' : '#6B7280',
+                  border: active ? '2px solid #7D39EB' : 'none',
                 }}
               >
                 {done ? <Check className="w-3.5 h-3.5" strokeWidth={3} /> : n}
               </span>
               <span
                 className="text-[10px] hidden md:block transition-colors"
-                style={{ color: active ? '#0A1F44' : done ? '#1E63D6' : '#6B7C95' }}
+                style={{ color: active ? '#000000' : done ? '#7D39EB' : '#6B7280' }}
               >
                 {n}
               </span>
@@ -56,13 +56,13 @@ export default function ProgressBar({ step, onStepClick }: { step: number; onSte
 
       {/* Label for current step */}
       <div className="mt-6 text-center">
-        <p className="text-xs font-bold tracking-widest uppercase" style={{ color: '#1E63D6' }}>
+        <p className="text-xs font-bold tracking-widest uppercase" style={{ color: '#7D39EB' }}>
           שלב {step} מתוך {TOTAL_STEPS}
         </p>
-        <h1 className="display text-3xl md:text-5xl mt-2" style={{ color: '#0A1F44' }}>
+        <h1 className="display text-3xl md:text-5xl mt-2" style={{ color: '#000000' }}>
           {stepTitles[step].title}
         </h1>
-        <p className="mt-2 text-sm md:text-base" style={{ color: '#6B7C95' }}>
+        <p className="mt-2 text-sm md:text-base" style={{ color: '#6B7280' }}>
           {stepTitles[step].subtitle}
         </p>
       </div>

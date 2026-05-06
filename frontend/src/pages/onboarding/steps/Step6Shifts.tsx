@@ -33,12 +33,12 @@ export default function Step6Shifts({
       {/* Toggle: do you have return shifts? */}
       <div
         className="p-5 rounded-2xl mb-6"
-        style={{ background: '#EAF1FB', border: '1px solid rgba(30,99,214,0.15)' }}
+        style={{ background: '#F2EBFF', border: '1px solid rgba(125,57,235,0.15)' }}
       >
-        <p className="text-sm font-bold mb-3" style={{ color: '#0A1F44' }}>
+        <p className="text-sm font-bold mb-3" style={{ color: '#000000' }}>
           האם הכנסת ההסעות חזרה כוללת מספר משמרות?
         </p>
-        <p className="text-xs mb-4" style={{ color: '#6B7C95' }}>
+        <p className="text-xs mb-4" style={{ color: '#6B7280' }}>
           לדוגמה: סבב מוקדם בחצות + סבב מאוחר ב-2:00. אם יש רק סבב אחד או שאין משמעות — בחר "לא".
         </p>
 
@@ -47,9 +47,9 @@ export default function Step6Shifts({
             onClick={() => onChange({ useShifts: true })}
             className="flex-1 py-3 rounded-xl font-bold transition-all"
             style={{
-              background: useShifts ? '#1E63D6' : '#fff',
-              color: useShifts ? '#fff' : '#0A1F44',
-              border: useShifts ? '2px solid #1E63D6' : '1px solid rgba(30,99,214,0.2)',
+              background: useShifts ? '#7D39EB' : '#fff',
+              color: useShifts ? '#fff' : '#000000',
+              border: useShifts ? '2px solid #7D39EB' : '1px solid rgba(125,57,235,0.2)',
             }}
           >
             כן, יש משמרות
@@ -58,9 +58,9 @@ export default function Step6Shifts({
             onClick={() => onChange({ useShifts: false, shifts: [] })}
             className="flex-1 py-3 rounded-xl font-bold transition-all"
             style={{
-              background: !useShifts ? '#1E63D6' : '#fff',
-              color: !useShifts ? '#fff' : '#0A1F44',
-              border: !useShifts ? '2px solid #1E63D6' : '1px solid rgba(30,99,214,0.2)',
+              background: !useShifts ? '#7D39EB' : '#fff',
+              color: !useShifts ? '#fff' : '#000000',
+              border: !useShifts ? '2px solid #7D39EB' : '1px solid rgba(125,57,235,0.2)',
             }}
           >
             לא
@@ -74,7 +74,7 @@ export default function Step6Shifts({
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
         >
-          <p className="text-sm font-bold mb-3" style={{ color: '#0A1F44' }}>
+          <p className="text-sm font-bold mb-3" style={{ color: '#000000' }}>
             משמרות חזרה
           </p>
 
@@ -84,11 +84,11 @@ export default function Step6Shifts({
                 <div
                   key={s}
                   className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl"
-                  style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.15)' }}
+                  style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.15)' }}
                 >
                   <span className="flex items-center gap-2">
-                    <Clock className="w-4 h-4" style={{ color: '#1E63D6' }} />
-                    <span className="font-semibold" style={{ color: '#0A1F44' }}>{s}</span>
+                    <Clock className="w-4 h-4" style={{ color: '#7D39EB' }} />
+                    <span className="font-semibold" style={{ color: '#000000' }}>{s}</span>
                   </span>
                   <button
                     onClick={() => removeShift(s)}
@@ -112,30 +112,30 @@ export default function Step6Shifts({
               className="flex-1 px-4 py-3 text-base focus:outline-none transition-all"
               style={{
                 background: '#fff',
-                border: '1.5px solid rgba(30,99,214,0.15)',
+                border: '1.5px solid rgba(125,57,235,0.15)',
                 borderRadius: '14px',
-                color: '#0A1F44',
+                color: '#000000',
               }}
             />
             <button
               onClick={addShift}
               disabled={!custom.trim()}
               className="px-5 py-3 rounded-2xl font-bold transition-all disabled:opacity-40 inline-flex items-center gap-2"
-              style={{ background: '#1E63D6', color: '#fff' }}
+              style={{ background: '#7D39EB', color: '#fff' }}
             >
               <Plus className="w-4 h-4" />
               הוסף
             </button>
           </div>
 
-          <p className="mt-3 text-xs" style={{ color: '#6B7C95' }}>
+          <p className="mt-3 text-xs" style={{ color: '#6B7280' }}>
             💡 פורמט מומלץ: "סבב א' - 00:00", "סבב ב' - 02:00"
           </p>
         </motion.div>
       )}
 
       {!useShifts && (
-        <div className="text-center text-sm py-8" style={{ color: '#6B7C95' }}>
+        <div className="text-center text-sm py-8" style={{ color: '#6B7280' }}>
           האורחים לא יראו שאלת משמרת בטופס.
         </div>
       )}

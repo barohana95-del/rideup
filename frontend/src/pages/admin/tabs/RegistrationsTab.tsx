@@ -89,28 +89,28 @@ export default function RegistrationsTab({
 
       {/* Top bar */}
       <div className="rounded-2xl p-4 flex items-center gap-3 flex-wrap"
-           style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
+           style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
         <div className="flex items-center gap-2 flex-1 min-w-[240px]">
-          <Search className="w-4 h-4" style={{ color: '#6B7C95' }} />
+          <Search className="w-4 h-4" style={{ color: '#6B7280' }} />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="חיפוש לפי שם, טלפון, או עיר..."
             className="flex-1 bg-transparent text-sm focus:outline-none"
-            style={{ color: '#0A1F44' }}
+            style={{ color: '#000000' }}
           />
         </div>
-        <div className="flex items-center gap-2 text-sm" style={{ color: '#6B7C95' }}>
-          <span><span className="font-bold" style={{ color: '#0A1F44' }}>{filtered.length}</span> רישומים</span>
+        <div className="flex items-center gap-2 text-sm" style={{ color: '#6B7280' }}>
+          <span><span className="font-bold" style={{ color: '#000000' }}>{filtered.length}</span> רישומים</span>
           <span className="opacity-50">·</span>
-          <span><span className="font-bold" style={{ color: '#0A1F44' }}>{totalGuests}</span> אורחים</span>
+          <span><span className="font-bold" style={{ color: '#000000' }}>{totalGuests}</span> אורחים</span>
         </div>
         <button
           onClick={handleExport}
           disabled={exporting || registrations.length === 0}
           className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-full transition-all disabled:opacity-40"
-          style={{ background: '#1E63D6', color: '#fff' }}>
+          style={{ background: '#7D39EB', color: '#fff' }}>
           {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
           ייצא ל-Excel
         </button>
@@ -119,21 +119,21 @@ export default function RegistrationsTab({
       {/* Table */}
       {filtered.length === 0 ? (
         <div className="rounded-2xl p-10 text-center"
-             style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
-          <Users className="w-10 h-10 mx-auto mb-3" style={{ color: '#6B7C95' }} />
-          <p className="font-bold mb-1" style={{ color: '#0A1F44' }}>
+             style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
+          <Users className="w-10 h-10 mx-auto mb-3" style={{ color: '#6B7280' }} />
+          <p className="font-bold mb-1" style={{ color: '#000000' }}>
             {registrations.length === 0 ? 'אין עדיין רישומים' : 'לא נמצאו תוצאות'}
           </p>
-          <p className="text-sm" style={{ color: '#6B7C95' }}>
+          <p className="text-sm" style={{ color: '#6B7280' }}>
             {registrations.length === 0 ? 'שתף את הקישור לאתר ותתחיל לקבל אישורי הגעה.' : 'נסה חיפוש אחר.'}
           </p>
         </div>
       ) : (
         <div className="rounded-2xl overflow-hidden"
-             style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
+             style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead style={{ background: '#EAF1FB' }}>
+              <thead style={{ background: '#F2EBFF' }}>
                 <tr>
                   <Th>שם</Th>
                   <Th>טלפון</Th>
@@ -153,7 +153,7 @@ export default function RegistrationsTab({
                     return (
                       <motion.tr key={r.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                                  className="border-t"
-                                 style={{ borderColor: 'rgba(30,99,214,0.06)', background: isEditing ? '#FFFBEB' : '#fff' }}>
+                                 style={{ borderColor: 'rgba(125,57,235,0.06)', background: isEditing ? '#FFFBEB' : '#fff' }}>
                         {isEditing ? (
                           <>
                             <Td><CellInput value={editForm.fullName ?? ''} onChange={(v) => setEditForm({ ...editForm, fullName: v })} /></Td>
@@ -162,48 +162,48 @@ export default function RegistrationsTab({
                             <Td><CellInput value={editForm.city ?? ''} onChange={(v) => setEditForm({ ...editForm, city: v })} /></Td>
                             <Td><CellInput value={editForm.returnShift ?? ''} onChange={(v) => setEditForm({ ...editForm, returnShift: v })} /></Td>
                             <Td><CellInput value={editForm.notes ?? ''} onChange={(v) => setEditForm({ ...editForm, notes: v })} /></Td>
-                            <Td><span style={{ color: '#6B7C95', fontSize: 11 }}>{new Date(r.createdAt).toLocaleDateString('he-IL')}</span></Td>
+                            <Td><span style={{ color: '#6B7280', fontSize: 11 }}>{new Date(r.createdAt).toLocaleDateString('he-IL')}</span></Td>
                             <Td align="center">
                               <div className="inline-flex gap-1">
                                 <IconBtn onClick={() => saveEdit(r.id)} color="#10B981" disabled={isSaving}>
                                   {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
                                 </IconBtn>
-                                <IconBtn onClick={cancelEdit} color="#6B7C95"><X className="w-3.5 h-3.5" /></IconBtn>
+                                <IconBtn onClick={cancelEdit} color="#6B7280"><X className="w-3.5 h-3.5" /></IconBtn>
                               </div>
                             </Td>
                           </>
                         ) : (
                           <>
-                            <Td><span className="font-bold" style={{ color: '#0A1F44' }}>{r.fullName}</span></Td>
+                            <Td><span className="font-bold" style={{ color: '#000000' }}>{r.fullName}</span></Td>
                             <Td>
-                              <a href={`tel:${r.phoneNumber}`} className="inline-flex items-center gap-1" style={{ color: '#1E63D6' }} dir="ltr">
+                              <a href={`tel:${r.phoneNumber}`} className="inline-flex items-center gap-1" style={{ color: '#7D39EB' }} dir="ltr">
                                 <Phone className="w-3 h-3" />
                                 <span className="font-mono text-xs">{r.phoneNumber}</span>
                               </a>
                             </Td>
                             <Td align="center">
                               <span className="inline-flex items-center justify-center w-7 h-7 rounded-full font-bold text-xs"
-                                    style={{ background: '#EAF1FB', color: '#1E63D6' }}>{r.numGuests}</span>
+                                    style={{ background: '#F2EBFF', color: '#7D39EB' }}>{r.numGuests}</span>
                             </Td>
                             <Td>
                               {r.city ? (
                                 <span className="inline-flex items-center gap-1 text-xs">
-                                  <MapPin className="w-3 h-3" style={{ color: '#6B7C95' }} />{r.city}
+                                  <MapPin className="w-3 h-3" style={{ color: '#6B7280' }} />{r.city}
                                 </span>
                               ) : <Muted>—</Muted>}
                             </Td>
                             <Td>
                               {r.returnShift ? (
                                 <span className="inline-flex items-center gap-1 text-xs">
-                                  <Clock className="w-3 h-3" style={{ color: '#6B7C95' }} />{r.returnShift}
+                                  <Clock className="w-3 h-3" style={{ color: '#6B7280' }} />{r.returnShift}
                                 </span>
                               ) : <Muted>—</Muted>}
                             </Td>
                             <Td>{r.notes ? <span className="text-xs truncate max-w-[160px] inline-block" title={r.notes}>{r.notes}</span> : <Muted>—</Muted>}</Td>
-                            <Td><span className="font-mono text-xs" style={{ color: '#6B7C95' }}>{new Date(r.createdAt).toLocaleDateString('he-IL')}</span></Td>
+                            <Td><span className="font-mono text-xs" style={{ color: '#6B7280' }}>{new Date(r.createdAt).toLocaleDateString('he-IL')}</span></Td>
                             <Td align="center">
                               <div className="inline-flex gap-1">
-                                <IconBtn onClick={() => startEdit(r)} color="#1E63D6"><Pencil className="w-3.5 h-3.5" /></IconBtn>
+                                <IconBtn onClick={() => startEdit(r)} color="#7D39EB"><Pencil className="w-3.5 h-3.5" /></IconBtn>
                                 <IconBtn onClick={() => remove(r.id)} color="#DC2626"><Trash2 className="w-3.5 h-3.5" /></IconBtn>
                               </div>
                             </Td>
@@ -223,13 +223,13 @@ export default function RegistrationsTab({
 }
 
 function Th({ children, align = 'right' }: { children: React.ReactNode; align?: 'right' | 'center' | 'left' }) {
-  return <th className="px-4 py-3 font-bold text-xs uppercase tracking-wider" style={{ color: '#6B7C95', textAlign: align }}>{children}</th>;
+  return <th className="px-4 py-3 font-bold text-xs uppercase tracking-wider" style={{ color: '#6B7280', textAlign: align }}>{children}</th>;
 }
 function Td({ children, align = 'right' }: { children: React.ReactNode; align?: 'right' | 'center' | 'left' }) {
   return <td className="px-4 py-3" style={{ color: '#3D4F6B', textAlign: align }}>{children}</td>;
 }
 function Muted({ children }: { children: React.ReactNode }) {
-  return <span style={{ color: '#9AA5B6' }}>{children}</span>;
+  return <span style={{ color: '#9CA3AF' }}>{children}</span>;
 }
 function IconBtn({ children, onClick, color, disabled }: { children: React.ReactNode; onClick: () => void; color: string; disabled?: boolean }) {
   return (
@@ -244,6 +244,6 @@ function CellInput({ value, onChange, dir, type = 'text', width }: { value: stri
   return (
     <input type={type} value={value} dir={dir} onChange={(e) => onChange(e.target.value)}
            className="px-2 py-1 text-xs focus:outline-none transition-all"
-           style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.25)', borderRadius: '6px', color: '#0A1F44', width: width ?? '100%' }} />
+           style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.25)', borderRadius: '6px', color: '#000000', width: width ?? '100%' }} />
   );
 }

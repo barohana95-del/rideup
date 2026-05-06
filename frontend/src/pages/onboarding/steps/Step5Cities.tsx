@@ -38,15 +38,15 @@ export default function Step5Cities({
     >
       {/* Selected count */}
       <div className="text-center mb-6">
-        <p className="text-sm" style={{ color: '#6B7C95' }}>
-          נבחרו <span className="font-bold" style={{ color: '#1E63D6' }}>{cities.length}</span> ערים
+        <p className="text-sm" style={{ color: '#6B7280' }}>
+          נבחרו <span className="font-bold" style={{ color: '#7D39EB' }}>{cities.length}</span> ערים
         </p>
       </div>
 
       {/* Selected cities */}
       {cities.length > 0 && (
-        <div className="mb-6 p-4 rounded-2xl" style={{ background: '#EAF1FB', border: '1px solid rgba(30,99,214,0.15)' }}>
-          <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: '#1E63D6' }}>
+        <div className="mb-6 p-4 rounded-2xl" style={{ background: '#F2EBFF', border: '1px solid rgba(125,57,235,0.15)' }}>
+          <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: '#7D39EB' }}>
             נבחרו
           </p>
           <div className="flex flex-wrap gap-2">
@@ -54,7 +54,7 @@ export default function Step5Cities({
               <span
                 key={c}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold"
-                style={{ background: '#1E63D6', color: '#fff' }}
+                style={{ background: '#7D39EB', color: '#fff' }}
               >
                 <MapPin className="w-3 h-3" />
                 {c}
@@ -73,7 +73,7 @@ export default function Step5Cities({
 
       {/* Default city pool */}
       <div className="mb-6">
-        <p className="text-sm font-bold mb-3" style={{ color: '#0A1F44' }}>
+        <p className="text-sm font-bold mb-3" style={{ color: '#000000' }}>
           ערים פופולריות
         </p>
         <div className="flex flex-wrap gap-2">
@@ -85,9 +85,9 @@ export default function Step5Cities({
                 onClick={() => toggle(c)}
                 className="px-4 py-2 rounded-full text-sm font-semibold transition-all"
                 style={{
-                  background: selected ? '#0A1F44' : '#fff',
+                  background: selected ? '#000000' : '#fff',
                   color: selected ? '#fff' : '#3D4F6B',
-                  border: selected ? '1px solid #0A1F44' : '1px solid rgba(30,99,214,0.15)',
+                  border: selected ? '1px solid #000000' : '1px solid rgba(125,57,235,0.15)',
                 }}
               >
                 {selected && '✓ '}
@@ -100,7 +100,7 @@ export default function Step5Cities({
 
       {/* Custom city */}
       <div>
-        <p className="text-sm font-bold mb-2" style={{ color: '#0A1F44' }}>
+        <p className="text-sm font-bold mb-2" style={{ color: '#000000' }}>
           לא רואה את העיר שלך?
         </p>
         <div className="flex gap-2">
@@ -113,16 +113,16 @@ export default function Step5Cities({
             className="flex-1 px-4 py-3 text-base focus:outline-none transition-all"
             style={{
               background: '#fff',
-              border: '1.5px solid rgba(30,99,214,0.15)',
+              border: '1.5px solid rgba(125,57,235,0.15)',
               borderRadius: '14px',
-              color: '#0A1F44',
+              color: '#000000',
             }}
           />
           <button
             onClick={addCustom}
             disabled={!custom.trim()}
             className="px-5 py-3 rounded-2xl font-bold transition-all disabled:opacity-40 inline-flex items-center gap-2"
-            style={{ background: '#1E63D6', color: '#fff' }}
+            style={{ background: '#7D39EB', color: '#fff' }}
           >
             <Plus className="w-4 h-4" />
             הוסף

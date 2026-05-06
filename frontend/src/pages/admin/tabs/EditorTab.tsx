@@ -50,7 +50,7 @@ export default function EditorTab({
     theme: tenant.theme,
     logoUrl: tenant.logoUrl ?? '',
     coverImageUrl: tenant.coverImageUrl ?? '',
-    primaryColor: settings.primaryColor ?? '#1E63D6',
+    primaryColor: settings.primaryColor ?? '#7D39EB',
     secondaryColor: settings.secondaryColor ?? '',
     fontFamily: settings.fontFamily ?? 'Heebo',
   }), [tenant, settings]);
@@ -98,7 +98,7 @@ export default function EditorTab({
     if (form.theme !== tenant.theme)                  patch.theme = form.theme;
     if (form.logoUrl !== (tenant.logoUrl ?? ''))      patch.logoUrl = form.logoUrl || null;
     if (form.coverImageUrl !== (tenant.coverImageUrl ?? '')) patch.coverImageUrl = form.coverImageUrl || null;
-    if (form.primaryColor !== (settings.primaryColor ?? '#1E63D6'))
+    if (form.primaryColor !== (settings.primaryColor ?? '#7D39EB'))
       patch.primaryColor = form.primaryColor;
     if (form.secondaryColor !== (settings.secondaryColor ?? ''))
       patch.secondaryColor = form.secondaryColor || null;
@@ -165,8 +165,8 @@ export default function EditorTab({
                     onClick={() => setForm({ ...form, theme: t.key })}
                     className="relative rounded-xl overflow-hidden transition-all text-right"
                     style={{
-                      border: selected ? '2px solid #1E63D6' : '1px solid rgba(30,99,214,0.15)',
-                      boxShadow: selected ? '0 6px 20px -4px rgba(30,99,214,0.35)' : 'none',
+                      border: selected ? '2px solid #7D39EB' : '1px solid rgba(125,57,235,0.15)',
+                      boxShadow: selected ? '0 6px 20px -4px rgba(125,57,235,0.35)' : 'none',
                     }}
                   >
                     <div
@@ -176,13 +176,13 @@ export default function EditorTab({
                       Aa
                     </div>
                     <div className="px-2.5 py-1.5 bg-white">
-                      <p className="font-bold text-xs" style={{ color: '#0A1F44' }}>{t.label}</p>
-                      <p className="text-[10px]" style={{ color: '#6B7C95' }}>{t.vibe}</p>
+                      <p className="font-bold text-xs" style={{ color: '#000000' }}>{t.label}</p>
+                      <p className="text-[10px]" style={{ color: '#6B7280' }}>{t.vibe}</p>
                     </div>
                     {selected && (
                       <span
                         className="absolute top-1.5 left-1.5 w-5 h-5 rounded-full flex items-center justify-center"
-                        style={{ background: '#1E63D6' }}
+                        style={{ background: '#7D39EB' }}
                       >
                         <Check className="w-3 h-3 text-white" strokeWidth={3} />
                       </span>
@@ -219,9 +219,9 @@ export default function EditorTab({
                     onClick={() => setForm({ ...form, fontFamily: font })}
                     className="px-4 py-3 rounded-xl text-right transition-all"
                     style={{
-                      background: selected ? '#0A1F44' : '#fff',
-                      color: selected ? '#fff' : '#0A1F44',
-                      border: selected ? '2px solid #1E63D6' : '1px solid rgba(30,99,214,0.15)',
+                      background: selected ? '#000000' : '#fff',
+                      color: selected ? '#fff' : '#000000',
+                      border: selected ? '2px solid #7D39EB' : '1px solid rgba(125,57,235,0.15)',
                       fontFamily: font,
                       fontWeight: 700,
                     }}
@@ -239,9 +239,9 @@ export default function EditorTab({
         <div
           className="sticky bottom-3 flex items-center justify-between gap-3 p-4 rounded-2xl shadow-lg"
           style={{
-            background: '#0A1F44',
+            background: '#000000',
             color: '#fff',
-            border: '1px solid rgba(30,99,214,0.3)',
+            border: '1px solid rgba(125,57,235,0.3)',
           }}
         >
           <div className="flex-1 min-w-0">
@@ -281,7 +281,7 @@ export default function EditorTab({
             disabled={!canSave}
             className="inline-flex items-center gap-2 px-6 py-2.5 font-bold rounded-full transition-all disabled:opacity-40"
             style={{
-              background: canSave ? '#1E63D6' : 'rgba(255,255,255,0.1)',
+              background: canSave ? '#7D39EB' : 'rgba(255,255,255,0.1)',
               color: '#fff',
             }}
           >
@@ -297,8 +297,8 @@ export default function EditorTab({
       {/* ── RIGHT: live preview ───────────────────────────────────── */}
       <div className="lg:col-span-5">
         <div className="lg:sticky lg:top-6">
-          <h3 className="font-bold flex items-center gap-2 mb-3" style={{ color: '#0A1F44' }}>
-            <Eye className="w-4 h-4" style={{ color: '#1E63D6' }} />
+          <h3 className="font-bold flex items-center gap-2 mb-3" style={{ color: '#000000' }}>
+            <Eye className="w-4 h-4" style={{ color: '#7D39EB' }} />
             תצוגה מקדימה
           </h3>
 
@@ -309,7 +309,7 @@ export default function EditorTab({
             target="_blank"
             rel="noreferrer"
             className="mt-3 inline-flex items-center gap-2 text-sm font-semibold underline underline-offset-4"
-            style={{ color: '#1E63D6' }}
+            style={{ color: '#7D39EB' }}
           >
             <Link2 className="w-3.5 h-3.5" />
             פתח אתר אמיתי בחלון חדש
@@ -325,13 +325,13 @@ export default function EditorTab({
 function Section({ icon: Icon, title, subtitle, children }: { icon: React.ElementType; title: string; subtitle?: string; children: React.ReactNode }) {
   return (
     <div className="rounded-2xl p-5 md:p-6 space-y-5"
-         style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
+         style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <Icon className="w-4 h-4" style={{ color: '#1E63D6' }} />
-          <h2 className="font-bold" style={{ color: '#0A1F44' }}>{title}</h2>
+          <Icon className="w-4 h-4" style={{ color: '#7D39EB' }} />
+          <h2 className="font-bold" style={{ color: '#000000' }}>{title}</h2>
         </div>
-        {subtitle && <p className="text-xs" style={{ color: '#6B7C95' }}>{subtitle}</p>}
+        {subtitle && <p className="text-xs" style={{ color: '#6B7280' }}>{subtitle}</p>}
       </div>
       {children}
     </div>
@@ -341,12 +341,12 @@ function Section({ icon: Icon, title, subtitle, children }: { icon: React.Elemen
 function Field({ label, icon: Icon, hint, children }: { label: string; icon?: React.ElementType; hint?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="flex items-center gap-1.5 text-xs font-bold mb-1.5" style={{ color: '#0A1F44' }}>
-        {Icon && <Icon className="w-3.5 h-3.5" style={{ color: '#1E63D6' }} />}
+      <label className="flex items-center gap-1.5 text-xs font-bold mb-1.5" style={{ color: '#000000' }}>
+        {Icon && <Icon className="w-3.5 h-3.5" style={{ color: '#7D39EB' }} />}
         {label}
       </label>
       {children}
-      {hint && <p className="mt-1 text-[11px]" style={{ color: '#6B7C95' }}>{hint}</p>}
+      {hint && <p className="mt-1 text-[11px]" style={{ color: '#6B7280' }}>{hint}</p>}
     </div>
   );
 }
@@ -362,12 +362,12 @@ function Input({ value, onChange, placeholder, dir }: { value: string; onChange:
       className="w-full px-3.5 py-2.5 text-sm focus:outline-none transition-all"
       style={{
         background: '#fff',
-        border: '1.5px solid rgba(30,99,214,0.15)',
+        border: '1.5px solid rgba(125,57,235,0.15)',
         borderRadius: '10px',
-        color: '#0A1F44',
+        color: '#000000',
       }}
-      onFocus={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = '#1E63D6'; }}
-      onBlur={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = 'rgba(30,99,214,0.15)'; }}
+      onFocus={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = '#7D39EB'; }}
+      onBlur={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = 'rgba(125,57,235,0.15)'; }}
     />
   );
 }
@@ -381,14 +381,14 @@ function SlugInput({ value, status, originalSlug, onChange }: {
   const borderColor =
     status === 'available' ? '#10B981' :
     status === 'taken' || status === 'invalid' ? '#EF4444' :
-    'rgba(30,99,214,0.15)';
+    'rgba(125,57,235,0.15)';
 
   return (
     <div>
       <div className="flex items-stretch rounded-lg overflow-hidden"
            style={{ border: `1.5px solid ${borderColor}` }}>
         <span className="px-3 flex items-center text-xs"
-              style={{ background: '#EAF1FB', color: '#6B7C95' }} dir="ltr">
+              style={{ background: '#F2EBFF', color: '#6B7280' }} dir="ltr">
           rideup.../
         </span>
         <input
@@ -397,14 +397,14 @@ function SlugInput({ value, status, originalSlug, onChange }: {
           onChange={(e) => onChange(e.target.value.toLowerCase().trim())}
           dir="ltr"
           className="flex-1 px-3 py-2.5 text-sm font-mono focus:outline-none"
-          style={{ background: '#fff', color: '#0A1F44' }}
+          style={{ background: '#fff', color: '#000000' }}
         />
         <span className="px-3 flex items-center min-w-[80px] justify-center">
-          {status === 'checking' && <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#6B7C95' }} />}
+          {status === 'checking' && <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#6B7280' }} />}
           {status === 'available' && <Check className="w-4 h-4" style={{ color: '#10B981' }} />}
           {status === 'taken' && <span className="text-[10px] font-bold" style={{ color: '#EF4444' }}>תפוס</span>}
           {status === 'invalid' && <span className="text-[10px] font-bold" style={{ color: '#EF4444' }}>פסול</span>}
-          {status === 'idle' && value === originalSlug && <span className="text-[10px]" style={{ color: '#6B7C95' }}>נוכחי</span>}
+          {status === 'idle' && value === originalSlug && <span className="text-[10px]" style={{ color: '#6B7280' }}>נוכחי</span>}
         </span>
       </div>
       {value !== originalSlug && status === 'available' && (
@@ -417,11 +417,11 @@ function SlugInput({ value, status, originalSlug, onChange }: {
 }
 
 function ColorPicker({ value, onChange, allowEmpty }: { value: string; onChange: (v: string) => void; allowEmpty?: boolean }) {
-  const safeValue = value || '#1E63D6';
+  const safeValue = value || '#7D39EB';
   return (
     <div className="flex items-center gap-2">
       <label className="relative cursor-pointer rounded-lg overflow-hidden shrink-0"
-             style={{ width: 40, height: 40, border: '1.5px solid rgba(30,99,214,0.15)' }}>
+             style={{ width: 40, height: 40, border: '1.5px solid rgba(125,57,235,0.15)' }}>
         <input
           type="color"
           value={safeValue}
@@ -435,20 +435,20 @@ function ColorPicker({ value, onChange, allowEmpty }: { value: string; onChange:
         value={value}
         onChange={(e) => onChange(e.target.value)}
         dir="ltr"
-        placeholder="#1E63D6"
+        placeholder="#7D39EB"
         className="flex-1 px-3 py-2.5 text-sm font-mono focus:outline-none transition-all"
         style={{
           background: '#fff',
-          border: '1.5px solid rgba(30,99,214,0.15)',
+          border: '1.5px solid rgba(125,57,235,0.15)',
           borderRadius: '10px',
-          color: '#0A1F44',
+          color: '#000000',
         }}
       />
       {allowEmpty && value && (
         <button
           onClick={() => onChange('')}
           className="text-xs px-2 py-1 rounded-md"
-          style={{ color: '#6B7C95' }}
+          style={{ color: '#6B7280' }}
         >
           נקה
         </button>
@@ -470,7 +470,7 @@ function ThemePreview({
 
   return (
     <div className="rounded-2xl overflow-hidden ring-1"
-         style={{ borderColor: 'rgba(30,99,214,0.1)', boxShadow: '0 8px 24px -8px rgba(10,31,68,0.15)' }}>
+         style={{ borderColor: 'rgba(125,57,235,0.1)', boxShadow: '0 8px 24px -8px rgba(0,0,0,0.15)' }}>
       {/* Browser chrome */}
       <div className="px-3 py-2 flex items-center gap-1.5"
            style={{ background: '#1A2A28' }}>

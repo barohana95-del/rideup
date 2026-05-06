@@ -22,16 +22,16 @@ type UserRow      = NonNullable<Awaited<ReturnType<typeof saApi.listUsers>>['dat
 
 const PLAN_COLORS: Record<string, string> = {
   trial:   '#F59E0B',
-  basic:   '#6B7C95',
-  pro:     '#1E63D6',
+  basic:   '#6B7280',
+  pro:     '#7D39EB',
   premium: '#8B5CF6',
 };
 const STATUS_COLORS: Record<string, string> = {
-  draft:     '#9AA5B6',
+  draft:     '#9CA3AF',
   trial:     '#F59E0B',
   active:    '#10B981',
   expired:   '#DC2626',
-  archived:  '#6B7C95',
+  archived:  '#6B7280',
   suspended: '#7F1D1D',
 };
 
@@ -43,7 +43,7 @@ export default function SuperAdminApp() {
     return (
       <FullPage>
         <p className="mb-4">צריך להתחבר תחילה.</p>
-        <a href="/onboarding" className="font-bold underline" style={{ color: '#1E63D6' }}>
+        <a href="/onboarding" className="font-bold underline" style={{ color: '#7D39EB' }}>
           למסך התחברות
         </a>
       </FullPage>
@@ -57,11 +57,11 @@ export default function SuperAdminApp() {
   ];
 
   return (
-    <div dir="rtl" className="min-h-screen flex" style={{ background: '#EAF1FB' }}>
+    <div dir="rtl" className="min-h-screen flex" style={{ background: '#F2EBFF' }}>
       {/* Sidebar */}
       <aside
         className="w-64 shrink-0 flex flex-col"
-        style={{ background: '#0A1F44', color: '#fff', minHeight: '100vh' }}
+        style={{ background: '#000000', color: '#fff', minHeight: '100vh' }}
       >
         <div className="px-6 pt-6 pb-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <Logo size="sm" />
@@ -88,7 +88,7 @@ export default function SuperAdminApp() {
                     onClick={() => setActiveTab(tab.key)}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors text-right"
                     style={{
-                      background: active ? '#1E63D6' : 'transparent',
+                      background: active ? '#7D39EB' : 'transparent',
                       color: active ? '#fff' : 'rgba(255,255,255,0.7)',
                     }}
                   >
@@ -114,7 +114,7 @@ export default function SuperAdminApp() {
           </button>
           <div className="flex items-center gap-2 px-3 py-2 mt-2">
             <div className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs"
-                 style={{ background: '#FCD34D', color: '#0A1F44' }}>
+                 style={{ background: '#FCD34D', color: '#000000' }}>
               {user.displayName[0]}
             </div>
             <p className="text-xs truncate" style={{ color: 'rgba(255,255,255,0.55)' }}>
@@ -127,13 +127,13 @@ export default function SuperAdminApp() {
       {/* Main */}
       <main className="flex-1 min-w-0">
         <div className="px-8 py-5 flex items-center justify-between border-b"
-             style={{ background: '#fff', borderColor: 'rgba(30,99,214,0.1)' }}>
+             style={{ background: '#fff', borderColor: 'rgba(125,57,235,0.1)' }}>
           <div>
             <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#FCD34D' }}>
               <Crown className="w-3 h-3 inline mr-1" />
               SUPER-ADMIN
             </p>
-            <h1 className="text-2xl mt-0.5 font-black" style={{ color: '#0A1F44' }}>
+            <h1 className="text-2xl mt-0.5 font-black" style={{ color: '#000000' }}>
               {tabs.find((t) => t.key === activeTab)?.label}
             </h1>
           </div>
@@ -180,7 +180,7 @@ function OverviewTab() {
     <div className="space-y-6">
       {/* Top totals */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <BigStat icon={Briefcase} label="אתרים פעילים"     value={data.totals.tenants}        color="#1E63D6" delta={`+${data.recent.newTenants} השבוע`} />
+        <BigStat icon={Briefcase} label="אתרים פעילים"     value={data.totals.tenants}        color="#7D39EB" delta={`+${data.recent.newTenants} השבוע`} />
         <BigStat icon={UsersIcon} label="משתמשים רשומים"   value={data.totals.users}          color="#10B981" delta={`+${data.recent.newUsers} השבוע`} />
         <BigStat icon={TrendingUp} label="סך רישומי אורחים" value={data.totals.registrations}  color="#F59E0B" delta={`+${data.recent.newRegistrations} השבוע`} />
         <BigStat icon={Sparkles}  label="אורחים מאורגנים"  value={data.totals.guests}         color="#8B5CF6" />
@@ -197,9 +197,9 @@ function OverviewTab() {
                 <li key={plan} className="flex items-center justify-between text-sm">
                   <span className="inline-flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full" style={{ background: PLAN_COLORS[plan] ?? '#999' }} />
-                    <span className="font-bold capitalize" style={{ color: '#0A1F44' }}>{plan}</span>
+                    <span className="font-bold capitalize" style={{ color: '#000000' }}>{plan}</span>
                   </span>
-                  <span className="font-mono" style={{ color: '#6B7C95' }}>{n}</span>
+                  <span className="font-mono" style={{ color: '#6B7280' }}>{n}</span>
                 </li>
               ))}
             </ul>
@@ -216,9 +216,9 @@ function OverviewTab() {
                 <li key={status} className="flex items-center justify-between text-sm">
                   <span className="inline-flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full" style={{ background: STATUS_COLORS[status] ?? '#999' }} />
-                    <span className="font-bold" style={{ color: '#0A1F44' }}>{status}</span>
+                    <span className="font-bold" style={{ color: '#000000' }}>{status}</span>
                   </span>
-                  <span className="font-mono" style={{ color: '#6B7C95' }}>{n}</span>
+                  <span className="font-mono" style={{ color: '#6B7280' }}>{n}</span>
                 </li>
               ))}
             </ul>
@@ -231,20 +231,20 @@ function OverviewTab() {
         {data.latestTenants.length === 0 ? (
           <Empty>אין עדיין אתרים</Empty>
         ) : (
-          <ul className="divide-y" style={{ borderColor: 'rgba(30,99,214,0.08)' }}>
+          <ul className="divide-y" style={{ borderColor: 'rgba(125,57,235,0.08)' }}>
             {data.latestTenants.map((t) => (
               <li key={t.id} className="flex items-center justify-between gap-3 py-3">
                 <div className="min-w-0 flex-1">
-                  <p className="font-bold truncate" style={{ color: '#0A1F44' }}>
+                  <p className="font-bold truncate" style={{ color: '#000000' }}>
                     {t.eventTitle || t.slug}
                   </p>
-                  <p className="text-xs truncate" style={{ color: '#6B7C95' }}>
+                  <p className="text-xs truncate" style={{ color: '#6B7280' }}>
                     {t.ownerEmail ?? '—'} · {t.slug}
                   </p>
                 </div>
                 <PlanBadge plan={t.plan} />
                 <StatusBadge status={t.status} />
-                <span className="text-xs font-mono shrink-0" style={{ color: '#6B7C95' }}>
+                <span className="text-xs font-mono shrink-0" style={{ color: '#6B7280' }}>
                   {new Date(t.createdAt).toLocaleDateString('he-IL')}
                 </span>
               </li>
@@ -290,16 +290,16 @@ function TenantsTab() {
     <div className="space-y-5">
       {/* Filters */}
       <div className="rounded-2xl p-4 flex items-center gap-3 flex-wrap"
-           style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
+           style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
         <div className="flex items-center gap-2 flex-1 min-w-[240px]">
-          <Search className="w-4 h-4" style={{ color: '#6B7C95' }} />
+          <Search className="w-4 h-4" style={{ color: '#6B7280' }} />
           <input
             type="text"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="חיפוש לפי slug, שם אירוע, או אימייל..."
             className="flex-1 bg-transparent text-sm focus:outline-none"
-            style={{ color: '#0A1F44' }}
+            style={{ color: '#000000' }}
           />
         </div>
         <FilterSelect value={planFilter} onChange={setPlanFilter} options={[
@@ -317,18 +317,18 @@ function TenantsTab() {
           { v: 'archived', l: 'בארכיון' },
           { v: 'suspended', l: 'מושעה' },
         ]} />
-        <span className="text-sm" style={{ color: '#6B7C95' }}>
-          <span className="font-bold" style={{ color: '#0A1F44' }}>{rows.length}</span> אתרים
+        <span className="text-sm" style={{ color: '#6B7280' }}>
+          <span className="font-bold" style={{ color: '#000000' }}>{rows.length}</span> אתרים
         </span>
       </div>
 
       {error && <ErrorBox message={error} onDismiss={() => setError(null)} />}
       {loading ? <CenteredLoader /> : (
         rows.length === 0 ? <Empty>לא נמצאו אתרים</Empty> :
-        <div className="rounded-2xl overflow-hidden" style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
+        <div className="rounded-2xl overflow-hidden" style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead style={{ background: '#EAF1FB' }}>
+              <thead style={{ background: '#F2EBFF' }}>
                 <tr>
                   <Th>אירוע</Th>
                   <Th>בעלים</Th>
@@ -342,32 +342,32 @@ function TenantsTab() {
               </thead>
               <tbody>
                 {rows.map((r) => (
-                  <tr key={r.id} className="border-t" style={{ borderColor: 'rgba(30,99,214,0.06)' }}>
+                  <tr key={r.id} className="border-t" style={{ borderColor: 'rgba(125,57,235,0.06)' }}>
                     <Td>
-                      <p className="font-bold" style={{ color: '#0A1F44' }}>
+                      <p className="font-bold" style={{ color: '#000000' }}>
                         {r.eventTitle || r.slug}
                       </p>
-                      <p className="text-[11px] font-mono" style={{ color: '#6B7C95' }}>
+                      <p className="text-[11px] font-mono" style={{ color: '#6B7280' }}>
                         /{r.slug}
                       </p>
                     </Td>
                     <Td>
-                      <p className="text-xs" style={{ color: '#0A1F44' }}>{r.ownerName ?? '—'}</p>
-                      <p className="text-[11px]" style={{ color: '#6B7C95' }}>{r.ownerEmail ?? '—'}</p>
+                      <p className="text-xs" style={{ color: '#000000' }}>{r.ownerName ?? '—'}</p>
+                      <p className="text-[11px]" style={{ color: '#6B7280' }}>{r.ownerEmail ?? '—'}</p>
                     </Td>
                     <Td><PlanBadge plan={r.plan} /></Td>
                     <Td><StatusBadge status={r.status} /></Td>
                     <Td align="center">
-                      <span className="font-bold" style={{ color: '#0A1F44' }}>{r.guests}</span>
-                      <span className="text-[11px] mr-1" style={{ color: '#6B7C95' }}>· {r.registrations}</span>
+                      <span className="font-bold" style={{ color: '#000000' }}>{r.guests}</span>
+                      <span className="text-[11px] mr-1" style={{ color: '#6B7280' }}>· {r.registrations}</span>
                     </Td>
                     <Td>
-                      <span className="text-xs" style={{ color: r.eventDate ? '#0A1F44' : '#6B7C95' }}>
+                      <span className="text-xs" style={{ color: r.eventDate ? '#000000' : '#6B7280' }}>
                         {r.eventDate ? new Date(r.eventDate).toLocaleDateString('he-IL') : '—'}
                       </span>
                     </Td>
                     <Td>
-                      <span className="text-[11px] font-mono" style={{ color: '#6B7C95' }}>
+                      <span className="text-[11px] font-mono" style={{ color: '#6B7280' }}>
                         {new Date(r.createdAt).toLocaleDateString('he-IL')}
                       </span>
                     </Td>
@@ -375,7 +375,7 @@ function TenantsTab() {
                       <div className="inline-flex gap-1">
                         <a href={`/admin/${r.slug}`} target="_blank" rel="noreferrer"
                            className="w-7 h-7 rounded-md inline-flex items-center justify-center"
-                           style={{ background: '#1E63D615', color: '#1E63D6' }}
+                           style={{ background: '#7D39EB15', color: '#7D39EB' }}
                            title="פתח פאנל ניהול של הלקוח">
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
@@ -439,18 +439,18 @@ function TenantActionDrawer({ tenant, onClose, onSaved }: {
                   onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between mb-5">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#6B7C95' }}>
+            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#6B7280' }}>
               ניהול אתר
             </p>
-            <h2 className="text-2xl font-black mt-1" style={{ color: '#0A1F44' }}>
+            <h2 className="text-2xl font-black mt-1" style={{ color: '#000000' }}>
               {tenant.eventTitle || tenant.slug}
             </h2>
-            <p className="text-sm font-mono mt-1" style={{ color: '#6B7C95' }}>
+            <p className="text-sm font-mono mt-1" style={{ color: '#6B7280' }}>
               /{tenant.slug}
             </p>
           </div>
           <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center"
-                  style={{ background: '#EAF1FB', color: '#6B7C95' }}>
+                  style={{ background: '#F2EBFF', color: '#6B7280' }}>
             ×
           </button>
         </div>
@@ -459,27 +459,27 @@ function TenantActionDrawer({ tenant, onClose, onSaved }: {
 
         {/* Current state */}
         <div className="rounded-2xl p-4 mb-5 space-y-3"
-             style={{ background: '#EAF1FB', border: '1px solid rgba(30,99,214,0.15)' }}>
+             style={{ background: '#F2EBFF', border: '1px solid rgba(125,57,235,0.15)' }}>
           <div className="flex items-center justify-between text-sm">
-            <span style={{ color: '#6B7C95' }}>חבילה נוכחית</span>
+            <span style={{ color: '#6B7280' }}>חבילה נוכחית</span>
             <PlanBadge plan={tenant.plan} />
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span style={{ color: '#6B7C95' }}>סטטוס</span>
+            <span style={{ color: '#6B7280' }}>סטטוס</span>
             <StatusBadge status={tenant.status} />
           </div>
           {tenant.trialEndsAt && (
             <div className="flex items-center justify-between text-sm">
-              <span style={{ color: '#6B7C95' }}>נסיון פג ב-</span>
-              <span className="font-mono text-xs" style={{ color: '#0A1F44' }}>
+              <span style={{ color: '#6B7280' }}>נסיון פג ב-</span>
+              <span className="font-mono text-xs" style={{ color: '#000000' }}>
                 {new Date(tenant.trialEndsAt).toLocaleDateString('he-IL')}
               </span>
             </div>
           )}
           {tenant.paidUntil && (
             <div className="flex items-center justify-between text-sm">
-              <span style={{ color: '#6B7C95' }}>גישה עד</span>
-              <span className="font-mono text-xs" style={{ color: '#0A1F44' }}>
+              <span style={{ color: '#6B7280' }}>גישה עד</span>
+              <span className="font-mono text-xs" style={{ color: '#000000' }}>
                 {new Date(tenant.paidUntil).toLocaleDateString('he-IL')}
               </span>
             </div>
@@ -495,8 +495,8 @@ function TenantActionDrawer({ tenant, onClose, onSaved }: {
                       disabled={busy === 'change_plan' || tenant.plan === p}
                       className="px-3 py-2 text-xs font-bold rounded-lg disabled:opacity-40"
                       style={{
-                        background: tenant.plan === p ? PLAN_COLORS[p] : '#EAF1FB',
-                        color: tenant.plan === p ? '#fff' : '#0A1F44',
+                        background: tenant.plan === p ? PLAN_COLORS[p] : '#F2EBFF',
+                        color: tenant.plan === p ? '#fff' : '#000000',
                       }}>
                 {p}
               </button>
@@ -512,8 +512,8 @@ function TenantActionDrawer({ tenant, onClose, onSaved }: {
                       disabled={busy === 'change_status' || tenant.status === s}
                       className="px-3 py-2 text-xs font-bold rounded-lg disabled:opacity-40"
                       style={{
-                        background: tenant.status === s ? STATUS_COLORS[s] : '#EAF1FB',
-                        color: tenant.status === s ? '#fff' : '#0A1F44',
+                        background: tenant.status === s ? STATUS_COLORS[s] : '#F2EBFF',
+                        color: tenant.status === s ? '#fff' : '#000000',
                       }}>
                 {s}
               </button>
@@ -563,7 +563,7 @@ function TenantActionDrawer({ tenant, onClose, onSaved }: {
         </Section>
 
         {busy && (
-          <div className="text-center py-3 text-sm" style={{ color: '#6B7C95' }}>
+          <div className="text-center py-3 text-sm" style={{ color: '#6B7280' }}>
             <Loader2 className="w-4 h-4 animate-spin inline ml-2" />
             מבצע {busy}...
           </div>
@@ -600,18 +600,18 @@ function UsersTab() {
   return (
     <div className="space-y-5">
       <div className="rounded-2xl p-4 flex items-center gap-3 flex-wrap"
-           style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
+           style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
         <div className="flex items-center gap-2 flex-1 min-w-[240px]">
-          <Search className="w-4 h-4" style={{ color: '#6B7C95' }} />
+          <Search className="w-4 h-4" style={{ color: '#6B7280' }} />
           <input
             type="text" value={q} onChange={(e) => setQ(e.target.value)}
             placeholder="חיפוש לפי אימייל או שם..."
             className="flex-1 bg-transparent text-sm focus:outline-none"
-            style={{ color: '#0A1F44' }}
+            style={{ color: '#000000' }}
           />
         </div>
-        <span className="text-sm" style={{ color: '#6B7C95' }}>
-          <span className="font-bold" style={{ color: '#0A1F44' }}>{rows.length}</span> משתמשים
+        <span className="text-sm" style={{ color: '#6B7280' }}>
+          <span className="font-bold" style={{ color: '#000000' }}>{rows.length}</span> משתמשים
         </span>
       </div>
 
@@ -619,9 +619,9 @@ function UsersTab() {
       {loading ? <CenteredLoader /> :
         rows.length === 0 ? <Empty>לא נמצאו משתמשים</Empty> :
         <div className="rounded-2xl overflow-hidden"
-             style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
+             style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
           <table className="w-full text-sm">
-            <thead style={{ background: '#EAF1FB' }}>
+            <thead style={{ background: '#F2EBFF' }}>
               <tr>
                 <Th>שם</Th>
                 <Th>אימייל</Th>
@@ -633,44 +633,44 @@ function UsersTab() {
             </thead>
             <tbody>
               {rows.map((u) => (
-                <tr key={u.id} className="border-t" style={{ borderColor: 'rgba(30,99,214,0.06)' }}>
+                <tr key={u.id} className="border-t" style={{ borderColor: 'rgba(125,57,235,0.06)' }}>
                   <Td>
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs"
-                           style={{ background: '#1E63D6', color: '#fff' }}>
+                           style={{ background: '#7D39EB', color: '#fff' }}>
                         {(u.displayName ?? u.email)[0]?.toUpperCase()}
                       </div>
-                      <span className="font-bold" style={{ color: '#0A1F44' }}>
+                      <span className="font-bold" style={{ color: '#000000' }}>
                         {u.displayName ?? '—'}
                       </span>
                     </div>
                   </Td>
                   <Td>
-                    <a href={`mailto:${u.email}`} className="text-xs" style={{ color: '#1E63D6' }}>
+                    <a href={`mailto:${u.email}`} className="text-xs" style={{ color: '#7D39EB' }}>
                       {u.email}
                     </a>
                   </Td>
                   <Td align="center">
-                    <span className="font-bold" style={{ color: '#0A1F44' }}>{u.tenantsCount}</span>
+                    <span className="font-bold" style={{ color: '#000000' }}>{u.tenantsCount}</span>
                   </Td>
                   <Td align="center">
                     {u.isAdmin ? (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
-                            style={{ background: '#FCD34D', color: '#0A1F44' }}>
+                            style={{ background: '#FCD34D', color: '#000000' }}>
                         <Crown className="w-2.5 h-2.5" />
                         ADMIN
                       </span>
                     ) : (
-                      <span className="text-xs" style={{ color: '#6B7C95' }}>משתמש</span>
+                      <span className="text-xs" style={{ color: '#6B7280' }}>משתמש</span>
                     )}
                   </Td>
                   <Td>
-                    <span className="text-[11px] font-mono" style={{ color: '#6B7C95' }}>
+                    <span className="text-[11px] font-mono" style={{ color: '#6B7280' }}>
                       {new Date(u.createdAt).toLocaleDateString('he-IL')}
                     </span>
                   </Td>
                   <Td>
-                    <span className="text-[11px] font-mono" style={{ color: '#6B7C95' }}>
+                    <span className="text-[11px] font-mono" style={{ color: '#6B7280' }}>
                       {u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleDateString('he-IL') : '—'}
                     </span>
                   </Td>
@@ -689,7 +689,7 @@ function UsersTab() {
 function FullPage({ children }: { children: React.ReactNode }) {
   return (
     <div dir="rtl" className="min-h-screen flex items-center justify-center px-6 text-center"
-         style={{ background: '#EAF1FB', color: '#0A1F44' }}>
+         style={{ background: '#F2EBFF', color: '#000000' }}>
       <div>{children}</div>
     </div>
   );
@@ -698,7 +698,7 @@ function FullPage({ children }: { children: React.ReactNode }) {
 function CenteredLoader() {
   return (
     <div className="flex items-center justify-center py-20">
-      <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#1E63D6' }} />
+      <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#7D39EB' }} />
     </div>
   );
 }
@@ -719,8 +719,8 @@ function ErrorBox({ message, onDismiss }: { message: string; onDismiss?: () => v
 function Empty({ children }: { children: React.ReactNode }) {
   return (
     <div className="rounded-2xl p-10 text-center"
-         style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
-      <p className="text-sm" style={{ color: '#6B7C95' }}>{children}</p>
+         style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
+      <p className="text-sm" style={{ color: '#6B7280' }}>{children}</p>
     </div>
   );
 }
@@ -728,8 +728,8 @@ function Empty({ children }: { children: React.ReactNode }) {
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="p-5 rounded-2xl"
-         style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
-      <h3 className="font-bold mb-4" style={{ color: '#0A1F44' }}>{title}</h3>
+         style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
+      <h3 className="font-bold mb-4" style={{ color: '#000000' }}>{title}</h3>
       {children}
     </div>
   );
@@ -739,7 +739,7 @@ function Section({ title, danger, children }: { title: string; danger?: boolean;
   return (
     <div className="mb-5">
       <p className="text-[10px] font-bold uppercase tracking-widest mb-2 flex items-center gap-1"
-         style={{ color: danger ? '#DC2626' : '#6B7C95' }}>
+         style={{ color: danger ? '#DC2626' : '#6B7280' }}>
         {danger && <ShieldAlert className="w-3 h-3" />}
         {title}
       </p>
@@ -753,17 +753,17 @@ function BigStat({ icon: Icon, label, value, color, delta }: {
 }) {
   return (
     <div className="p-5 rounded-2xl"
-         style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}>
+         style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}>
       <div className="flex items-center gap-2 mb-3">
         <div className="w-9 h-9 rounded-xl flex items-center justify-center"
              style={{ background: `${color}1A`, color }}>
           <Icon className="w-5 h-5" strokeWidth={2} />
         </div>
       </div>
-      <p className="text-3xl font-black" style={{ color: '#0A1F44' }}>
+      <p className="text-3xl font-black" style={{ color: '#000000' }}>
         {value.toLocaleString('he-IL')}
       </p>
-      <p className="text-xs font-bold mt-1" style={{ color: '#6B7C95' }}>{label}</p>
+      <p className="text-xs font-bold mt-1" style={{ color: '#6B7280' }}>{label}</p>
       {delta && (
         <p className="text-[11px] mt-1" style={{ color }}>{delta}</p>
       )}
@@ -798,7 +798,7 @@ function FilterSelect({ value, onChange, options }: {
   return (
     <select value={value} onChange={(e) => onChange(e.target.value)}
             className="px-3 py-2 text-sm focus:outline-none cursor-pointer"
-            style={{ background: '#EAF1FB', borderRadius: '999px', color: '#0A1F44', border: 'none' }}>
+            style={{ background: '#F2EBFF', borderRadius: '999px', color: '#000000', border: 'none' }}>
       {options.map((o) => <option key={o.v} value={o.v}>{o.l}</option>)}
     </select>
   );
@@ -806,7 +806,7 @@ function FilterSelect({ value, onChange, options }: {
 
 function Th({ children, align = 'right' }: { children: React.ReactNode; align?: 'right' | 'center' | 'left' }) {
   return <th className="px-4 py-3 font-bold text-xs uppercase tracking-wider"
-             style={{ color: '#6B7C95', textAlign: align }}>{children}</th>;
+             style={{ color: '#6B7280', textAlign: align }}>{children}</th>;
 }
 function Td({ children, align = 'right' }: { children: React.ReactNode; align?: 'right' | 'center' | 'left' }) {
   return <td className="px-4 py-3" style={{ color: '#3D4F6B', textAlign: align }}>{children}</td>;

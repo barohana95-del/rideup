@@ -81,7 +81,7 @@ export default function TripPlanningTab({ slug }: { slug: string }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#1E63D6' }} />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#7D39EB' }} />
       </div>
     );
   }
@@ -143,13 +143,13 @@ function FleetSection({
   return (
     <div
       className="rounded-2xl p-5 md:p-6"
-      style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}
+      style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}
     >
       <div className="flex items-center gap-2 mb-1">
-        <Bus className="w-4 h-4" style={{ color: '#1E63D6' }} />
-        <h2 className="font-bold" style={{ color: '#0A1F44' }}>צי האוטובוסים</h2>
+        <Bus className="w-4 h-4" style={{ color: '#7D39EB' }} />
+        <h2 className="font-bold" style={{ color: '#000000' }}>צי האוטובוסים</h2>
       </div>
-      <p className="text-xs mb-5" style={{ color: '#6B7C95' }}>
+      <p className="text-xs mb-5" style={{ color: '#6B7280' }}>
         הוסף את גודלי האוטובוסים שזמינים לאירוע. האלגוריתם יבחר את השילוב הטוב ביותר לכל עיר.
       </p>
 
@@ -160,14 +160,14 @@ function FleetSection({
             <div
               key={bus.id}
               className="group inline-flex items-center gap-2 pl-2 pr-3 py-2 rounded-full"
-              style={{ background: '#EAF1FB', border: '1px solid rgba(30,99,214,0.2)' }}
+              style={{ background: '#F2EBFF', border: '1px solid rgba(125,57,235,0.2)' }}
             >
-              <Bus className="w-3.5 h-3.5" style={{ color: '#1E63D6' }} />
-              <span className="font-bold text-sm" style={{ color: '#0A1F44' }}>
+              <Bus className="w-3.5 h-3.5" style={{ color: '#7D39EB' }} />
+              <span className="font-bold text-sm" style={{ color: '#000000' }}>
                 {bus.capacity} מקומות
               </span>
               {bus.label && (
-                <span className="text-xs" style={{ color: '#6B7C95' }}>· {bus.label}</span>
+                <span className="text-xs" style={{ color: '#6B7280' }}>· {bus.label}</span>
               )}
               <button
                 onClick={() => onDelete(bus.id)}
@@ -191,7 +191,7 @@ function FleetSection({
       {/* Add form */}
       <div className="flex flex-wrap gap-2 items-end">
         <div className="flex-1 min-w-[120px]">
-          <label className="text-xs font-bold mb-1 block" style={{ color: '#0A1F44' }}>
+          <label className="text-xs font-bold mb-1 block" style={{ color: '#000000' }}>
             קיבולת (מקומות)
           </label>
           <input
@@ -204,14 +204,14 @@ function FleetSection({
             className="w-full px-3 py-2.5 text-sm focus:outline-none transition-all"
             style={{
               background: '#fff',
-              border: '1.5px solid rgba(30,99,214,0.15)',
+              border: '1.5px solid rgba(125,57,235,0.15)',
               borderRadius: '10px',
-              color: '#0A1F44',
+              color: '#000000',
             }}
           />
         </div>
         <div className="flex-[2] min-w-[180px]">
-          <label className="text-xs font-bold mb-1 block" style={{ color: '#0A1F44' }}>
+          <label className="text-xs font-bold mb-1 block" style={{ color: '#000000' }}>
             תיאור (אופציונלי)
           </label>
           <input
@@ -222,9 +222,9 @@ function FleetSection({
             className="w-full px-3 py-2.5 text-sm focus:outline-none transition-all"
             style={{
               background: '#fff',
-              border: '1.5px solid rgba(30,99,214,0.15)',
+              border: '1.5px solid rgba(125,57,235,0.15)',
               borderRadius: '10px',
-              color: '#0A1F44',
+              color: '#000000',
             }}
             onKeyDown={(e) => e.key === 'Enter' && onAdd()}
           />
@@ -233,7 +233,7 @@ function FleetSection({
           onClick={onAdd}
           disabled={adding || !newCap}
           className="inline-flex items-center gap-1.5 px-5 py-2.5 font-bold text-sm rounded-full transition-all disabled:opacity-40"
-          style={{ background: '#1E63D6', color: '#fff' }}
+          style={{ background: '#7D39EB', color: '#fff' }}
         >
           {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
           הוסף אוטובוס
@@ -263,7 +263,7 @@ function SummaryStrip({
   return (
     <div
       className="rounded-2xl p-5 md:p-6 grid grid-cols-2 sm:grid-cols-4 gap-4"
-      style={{ background: '#0A1F44', color: '#fff' }}
+      style={{ background: '#000000', color: '#fff' }}
     >
       <SummaryItem icon={Users}    label="סך אורחים" value={summary.totalGuests.toLocaleString('he-IL')} />
       <SummaryItem icon={Bus}      label="אוטובוסים" value={summary.totalBuses.toString()} />
@@ -282,7 +282,7 @@ function SummaryStrip({
           onClick={onRefresh}
           disabled={recomputing}
           className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-full transition-all disabled:opacity-50"
-          style={{ background: '#1E63D6', color: '#fff' }}
+          style={{ background: '#7D39EB', color: '#fff' }}
         >
           {recomputing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
           חישוב
@@ -321,11 +321,11 @@ function PlanGrid({ plan, fleet }: { plan: NonNullable<Plan> | null; fleet: NonN
     return (
       <div
         className="rounded-2xl p-10 text-center"
-        style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}
+        style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}
       >
-        <Users className="w-10 h-10 mx-auto mb-3" style={{ color: '#6B7C95' }} />
-        <p className="font-bold mb-1" style={{ color: '#0A1F44' }}>אין רישומים עדיין</p>
-        <p className="text-sm" style={{ color: '#6B7C95' }}>
+        <Users className="w-10 h-10 mx-auto mb-3" style={{ color: '#6B7280' }} />
+        <p className="font-bold mb-1" style={{ color: '#000000' }}>אין רישומים עדיין</p>
+        <p className="text-sm" style={{ color: '#6B7280' }}>
           ברגע שאורחים יתחילו להירשם — נציג כאן את התכנון לכל עיר.
         </p>
       </div>
@@ -352,28 +352,28 @@ function GroupCard({ group, hasFleet }: { group: NonNullable<Plan>['groups'][num
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       className="rounded-2xl overflow-hidden"
-      style={{ background: '#fff', border: '1px solid rgba(30,99,214,0.1)' }}
+      style={{ background: '#fff', border: '1px solid rgba(125,57,235,0.1)' }}
     >
       {/* Header */}
       <div
         className="p-5 border-b"
-        style={{ borderColor: 'rgba(30,99,214,0.08)' }}
+        style={{ borderColor: 'rgba(125,57,235,0.08)' }}
       >
         <div className="flex items-start justify-between gap-3 mb-2">
           <div className="flex items-center gap-2 flex-1 min-w-0">
-            <MapPin className="w-4 h-4 shrink-0" style={{ color: '#1E63D6' }} />
-            <h3 className="font-bold truncate" style={{ color: '#0A1F44' }}>
+            <MapPin className="w-4 h-4 shrink-0" style={{ color: '#7D39EB' }} />
+            <h3 className="font-bold truncate" style={{ color: '#000000' }}>
               {group.city}
             </h3>
           </div>
           <div
             className="font-black text-2xl tabular-nums shrink-0"
-            style={{ color: '#1E63D6' }}
+            style={{ color: '#7D39EB' }}
           >
             {group.totalGuests}
           </div>
         </div>
-        <div className="flex items-center justify-between text-xs" style={{ color: '#6B7C95' }}>
+        <div className="flex items-center justify-between text-xs" style={{ color: '#6B7280' }}>
           {showShift && (
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
@@ -396,7 +396,7 @@ function GroupCard({ group, hasFleet }: { group: NonNullable<Plan>['groups'][num
           </div>
         ) : (
           <>
-            <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: '#6B7C95' }}>
+            <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: '#6B7280' }}>
               תכנון מומלץ
             </p>
             <ul className="space-y-2 mb-4">
@@ -404,14 +404,14 @@ function GroupCard({ group, hasFleet }: { group: NonNullable<Plan>['groups'][num
                 <li
                   key={i}
                   className="flex items-center gap-2.5 px-3 py-2 rounded-lg"
-                  style={{ background: '#EAF1FB' }}
+                  style={{ background: '#F2EBFF' }}
                 >
-                  <Bus className="w-4 h-4 shrink-0" style={{ color: '#1E63D6' }} />
-                  <span className="font-bold text-sm" style={{ color: '#0A1F44' }}>
+                  <Bus className="w-4 h-4 shrink-0" style={{ color: '#7D39EB' }} />
+                  <span className="font-bold text-sm" style={{ color: '#000000' }}>
                     {bus.capacity} מקומות
                   </span>
                   {bus.label && (
-                    <span className="text-xs mr-auto" style={{ color: '#6B7C95' }}>{bus.label}</span>
+                    <span className="text-xs mr-auto" style={{ color: '#6B7280' }}>{bus.label}</span>
                   )}
                 </li>
               ))}
@@ -420,17 +420,17 @@ function GroupCard({ group, hasFleet }: { group: NonNullable<Plan>['groups'][num
             {/* Capacity bar */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <span style={{ color: '#6B7C95' }}>ניצולת</span>
-                <span className="font-bold" style={{ color: occupancy >= 80 ? '#10B981' : '#0A1F44' }}>
+                <span style={{ color: '#6B7280' }}>ניצולת</span>
+                <span className="font-bold" style={{ color: occupancy >= 80 ? '#10B981' : '#000000' }}>
                   {occupancy}% · {group.spareSeats} מקומות פנויים
                 </span>
               </div>
-              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#EAF1FB' }}>
+              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#F2EBFF' }}>
                 <div
                   className="h-full rounded-full transition-all"
                   style={{
                     width: `${occupancy}%`,
-                    background: occupancy >= 80 ? '#10B981' : '#1E63D6',
+                    background: occupancy >= 80 ? '#10B981' : '#7D39EB',
                   }}
                 />
               </div>

@@ -52,12 +52,12 @@ export default function Step4EventDetails({
                 onClick={() => onChange({ eventType: t.key })}
                 className="flex flex-col items-center gap-1.5 py-4 rounded-2xl transition-all"
                 style={{
-                  background: selected ? '#0A1F44' : '#fff',
-                  border: selected ? '2px solid #1E63D6' : '1px solid rgba(30,99,214,0.12)',
-                  color: selected ? '#fff' : '#0A1F44',
+                  background: selected ? '#000000' : '#fff',
+                  border: selected ? '2px solid #7D39EB' : '1px solid rgba(125,57,235,0.12)',
+                  color: selected ? '#fff' : '#000000',
                 }}
               >
-                <t.icon className="w-5 h-5" strokeWidth={1.8} style={{ color: selected ? '#1E63D6' : '#1E63D6' }} />
+                <t.icon className="w-5 h-5" strokeWidth={1.8} style={{ color: selected ? '#7D39EB' : '#7D39EB' }} />
                 <span className="text-xs font-semibold">{t.label}</span>
               </button>
             );
@@ -88,7 +88,7 @@ export default function Step4EventDetails({
           />
         </div>
         <div>
-          <Label>שעה <span className="font-normal" style={{ color: '#6B7C95' }}>(אופציונלי)</span></Label>
+          <Label>שעה <span className="font-normal" style={{ color: '#6B7280' }}>(אופציונלי)</span></Label>
           <Input
             type="time"
             value={eventTime}
@@ -114,8 +114,8 @@ export default function Step4EventDetails({
 
 function Label({ children, icon: Icon }: { children: React.ReactNode; icon?: React.ElementType }) {
   return (
-    <label className="flex items-center gap-2 text-sm font-bold mb-2.5" style={{ color: '#0A1F44' }}>
-      {Icon && <Icon className="w-4 h-4" style={{ color: '#1E63D6' }} />}
+    <label className="flex items-center gap-2 text-sm font-bold mb-2.5" style={{ color: '#000000' }}>
+      {Icon && <Icon className="w-4 h-4" style={{ color: '#7D39EB' }} />}
       {children}
     </label>
   );
@@ -144,16 +144,16 @@ function Input({
       className="w-full px-4 py-3 text-base focus:outline-none transition-all"
       style={{
         background: '#fff',
-        border: '1.5px solid rgba(30,99,214,0.15)',
+        border: '1.5px solid rgba(125,57,235,0.15)',
         borderRadius: '14px',
-        color: '#0A1F44',
+        color: '#000000',
       }}
-      onFocus={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = '#1E63D6'; }}
-      onBlur={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = 'rgba(30,99,214,0.15)'; }}
+      onFocus={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = '#7D39EB'; }}
+      onBlur={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = 'rgba(125,57,235,0.15)'; }}
     />
   );
 }
 
 function Hint({ children }: { children: React.ReactNode }) {
-  return <p className="mt-1.5 text-xs" style={{ color: '#6B7C95' }}>{children}</p>;
+  return <p className="mt-1.5 text-xs" style={{ color: '#6B7280' }}>{children}</p>;
 }

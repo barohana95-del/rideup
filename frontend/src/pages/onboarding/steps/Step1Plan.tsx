@@ -62,9 +62,9 @@ export default function Step1Plan({
             disabled={disabled}
             className="relative text-right rounded-3xl p-6 transition-all"
             style={{
-              background: selected ? '#0A1F44' : '#fff',
-              border: selected ? '2px solid #1E63D6' : '1px solid rgba(30,99,214,0.15)',
-              boxShadow: selected ? '0 16px 40px -12px rgba(30,99,214,0.4)' : '0 2px 12px -4px rgba(10,31,68,0.06)',
+              background: selected ? '#000000' : '#fff',
+              border: selected ? '2px solid #7D39EB' : '1px solid rgba(125,57,235,0.15)',
+              boxShadow: selected ? '0 16px 40px -12px rgba(125,57,235,0.4)' : '0 2px 12px -4px rgba(0,0,0,0.06)',
               opacity: disabled ? 0.55 : 1,
               cursor: disabled ? 'not-allowed' : 'pointer',
             }}
@@ -72,7 +72,7 @@ export default function Step1Plan({
             {plan.popular && (
               <span
                 className="absolute -top-3 right-4 text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1"
-                style={{ background: '#1E63D6', color: '#fff' }}
+                style={{ background: '#7D39EB', color: '#fff' }}
               >
                 <Sparkles className="w-3 h-3" />
                 פופולרי
@@ -81,24 +81,24 @@ export default function Step1Plan({
             {disabled && (
               <span
                 className="absolute top-4 left-4 text-[10px] font-bold px-2 py-0.5 rounded-full"
-                style={{ background: '#EAF1FB', color: '#6B7C95' }}
+                style={{ background: '#F2EBFF', color: '#6B7280' }}
               >
                 בקרוב
               </span>
             )}
 
-            <h3 className="display text-xl mb-1" style={{ color: selected ? '#fff' : '#0A1F44' }}>
+            <h3 className="display text-xl mb-1" style={{ color: selected ? '#fff' : '#000000' }}>
               {plan.name}
             </h3>
-            <p className="text-xs mb-4" style={{ color: selected ? 'rgba(255,255,255,0.65)' : '#6B7C95' }}>
+            <p className="text-xs mb-4" style={{ color: selected ? 'rgba(255,255,255,0.65)' : '#6B7280' }}>
               {plan.desc}
             </p>
 
             <div className="mb-5">
-              <span className="display text-3xl" style={{ color: selected ? '#fff' : '#0A1F44' }}>
+              <span className="display text-3xl" style={{ color: selected ? '#fff' : '#000000' }}>
                 {plan.price}
               </span>
-              <span className="text-xs mr-1.5" style={{ color: selected ? 'rgba(255,255,255,0.6)' : '#6B7C95' }}>
+              <span className="text-xs mr-1.5" style={{ color: selected ? 'rgba(255,255,255,0.6)' : '#6B7280' }}>
                 {plan.period}
               </span>
             </div>
@@ -109,7 +109,7 @@ export default function Step1Plan({
                   <Check
                     className="w-3.5 h-3.5 mt-0.5 shrink-0"
                     strokeWidth={3}
-                    style={{ color: selected ? '#fff' : '#1E63D6' }}
+                    style={{ color: selected ? '#fff' : '#7D39EB' }}
                   />
                   <span style={{ color: selected ? 'rgba(255,255,255,0.9)' : '#3D4F6B' }}>{f}</span>
                 </li>
@@ -119,7 +119,7 @@ export default function Step1Plan({
             {selected && (
               <div
                 className="absolute bottom-4 left-4 w-7 h-7 rounded-full flex items-center justify-center"
-                style={{ background: '#1E63D6' }}
+                style={{ background: '#7D39EB' }}
               >
                 <Check className="w-4 h-4 text-white" strokeWidth={3} />
               </div>
