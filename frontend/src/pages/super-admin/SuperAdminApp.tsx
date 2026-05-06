@@ -7,8 +7,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users as UsersIcon, Briefcase, Loader2, AlertCircle,
-  Search, ExternalLink, Edit, Trash2, Calendar, MapPin, ShieldAlert,
-  TrendingUp, Sparkles, Clock, Crown,
+  Search, ExternalLink, Edit, Trash2, ShieldAlert,
+  TrendingUp, Sparkles, Crown, Menu, X,
 } from 'lucide-react';
 import { saApi } from '../../lib/api';
 import { getMockUser, logoutMock } from '../../lib/mockAuth';
@@ -38,6 +38,9 @@ const STATUS_COLORS: Record<string, string> = {
 export default function SuperAdminApp() {
   const user = getMockUser();
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const onTabChange = (t: TabKey) => { setActiveTab(t); setSidebarOpen(false); };
 
   if (!user) {
     return (
@@ -57,14 +60,33 @@ export default function SuperAdminApp() {
   ];
 
   return (
-    <div dir="rtl" className="min-h-screen flex" style={{ background: '#F2EBFF' }}>
+    <div dir="rtl" className="min-h-screen lg:flex" style={{ background: '#F2EBFF' }}>
+      {/* Mobile backdrop */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 z-30 lg:hidden"
+          style={{ background: 'rgba(0,0,0,0.5)' }}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
-        className="w-64 shrink-0 flex flex-col"
+        className={`fixed lg:static inset-y-0 right-0 w-64 shrink-0 flex flex-col z-40 transition-transform duration-300 ${
+          sidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'
+        }`}
         style={{ background: '#000000', color: '#fff', minHeight: '100vh' }}
       >
-        <div className="px-6 pt-6 pb-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        <div className="px-6 pt-6 pb-4 border-b flex items-center justify-between" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <Logo size="sm" />
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden w-8 h-8 rounded-full flex items-center justify-center"
+            style={{ background: 'rgba(255,255,255,0.1)', color: '#fff' }}
+            aria-label="סגור"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
         <div className="px-6 py-5 border-b flex items-center gap-2"
@@ -85,7 +107,7 @@ export default function SuperAdminApp() {
               return (
                 <li key={tab.key}>
                   <button
-                    onClick={() => setActiveTab(tab.key)}
+                    onClick={() => onTabChange(tab.key)}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors text-right"
                     style={{
                       background: active ? '#7D39EB' : 'transparent',
@@ -126,20 +148,28 @@ export default function SuperAdminApp() {
 
       {/* Main */}
       <main className="flex-1 min-w-0">
-        <div className="px-8 py-5 flex items-center justify-between border-b"
+        <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex items-center justify-between border-b gap-3"
              style={{ background: '#fff', borderColor: 'rgba(125,57,235,0.1)' }}>
-          <div>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+            style={{ background: '#000', color: '#FCD34D' }}
+            aria-label="פתח תפריט"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <div className="flex-1 min-w-0">
             <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#FCD34D' }}>
               <Crown className="w-3 h-3 inline mr-1" />
               SUPER-ADMIN
             </p>
-            <h1 className="text-2xl mt-0.5 font-black" style={{ color: '#000000' }}>
+            <h1 className="text-xl sm:text-2xl mt-0.5 font-black truncate" style={{ color: '#000000' }}>
               {tabs.find((t) => t.key === activeTab)?.label}
             </h1>
           </div>
         </div>
 
-        <div className="p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
           <AnimatePresence mode="wait">
             <motion.div key={activeTab}
                         initial={{ opacity: 0, y: 12 }}

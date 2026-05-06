@@ -14,6 +14,8 @@ import {
   ExternalLink,
   Loader2,
   ArrowLeft,
+  Menu,
+  X,
 } from 'lucide-react';
 import { adminApi } from '../../lib/api';
 import { getMockUser, logoutMock } from '../../lib/mockAuth';
@@ -45,6 +47,13 @@ export default function AdminApp({ slug }: { slug: string }) {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Auto-close sidebar on tab change (mobile)
+  const onTabChange = (tab: TabKey) => {
+    setActiveTab(tab);
+    setSidebarOpen(false);
+  };
 
   useEffect(() => {
     if (!slug) {
@@ -101,15 +110,34 @@ export default function AdminApp({ slug }: { slug: string }) {
   if (!tenant) return null;
 
   return (
-    <div dir="rtl" className="min-h-screen flex" style={{ background: '#F2EBFF' }}>
+    <div dir="rtl" className="min-h-screen lg:flex" style={{ background: '#F2EBFF' }}>
+      {/* Mobile backdrop */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 z-30 lg:hidden"
+          style={{ background: 'rgba(0,0,0,0.5)' }}
+        />
+      )}
+
       {/* Sidebar (right in RTL) */}
       <aside
-        className="w-64 shrink-0 flex flex-col"
+        className={`fixed lg:static inset-y-0 right-0 w-64 shrink-0 flex flex-col z-40 transition-transform duration-300 ${
+          sidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'
+        }`}
         style={{ background: '#000000', color: '#fff', minHeight: '100vh' }}
       >
-        {/* Logo */}
-        <div className="px-6 pt-6 pb-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        {/* Logo + mobile close */}
+        <div className="px-6 pt-6 pb-4 border-b flex items-center justify-between" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <Logo size="sm" />
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden w-8 h-8 rounded-full flex items-center justify-center"
+            style={{ background: 'rgba(255,255,255,0.1)', color: '#fff' }}
+            aria-label="סגור"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Tenant info */}
@@ -148,7 +176,7 @@ export default function AdminApp({ slug }: { slug: string }) {
               return (
                 <li key={tab.key}>
                   <button
-                    onClick={() => !disabled && setActiveTab(tab.key)}
+                    onClick={() => !disabled && onTabChange(tab.key)}
                     disabled={disabled}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors text-right"
                     style={{
@@ -214,20 +242,29 @@ export default function AdminApp({ slug }: { slug: string }) {
       <main className="flex-1 min-w-0">
         {/* Top bar */}
         <div
-          className="px-8 py-5 flex items-center justify-between border-b"
+          className="px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex items-center justify-between border-b gap-3"
           style={{ background: '#fff', borderColor: 'rgba(125,57,235,0.1)' }}
         >
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#7D39EB' }}>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+            style={{ background: '#F2EBFF', color: '#7D39EB' }}
+            aria-label="פתח תפריט"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-bold uppercase tracking-widest truncate" style={{ color: '#7D39EB' }}>
               {tabs.find((t) => t.key === activeTab)?.label}
             </p>
-            <h1 className="display text-2xl mt-0.5" style={{ color: '#000000' }}>
+            <h1 className="display text-xl sm:text-2xl mt-0.5 truncate" style={{ color: '#000000' }}>
               ברוך שובך, {user.displayName.split(' ')[0]}
             </h1>
           </div>
           <a
             href="/onboarding"
-            className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all shrink-0"
             style={{ background: '#F2EBFF', color: '#7D39EB' }}
           >
             <ArrowLeft className="w-4 h-4" />
@@ -236,7 +273,7 @@ export default function AdminApp({ slug }: { slug: string }) {
         </div>
 
         {/* Tab content */}
-        <div className="p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

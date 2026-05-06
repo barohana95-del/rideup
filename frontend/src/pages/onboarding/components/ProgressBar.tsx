@@ -6,7 +6,7 @@ export default function ProgressBar({ step, onStepClick }: { step: number; onSte
   const pct = ((step - 1) / (TOTAL_STEPS - 1)) * 100;
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-6 pt-8">
+    <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8">
       {/* Track */}
       <div className="relative h-1 bg-light-soft rounded-full overflow-hidden">
         <motion.div
@@ -59,7 +59,7 @@ export default function ProgressBar({ step, onStepClick }: { step: number; onSte
         <p className="text-xs font-bold tracking-widest uppercase" style={{ color: '#7D39EB' }}>
           שלב {step} מתוך {TOTAL_STEPS}
         </p>
-        <h1 className="display text-3xl md:text-5xl mt-2" style={{ color: '#000000' }}>
+        <h1 className="display text-2xl sm:text-3xl md:text-5xl mt-2" style={{ color: '#000000' }}>
           {stepTitles[step].title}
         </h1>
         <p className="mt-2 text-sm md:text-base" style={{ color: '#6B7280' }}>
