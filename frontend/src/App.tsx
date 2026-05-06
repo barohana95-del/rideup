@@ -1,10 +1,16 @@
 // =====================================================================
-// App router — splits into zones (marketing/app/tenant) by host,
-// and within marketing also handles routes like /providers.
+// App router — purely path-based.
+//
+// Routes:
+//   /                  → MarketingApp
+//   /onboarding        → OnboardingApp (wizard)
+//   /providers         → ProvidersPage
+//   /admin             → AdminApp (will list user's tenants — TODO)
+//   /admin/:slug       → AdminApp for that tenant
+//   /:slug             → TenantApp (public RSVP). Reserved slugs hit NotFound.
+//   *                  → NotFound
 // =====================================================================
-import { useMemo } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { detectHost } from './lib/host';
+import { BrowserRouter, Routes, Route, useParams, Navigate } from 'react-router-dom';
 import MarketingApp from './pages/marketing/MarketingApp';
 import OnboardingApp from './pages/onboarding/OnboardingApp';
 import AdminApp from './pages/admin/AdminApp';
@@ -12,29 +18,65 @@ import TenantApp from './pages/public/TenantApp';
 import ProvidersPage from './pages/providers/ProvidersPage';
 import NotFound from './pages/public/NotFound';
 
-export default function App() {
-  const host = useMemo(() => detectHost(), []);
+// Slugs the platform reserves. Anything in this set under `/:slug` → 404
+// instead of being interpreted as a tenant. Mirror in DB & PHP.
+const RESERVED = new Set([
+  'admin', 'app', 'api', 'onboarding', 'providers',
+  'login', 'signup', 'logout', 'auth',
+  'pricing', 'about', 'contact', 'help', 'support',
+  'blog', 'docs', 'faq', 'terms', 'privacy', 'cookies',
+  'www', 'mail', 'static', 'assets', 'public', 'cdn',
+  'rideup',
+]);
 
-  return (
-    <BrowserRouter>
-      {host.zone === 'marketing' && (
-        <Routes>
-          <Route path="/" element={<MarketingApp />} />
-          <Route path="/providers" element={<ProvidersPage />} />
-          <Route path="/onboarding" element={<OnboardingApp />} />
-          <Route path="/onboarding/*" element={<OnboardingApp />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      )}
-      {host.zone === 'app' && <AppShell />}
-      {host.zone === 'tenant' && host.tenantSlug && <TenantApp slug={host.tenantSlug} />}
-      {host.zone === 'unknown' && <NotFound />}
-    </BrowserRouter>
-  );
+function isValidSlug(s: string): boolean {
+  return /^[a-z0-9][a-z0-9-]{1,58}[a-z0-9]$/.test(s);
 }
 
-function AppShell() {
-  const path = window.location.pathname;
-  if (path.startsWith('/onboarding')) return <OnboardingApp />;
-  return <AdminApp host={{ hostname: window.location.hostname }} />;
+/**
+ * Wraps the public tenant site. Pulls slug from the URL param,
+ * rejects reserved or malformed slugs.
+ */
+function TenantRoute() {
+  const { slug = '' } = useParams<{ slug: string }>();
+  const normalized = slug.toLowerCase();
+  if (!isValidSlug(normalized) || RESERVED.has(normalized)) {
+    return <NotFound />;
+  }
+  return <TenantApp slug={normalized} />;
+}
+
+/** /admin/:slug → admin app for that tenant. */
+function AdminRoute() {
+  const { slug } = useParams<{ slug: string }>();
+  if (!slug) {
+    // /admin without a slug → for now redirect to onboarding (later: tenant list).
+    return <Navigate to="/onboarding" replace />;
+  }
+  return <AdminApp slug={slug.toLowerCase()} />;
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Marketing + meta */}
+        <Route path="/" element={<MarketingApp />} />
+        <Route path="/onboarding" element={<OnboardingApp />} />
+        <Route path="/onboarding/*" element={<OnboardingApp />} />
+        <Route path="/providers" element={<ProvidersPage />} />
+
+        {/* Admin */}
+        <Route path="/admin" element={<AdminRoute />} />
+        <Route path="/admin/:slug" element={<AdminRoute />} />
+        <Route path="/admin/:slug/*" element={<AdminRoute />} />
+
+        {/* Tenant public site (must be after specific routes) */}
+        <Route path="/:slug" element={<TenantRoute />} />
+
+        {/* Catch-all */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }

@@ -30,16 +30,30 @@ const itemVariants: Variants = {
 export default function Hero() {
   return (
     <section className="hero section--wrapped">
-      <div className="hero__bg">
-        <img 
-          src="/images/hero-bg.jpg" 
-          alt="Luxury transportation"
-          onError={(e) => (e.currentTarget.src = 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=2000')}
-        />
-      </div>
-      <div className="hero__overlay" />
+      {/* Dynamic Background Elements */}
+      <div className="hero__grid" />
       
-      <div className="container">
+      <motion.div 
+        className="bg-orb bg-orb--purple" 
+        style={{ top: '-10%', right: '-10%' }}
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.15, 0.3, 0.15],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      
+      <motion.div 
+        className="bg-orb bg-orb--lime" 
+        style={{ bottom: '-20%', left: '10%' }}
+        animate={{ 
+          scale: [1, 1.4, 1],
+          opacity: [0.1, 0.2, 0.1],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+      />
+
+      <div className="container hero__container">
         <motion.div 
           className="hero__content"
           variants={containerVariants}
@@ -69,6 +83,15 @@ export default function Hero() {
             </a>
           </motion.div>
         </motion.div>
+
+        <motion.img 
+          src="/images/bus.png"
+          alt="Bus"
+          className="hero__bus"
+          initial={{ x: "-100%" }}
+          animate={{ x: 0 }}
+          transition={{ duration: 2.5, ease: "easeOut", delay: 0.3 }}
+        />
       </div>
     </section>
   )

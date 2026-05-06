@@ -42,12 +42,19 @@ export default function Services() {
 
   return (
     <section id="services" className="services-v2 section--wrapped" ref={containerRef}>
-      {/* Curved Top Decoration */}
-      <div className="services-v2__curve">
-        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 120L1440 120L1440 0C1440 0 1140 120 720 120C300 120 0 0 0 0L0 120Z" fill="var(--color-navy)" />
-        </svg>
-      </div>
+      {/* Ambient Orbs */}
+      <motion.div 
+        className="bg-orb bg-orb--purple"
+        style={{ top: '-10%', left: '-10%' }}
+        animate={{ y: [0, 50, 0], opacity: [0.1, 0.2, 0.1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div 
+        className="bg-orb bg-orb--lime"
+        style={{ bottom: '-10%', right: '-10%' }}
+        animate={{ y: [0, -50, 0], opacity: [0.05, 0.15, 0.05] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      />
 
       <div className="container">
         <motion.div style={{ opacity, scale }} className="services-v2__header">

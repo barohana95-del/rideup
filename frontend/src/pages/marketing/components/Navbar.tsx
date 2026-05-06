@@ -1,19 +1,16 @@
 import './Navbar.css'
 import { useState, useEffect } from 'react'
-
-const ArrowSvg = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="currentColor">
-    <path fillRule="evenodd" clipRule="evenodd" d="M16.8065 5.82872C14.3962 5.82872 12.1995 3.54151 12.1995 1.02981V0L10.2223 0V1.02981C10.2223 2.85669 10.9914 4.57028 12.1985 5.82872L0 5.82872L0 7.88833L12.1985 7.88833C10.9914 9.14676 10.2223 10.8604 10.2223 12.6872V13.717H12.1995V12.6872C12.1995 10.1755 14.3962 7.88833 16.8065 7.88833H17.7951V5.82872H16.8065Z"/>
-  </svg>
-)
+import { Menu } from 'lucide-react'
 
 const navLinks = [
   { label: 'ראשי', href: '#hero' },
   { label: 'איך זה עובד', href: '#services' },
-  { label: 'פיצ׳רים', href: '#about' },
+  { label: 'פיצ׳רים', href: '#features' },
+  { label: 'ספקים', href: '/providers' },
   { label: 'עיצובים', href: '#projects' },
   { label: 'מחירים', href: '#pricing' },
   { label: 'שאלות', href: '#faq' },
+  { label: 'צרו קשר', href: '#contact' },
 ]
 
 export default function Navbar() {
@@ -26,49 +23,50 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const rightLinks = navLinks.slice(0, 4) 
+  const leftLinks = navLinks.slice(4) 
+
   return (
     <header className={`navbar${scrolled ? ' navbar--scrolled' : ''}`}>
-      <div className="container navbar__inner">
-        {/* Logo */}
-        <a href="#hero" className="navbar__logo">
-          <img src="/images/logo.png" alt="RideUp" className="h-8" />
-        </a>
+      <div className="navbar__glass">
+        <div className="navbar__inner">
+          {/* Right Side Links (RTL) */}
+          <nav className="navbar__nav navbar__nav--right">
+            {rightLinks.map(l => (
+              <a key={l.href} href={l.href} className="navbar__link">{l.label}</a>
+            ))}
+          </nav>
 
-        {/* Desktop Nav */}
-        <nav className="navbar__nav">
-          {navLinks.map(l => (
-            <a key={l.href} href={l.href} className="navbar__link">{l.label}</a>
-          ))}
-        </nav>
+          {/* Centered Logo */}
+          <a href="#hero" className="navbar__logo">
+            <img src="/images/logo.png" alt="RideUp" />
+          </a>
 
-        {/* CTA */}
-        <a href="/onboarding" className="btn btn-primary navbar__cta">
-          התחברות / הרשמה
-          <ArrowSvg />
-        </a>
+          {/* Left Side Links + CTA */}
+          <div className="navbar__left-group">
+            <nav className="navbar__nav navbar__nav--left">
+              {leftLinks.map(l => (
+                <a key={l.href} href={l.href} className="navbar__link">{l.label}</a>
+              ))}
+            </nav>
+            
+            <a href="/onboarding" className="btn btn-primary navbar__cta">
+              התחברות / הרשמה
+            </a>
+          </div>
 
-        {/* Hamburger */}
-        <button
-          className={`navbar__hamburger${menuOpen ? ' open' : ''}`}
-          onClick={() => setMenuOpen(v => !v)}
-          aria-label="תפריט"
-        >
-          <span /><span /><span />
-        </button>
+          <button className="navbar__hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+            <Menu size={24} />
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <div className={`navbar__mobile${menuOpen ? ' open' : ''}`}>
         {navLinks.map(l => (
-          <a key={l.href} href={l.href} className="navbar__mobile-link" onClick={() => setMenuOpen(false)}>
-            {l.label}
-          </a>
+          <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>{l.label}</a>
         ))}
-        <a href="/onboarding" className="btn btn-primary" onClick={() => setMenuOpen(false)}>
-          התחברות <ArrowSvg />
-        </a>
       </div>
     </header>
   )
 }
-

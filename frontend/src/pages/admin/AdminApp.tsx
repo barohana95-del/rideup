@@ -15,7 +15,6 @@ import {
   Loader2,
   ArrowLeft,
 } from 'lucide-react';
-import { useSearchParams } from 'react-router-dom';
 import { adminApi } from '../../lib/api';
 import { getMockUser, logoutMock } from '../../lib/mockAuth';
 import type { Tenant, Registration, DashboardStats } from '../../types';
@@ -34,11 +33,7 @@ const tabs: { key: TabKey; label: string; icon: React.ElementType; comingSoon?: 
   { key: 'trip',          label: 'תכנון נסיעה', icon: Route,          comingSoon: true },
 ];
 
-export default function AdminApp(_props: { host?: { hostname: string } }) {
-  const [searchParams] = useSearchParams();
-  const slugFromQuery = searchParams.get('slug');
-  const slugFromPath = window.location.pathname.match(/^\/admin\/([a-z0-9-]+)/)?.[1] ?? null;
-  const slug = slugFromPath ?? slugFromQuery;
+export default function AdminApp({ slug }: { slug: string }) {
 
   const user = getMockUser();
   const [activeTab, setActiveTab] = useState<TabKey>('dashboard');
@@ -177,7 +172,7 @@ export default function AdminApp(_props: { host?: { hostname: string } }) {
         {/* Bottom — view site + logout */}
         <div className="p-3 border-t space-y-1" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <a
-            href={`/?tenant=${slug}`}
+            href={`/${slug}`}
             target="_blank"
             rel="noreferrer"
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors"

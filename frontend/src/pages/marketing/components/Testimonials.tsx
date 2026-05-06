@@ -32,6 +32,19 @@ const testimonials = [
 export default function Testimonials() {
   return (
     <section id="testimonials" className="testimonials-v2 section--wrapped">
+      {/* Ambient Orbs */}
+      <motion.div 
+        className="bg-orb bg-orb--purple"
+        style={{ top: '10%', right: '-10%' }}
+        animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.2, 0.1] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div 
+        className="bg-orb bg-orb--lime"
+        style={{ bottom: '10%', left: '-10%' }}
+        animate={{ scale: [1.3, 1, 1.3], opacity: [0.05, 0.15, 0.05] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+      />
       <div className="container">
         <div className="testimonials-v2__header">
           <span className="eyebrow eyebrow--white">מה לקוחות אומרים</span>

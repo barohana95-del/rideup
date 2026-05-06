@@ -61,7 +61,20 @@ export default function Simulation() {
   }, [cursorControls])
 
   return (
-    <section className="simulation-v3 section--wrapped">
+    <section id="simulation" className="simulation-v3 section--wrapped">
+      {/* Ambient Orbs */}
+      <motion.div 
+        className="bg-orb bg-orb--purple"
+        style={{ top: '20%', left: '-15%' }}
+        animate={{ y: [0, 60, 0], opacity: [0.1, 0.2, 0.1] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div 
+        className="bg-orb bg-orb--lime"
+        style={{ bottom: '10%', right: '-15%' }}
+        animate={{ y: [0, -60, 0], opacity: [0.05, 0.15, 0.05] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+      />
       <div className="container simulation-v3__container">
         <div className="simulation-v3__header">
           <span className="eyebrow eyebrow--white">המערכת בפעולה</span>

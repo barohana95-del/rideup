@@ -312,13 +312,15 @@ function SuccessScreen({ slug, onReset }: { slug: string; onReset: () => void })
         >
           <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>הקישור שלך:</span>
           <code className="font-mono text-base font-bold" style={{ color: '#1E63D6' }}>
-            {slug}.rideup.co.il
+            {window.location.host}/{slug}
           </code>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3">
           <a
-            href={`https://${slug}.rideup.co.il`}
+            href={`/${slug}`}
+            target="_blank"
+            rel="noreferrer"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold transition-all"
             style={{ background: '#1E63D6', color: '#fff' }}
           >
@@ -326,7 +328,7 @@ function SuccessScreen({ slug, onReset }: { slug: string; onReset: () => void })
             צפה באתר שלי
           </a>
           <a
-            href={`/admin?slug=${slug}`}
+            href={`/admin/${slug}`}
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold transition-all"
             style={{ background: '#fff', color: '#0A1F44' }}
           >

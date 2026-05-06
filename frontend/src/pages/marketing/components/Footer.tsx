@@ -1,5 +1,6 @@
 import './Footer.css'
 import { motion } from 'framer-motion'
+import { Phone, Mail, Facebook, Linkedin, Instagram, Sparkles } from 'lucide-react'
 
 const marqueeItems = [
   'ניהול הסעות חכם',
@@ -19,9 +20,11 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="footer">
+    <footer className="footer" aria-labelledby="footer-heading">
+      <h2 id="footer-heading" className="sr-only">תפריט תחתון ומידע ליצירת קשר</h2>
+      
       {/* Marquee strip */}
-      <div className="footer__marquee">
+      <div className="footer__marquee" aria-hidden="true">
         <motion.div 
           className="marquee-track"
           animate={{ x: [0, -1000] }}
@@ -29,7 +32,7 @@ export default function Footer() {
         >
           {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
             <span key={i} className="footer__marquee-item">
-              <span className="footer__marquee-star">✦</span>
+              <Sparkles className="footer__marquee-star" size={16} />
               {item}
             </span>
           ))}
@@ -41,10 +44,10 @@ export default function Footer() {
         <div className="container footer__grid">
           {/* Col 1: Logo + hours */}
           <div className="footer__col">
-            <div className="footer__logo">
-              <img src="/images/logo.png" alt="RideUp" className="h-8 mb-4" />
-            </div>
-            <h4 className="footer__col-title">שעות פעילות:</h4>
+            <a href="#hero" className="footer__logo" aria-label="חזרה לראש העמוד">
+              <img src="/images/logo.png" alt="RideUp - מערכת ניהול הסעות" className="h-8 mb-4" />
+            </a>
+            <h3 className="footer__col-title">שעות פעילות:</h3>
             <div className="footer__hours">
               <div>
                 <span>ראשון - חמישי:</span>
@@ -59,49 +62,62 @@ export default function Footer() {
 
           {/* Col 2: Contact */}
           <div className="footer__col">
-            <h4 className="footer__col-title">צרו קשר</h4>
-            <p className="footer__address">הברזל 1, תל אביב</p>
-            <a href="tel:0501234567" className="footer__contact-link">
-              <i className="fas fa-phone" />
-              <div>
-                <span>טלפון:</span>
-                <strong>050-123-4567</strong>
-              </div>
-            </a>
-            <a href="mailto:info@rideup.co.il" className="footer__contact-link">
-              <i className="fas fa-envelope" />
-              <div>
-                <span>אימייל:</span>
-                <strong>info@rideup.co.il</strong>
-              </div>
-            </a>
+            <h3 className="footer__col-title">צרו קשר</h3>
+            <address className="footer__address-block">
+              <p className="footer__address">הברזל 1, תל אביב</p>
+              <a href="tel:0501234567" className="footer__contact-link" aria-label="התקשרו אלינו למספר 050-123-4567">
+                <span className="footer__icon-wrapper">
+                  <Phone size={18} />
+                </span>
+                <div>
+                  <span>טלפון:</span>
+                  <strong>050-123-4567</strong>
+                </div>
+              </a>
+              <a href="mailto:info@rideup.co.il" className="footer__contact-link" aria-label="שלחו לנו אימייל לכתובת info@rideup.co.il">
+                <span className="footer__icon-wrapper">
+                  <Mail size={18} />
+                </span>
+                <div>
+                  <span>אימייל:</span>
+                  <strong>info@rideup.co.il</strong>
+                </div>
+              </a>
+            </address>
           </div>
 
           {/* Col 3: Newsletter */}
           <div className="footer__col">
-            <h4 className="footer__col-title">הירשמו לעדכונים</h4>
+            <h3 className="footer__col-title">הירשמו לעדכונים</h3>
             <p className="footer__newsletter-desc">קבלו טיפים לניהול לוגיסטי חכם ועדכונים על פיצ׳רים חדשים.</p>
-            <form className="footer__form" onSubmit={e => e.preventDefault()}>
+            <form className="footer__form" onSubmit={e => e.preventDefault()} aria-label="הרשמה לניוזלטר">
+              <label htmlFor="newsletter-email" className="sr-only">כתובת אימייל</label>
               <input
+                id="newsletter-email"
                 type="email"
                 placeholder="כתובת אימייל*"
                 className="footer__input"
+                required
               />
-              <button type="submit" className="footer__submit">הרשמה</button>
+              <button type="submit" className="footer__submit" aria-label="הרשמה">הרשמה</button>
             </form>
           </div>
 
           {/* Col 4: Navigation + Social */}
           <div className="footer__col">
-            <h4 className="footer__col-title">עקבו אחרינו:</h4>
-            <div className="footer__social">
-              {['fab fa-facebook-f', 'fab fa-linkedin-in', 'fab fa-instagram'].map(ic => (
-                <a key={ic} href="#" className="footer__social-link" aria-label={ic}>
-                  <i className={ic} />
-                </a>
-              ))}
+            <h3 className="footer__col-title">עקבו אחרינו:</h3>
+            <div className="footer__social" aria-label="רשתות חברתיות">
+              <a href="#" className="footer__social-link" aria-label="עמוד הפייסבוק שלנו">
+                <Facebook size={18} />
+              </a>
+              <a href="#" className="footer__social-link" aria-label="עמוד הלינקדאין שלנו">
+                <Linkedin size={18} />
+              </a>
+              <a href="#" className="footer__social-link" aria-label="עמוד האינסטגרם שלנו">
+                <Instagram size={18} />
+              </a>
             </div>
-            <nav className="footer__nav">
+            <nav className="footer__nav" aria-label="ניווט תחתון">
               {footerLinks.map(l => (
                 <a key={l.label} href={l.href} className="footer__nav-link">{l.label}</a>
               ))}
@@ -113,7 +129,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="footer__bottom">
         <div className="container footer__bottom-inner">
-          <p>© 2026 כל הזכויות שמורות ל-RideUp.</p>
+          <p>© {new Date().getFullYear()} כל הזכויות שמורות ל-RideUp.</p>
           <p>הפתרון החכם לניהול הסעות לאירועים</p>
         </div>
       </div>

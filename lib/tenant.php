@@ -1,16 +1,10 @@
 <?php
 // =====================================================================
-// tenant.php — חילוץ tenant מה-Host (subdomain).
+// tenant.php — extracts the active tenant from the request.
 //
-// כללי:
-//   {BASE_DOMAIN}              → no tenant (marketing/app)
-//   app.{BASE_DOMAIN}          → no tenant (admin shell)
-//   {slug}.{BASE_DOMAIN}       → tenant!
-//   reserved subdomains        → no tenant
-//
-// קונפיגורציה:
-//   BASE_DOMAIN   — דומיין בסיסי (ב-.env). למשל "rideup.co.il" או
-//                    "dev.rideup.co.il" בסביבת פיתוח.
+// Path-based architecture: the frontend uses paths like /<slug>,
+// but every API call passes the slug explicitly via `?tenant=<slug>`.
+// This class reads that query parameter, validates it, and loads the row.
 // =====================================================================
 declare(strict_types=1);
 
@@ -21,22 +15,15 @@ class Tenant {
     private static ?array $current = null;
     private static bool $resolved = false;
 
-    private const RESERVED = [
-        'www', 'app', 'api', 'admin', 'mail', 'blog', 'docs', 'help',
-        'support', 'billing', 'checkout', 'login', 'signup', 'about',
-        'pricing', 'terms', 'privacy', 'rideup', 'dev', 'staging', 'test',
-    ];
-
     /**
-     * מזהה את ה-tenant הנוכחי לפי ה-Host header.
-     * מחזיר את הרשומה מה-DB, או null אם אין tenant.
-     * אם slug קיים אבל לא נמצא ב-DB → 404.
+     * Returns the current tenant or null if no `?tenant=` was supplied.
+     * Throws 404 if the slug doesn't exist or the tenant is deleted/suspended.
      */
     public static function current(): ?array {
         if (self::$resolved) return self::$current;
         self::$resolved = true;
 
-        $slug = self::extractSlugFromHost();
+        $slug = self::extractSlug();
         if ($slug === null) return null;
 
         $tenant = DB::one(
@@ -49,10 +36,9 @@ class Tenant {
             Response::notFound("Tenant '$slug' not found");
         }
 
-        // בדיקת סטטוס — אם מחוק / מושעה, לא מחזירים.
         if (in_array($tenant['status'], ['deleted', 'suspended'], true)) {
             require_once __DIR__ . '/response.php';
-            Response::notFound("Tenant unavailable");
+            Response::notFound('Tenant unavailable');
         }
 
         self::$current = $tenant;
@@ -74,44 +60,18 @@ class Tenant {
     }
 
     /**
-     * פענוח slug מה-Host header.
-     * מחזיר null אם זה ה-base domain עצמו, app, או reserved.
+     * Extracts the slug from the request, in priority order:
+     *   1. ?tenant=<slug> query param (used by all API clients)
+     *   2. POST/PATCH JSON body field "slug" (used by admin/public writes)
+     *
+     * Host-based extraction has been removed — RideUp uses path-based
+     * tenancy and API endpoints always carry slug as a parameter.
      */
-    private static function extractSlugFromHost(): ?string {
-        $host = self::host();
-        $base = Env::get('BASE_DOMAIN', 'localhost');
-
-        // dev override: ?tenant=foo בשורת ה-URL
-        if (isset($_GET['tenant']) && is_string($_GET['tenant'])) {
+    private static function extractSlug(): ?string {
+        if (isset($_GET['tenant']) && is_string($_GET['tenant']) && $_GET['tenant'] !== '') {
             return self::sanitizeSlug($_GET['tenant']);
         }
-
-        // localhost / 127.0.0.1 → no tenant (אלא אם override)
-        if ($host === 'localhost' || $host === '127.0.0.1') return null;
-
-        // ה-base domain עצמו → no tenant
-        if ($host === $base) return null;
-
-        // {sub}.{base}
-        $suffix = '.' . $base;
-        if (str_ends_with($host, $suffix)) {
-            $sub = substr($host, 0, -strlen($suffix));
-            // רק רמה אחת
-            if (str_contains($sub, '.')) return null;
-            if (in_array($sub, self::RESERVED, true)) return null;
-            return self::sanitizeSlug($sub);
-        }
-
         return null;
-    }
-
-    private static function host(): string {
-        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        // הסרת port אם יש
-        if (str_contains($host, ':')) {
-            $host = explode(':', $host)[0];
-        }
-        return strtolower($host);
     }
 
     private static function sanitizeSlug(string $s): string {

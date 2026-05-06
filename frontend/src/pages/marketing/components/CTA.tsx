@@ -1,74 +1,79 @@
 import './CTA.css'
 import { motion } from 'framer-motion'
-import { MessageSquare, Handshake } from 'lucide-react'
 
 const ArrowSvg = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="currentColor">
-    <path fillRule="evenodd" clipRule="evenodd" d="M16.8065 5.82872C14.3962 5.82872 12.1995 3.54151 12.1995 1.02981V0L10.2223 0V1.02981C10.2223 2.85669 10.9914 4.57028 12.1985 5.82872L0 5.82872L0 7.88833L12.1985 7.88833C10.9914 9.14676 10.2223 10.8604 10.2223 12.6872V13.717H12.1995V12.6872C12.1995 10.1755 14.3962 7.88833 16.8065 7.88833H17.7951V5.82872H16.8065Z"/>
+    <path d="M11 1L17 7M17 7L11 13M17 7H1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 )
 
 export default function CTA() {
   return (
-    <section id="contact" className="cta section dark-section section--wrapped">
+    <section id="contact" className="cta section--wrapped dark-section">
+      <div className="cta__bg">
+        <img 
+          src="/images/hero-bg.jpg" 
+          alt="Luxury transportation"
+          onError={(e) => (e.currentTarget.src = 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=2000')}
+        />
+      </div>
+      <div className="cta__overlay" />
       <div className="container cta__container">
         <motion.div 
           className="cta__content"
-          initial={{ opacity: 0, x: 40 }}
+          initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
         >
-          <span className="eyebrow eyebrow--white">דברו איתנו עוד היום</span>
-          <h2 className="section-title section-title--white">
-            מוכנים להפוך את ניהול האירוע שלכם לקל ופשוט?
-          </h2>
+          <span className="eyebrow eyebrow--white">דברו איתנו</span>
+          <h2 className="section-title section-title--white">דברו איתנו עוד היום</h2>
           <p className="section-desc section-desc--white">
-            הצטרפו למאות מפיקים וזוגות שכבר חסכו זמן וכסף עם RideUp. המערכת שלנו תדאג לכל הלוגיסטיקה, כדי שאתם תוכלו פשוט לחגוג.
+            הצטרפו למהפכת ההיסעים החכמה. השאירו פרטים ונתחיל לתכנן את האירוע הבא שלכם.
           </p>
-          <div className="cta__features">
-            <div className="cta__feature">
-              <div className="cta__feature-icon">
-                <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>
-                  <MessageSquare size={24} color="var(--color-blue)" />
-                </motion.div>
-              </div>
-              <div>
-                <h4>תמיכה מהירה ומקצועית לכל שאלה</h4>
-              </div>
+          
+          <div className="cta__info">
+            <div className="cta__info-item">
+              <strong>שיחת ייעוץ חינם</strong>
+              <span>נציג שלנו יחזור אליכם תוך פחות מ-24 שעות</span>
             </div>
-            <div className="cta__feature">
-              <div className="cta__feature-icon">
-                <motion.div animate={{ rotate: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-                  <Handshake size={24} color="var(--color-blue)" />
-                </motion.div>
-              </div>
-              <div>
-                <h4>מערכת מאובטחת ואמינה ב-100%</h4>
-              </div>
-            </div>
-          </div>
-          <div className="cta__actions">
-            <a href="/onboarding" className="btn btn-primary">
-              התחילו עכשיו בחינם
-              <ArrowSvg />
-            </a>
           </div>
         </motion.div>
+
         <motion.div 
-          className="cta__image"
-          initial={{ opacity: 0, scale: 0.8 }}
+          className="cta__form-wrap"
+          initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, type: "spring" }}
+          transition={{ duration: 0.8, type: "spring" }}
         >
-          <img
-            src="/images/cta-image.png"
-            alt="RideUp Experience"
-          />
+          <div className="contact-form">
+            <h3 className="form-title">השאירו פרטים ונחזור אליכם</h3>
+            <form className="form-grid">
+              <div className="form-group">
+                <label>שם מלא</label>
+                <input type="text" placeholder="ישראל ישראלי" />
+              </div>
+              <div className="form-group">
+                <label>טלפון</label>
+                <input type="tel" placeholder="050-0000000" />
+              </div>
+              <div className="form-group full">
+                <label>אימייל</label>
+                <input type="email" placeholder="name@example.com" />
+              </div>
+              <div className="form-group full">
+                <label>סוג האירוע / הודעה</label>
+                <textarea placeholder="ספרו לנו קצת על האירוע שלכם..." rows={3}></textarea>
+              </div>
+              <button type="submit" className="btn btn-primary w-full form-submit">
+                שליחת פנייה
+                <ArrowSvg />
+              </button>
+            </form>
+          </div>
         </motion.div>
       </div>
     </section>
   )
 }
-

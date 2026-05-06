@@ -1,71 +1,93 @@
 // =====================================================================
-// Host detection — מזהה איזה "אזור" של האפליקציה אנחנו בו
-// לפי ה-hostname הנוכחי של הדפדפן.
+// Route detection — path-based zone detection.
+// (Filename kept as `host.ts` for backward-compat with existing imports.)
 //
-// אזורים:
-//   marketing — דף הנחיתה הראשי. למשל rideup.co.il
-//   app       — פאנל ניהול. למשל app.rideup.co.il
-//   tenant    — אתר ציבורי של לקוח. למשל mihal.rideup.co.il
-//   unknown   — לא תואם לכלום (404)
+// Zones:
+//   marketing — landing + meta pages   (/, /onboarding, /providers, /pricing, ...)
+//   admin     — tenant owner panel     (/admin, /admin/<slug>)
+//   tenant    — public RSVP site       (/<slug>) — anything not reserved
+//   unknown   — fallback / 404
 //
-// dev: localhost נחשב marketing כברירת מחדל.
-//      לבדיקת tenant בפיתוח: כתובת ?tenant=mihal יכפה על המצב.
+// Examples:
+//   rideup.integrity-web.com/                  → marketing
+//   rideup.integrity-web.com/onboarding        → marketing (onboarding wizard)
+//   rideup.integrity-web.com/admin/aviv-bar    → admin
+//   rideup.integrity-web.com/aviv-bar          → tenant (public RSVP)
+//   localhost:3000/aviv-bar                    → tenant (same as prod)
 // =====================================================================
 
 export type AppZone = 'marketing' | 'app' | 'tenant' | 'unknown';
 
-// Subdomains שלא נחשבים tenants (חופפים ל-reserved_slugs ב-DB).
+// First-segment slugs reserved for the platform itself (never a tenant).
+// Mirror this list in the DB `reserved_slugs` table and in PHP.
 const RESERVED = new Set([
-  'www', 'app', 'api', 'admin', 'mail', 'blog', 'docs', 'help',
-  'support', 'billing', 'checkout', 'login', 'signup', 'about',
-  'pricing', 'terms', 'privacy', 'rideup', 'dev', 'staging', 'test',
+  // platform pages
+  'admin', 'app', 'api', 'onboarding', 'providers',
+  'login', 'signup', 'logout', 'auth',
+  'pricing', 'about', 'contact', 'help', 'support',
+  'blog', 'docs', 'faq', 'terms', 'privacy', 'cookies',
+  // technical
+  'www', 'mail', 'static', 'assets', 'public', 'cdn',
+  // brand reservations
+  'rideup', 'app-store', 'play-store',
+  // env subdomains (still keep for safety)
+  'dev', 'staging', 'test',
 ]);
-
-// הדומיין הבסיסי (ללא subdomain). מוגדר בסביבה.
-// לדוג': 'rideup.co.il', 'dev.rideup.co.il', או 'localhost'.
-const BASE_DOMAIN = (import.meta.env.VITE_BASE_DOMAIN || 'localhost') as string;
 
 export interface HostInfo {
   zone: AppZone;
   tenantSlug: string | null;
+  /** First path segment — useful for debugging/logging. */
+  pathSegment: string;
+  /** The original hostname (informational). */
   hostname: string;
+}
+
+function isValidSlug(s: string): boolean {
+  return /^[a-z0-9][a-z0-9-]{1,58}[a-z0-9]$/.test(s);
 }
 
 export function detectHost(): HostInfo {
   const hostname = window.location.hostname;
+  const path = window.location.pathname;
 
-  // dev override: ?tenant=foo
+  // Optional explicit overrides via query (kept for dev convenience).
   const params = new URLSearchParams(window.location.search);
-  const overrideTenant = params.get('tenant');
-  if (overrideTenant) {
-    return { zone: 'tenant', tenantSlug: overrideTenant, hostname };
-  }
   const overrideZone = params.get('zone') as AppZone | null;
+  const overrideTenant = params.get('tenant');
   if (overrideZone) {
-    return { zone: overrideZone, tenantSlug: null, hostname };
+    return { zone: overrideZone, tenantSlug: overrideTenant, pathSegment: '', hostname };
   }
 
-  // localhost / 127.0.0.1 → marketing (אלא אם override)
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return { zone: 'marketing', tenantSlug: null, hostname };
+  // Extract the first path segment.
+  const segments = path.split('/').filter(Boolean);
+  const first = (segments[0] ?? '').toLowerCase();
+
+  // Root → marketing.
+  if (first === '') {
+    return { zone: 'marketing', tenantSlug: null, pathSegment: '', hostname };
   }
 
-  // אם זה בדיוק ה-base domain → marketing
-  if (hostname === BASE_DOMAIN) {
-    return { zone: 'marketing', tenantSlug: null, hostname };
+  // /admin and /admin/<slug>
+  if (first === 'admin') {
+    const slug = (segments[1] ?? '').toLowerCase();
+    return {
+      zone: 'app',
+      tenantSlug: slug && isValidSlug(slug) ? slug : null,
+      pathSegment: first,
+      hostname,
+    };
   }
 
-  // אם זה xxx.{BASE_DOMAIN} → לבדוק את xxx
-  if (hostname.endsWith(`.${BASE_DOMAIN}`)) {
-    const sub = hostname.slice(0, -(`.${BASE_DOMAIN}`).length);
-    // רק רמה אחת של subdomain (foo.rideup.co.il), לא foo.bar.rideup.co.il
-    if (sub.includes('.')) return { zone: 'unknown', tenantSlug: null, hostname };
-
-    if (sub === 'app') return { zone: 'app', tenantSlug: null, hostname };
-    if (RESERVED.has(sub)) return { zone: 'marketing', tenantSlug: null, hostname };
-
-    return { zone: 'tenant', tenantSlug: sub, hostname };
+  // Reserved → stays in marketing zone (router handles which page).
+  if (RESERVED.has(first)) {
+    return { zone: 'marketing', tenantSlug: null, pathSegment: first, hostname };
   }
 
-  return { zone: 'unknown', tenantSlug: null, hostname };
+  // Anything else that looks like a slug → tenant zone.
+  if (isValidSlug(first)) {
+    return { zone: 'tenant', tenantSlug: first, pathSegment: first, hostname };
+  }
+
+  return { zone: 'unknown', tenantSlug: null, pathSegment: first, hostname };
 }
