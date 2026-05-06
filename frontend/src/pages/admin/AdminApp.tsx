@@ -22,14 +22,15 @@ import Logo from '../marketing/components/Logo';
 import DashboardTab from './tabs/DashboardTab';
 import RegistrationsTab from './tabs/RegistrationsTab';
 import SettingsTab from './tabs/SettingsTab';
+import EditorTab from './tabs/EditorTab';
 
-type TabKey = 'dashboard' | 'registrations' | 'settings' | 'design' | 'trip';
+type TabKey = 'dashboard' | 'registrations' | 'design' | 'settings' | 'trip';
 
 const tabs: { key: TabKey; label: string; icon: React.ElementType; comingSoon?: boolean }[] = [
   { key: 'dashboard',     label: 'דשבורד',      icon: LayoutDashboard },
   { key: 'registrations', label: 'רישומים',     icon: Users },
+  { key: 'design',        label: 'עיצוב',       icon: Palette },
   { key: 'settings',      label: 'הגדרות',      icon: SettingsIcon },
-  { key: 'design',        label: 'עיצוב',       icon: Palette,        comingSoon: true },
   { key: 'trip',          label: 'תכנון נסיעה', icon: Route,          comingSoon: true },
 ];
 
@@ -38,6 +39,7 @@ export default function AdminApp({ slug }: { slug: string }) {
   const user = getMockUser();
   const [activeTab, setActiveTab] = useState<TabKey>('dashboard');
   const [tenant, setTenant] = useState<Tenant | null>(null);
+  const [settings, setSettings] = useState<Record<string, string>>({});
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,7 +71,9 @@ export default function AdminApp({ slug }: { slug: string }) {
       setLoading(false);
       return;
     }
-    setTenant((tenantRes.data as any).tenant);
+    const td = tenantRes.data as any;
+    setTenant(td.tenant);
+    setSettings(td.settings ?? {});
     if (statsRes.success) setStats(statsRes.data!);
     if (regRes.success) setRegistrations(regRes.data!);
     setLoading(false);
@@ -255,6 +259,21 @@ export default function AdminApp({ slug }: { slug: string }) {
                   onChange={async () => {
                     const r = await adminApi.listRegistrations(slug!);
                     if (r.success) setRegistrations(r.data!);
+                  }}
+                />
+              )}
+              {activeTab === 'design' && (
+                <EditorTab
+                  tenant={tenant}
+                  settings={settings}
+                  slug={slug!}
+                  onSaved={(newSlug) => {
+                    if (newSlug !== slug) {
+                      // Slug changed → navigate to new admin URL
+                      window.location.href = `/admin/${newSlug}`;
+                    } else {
+                      loadAll();
+                    }
                   }}
                 />
               )}

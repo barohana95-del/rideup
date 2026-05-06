@@ -133,6 +133,18 @@ export const adminApi = {
   getStats: (slug: string) =>
     request<DashboardStats>(`/admin/stats.php?slug=${slug}`),
 
+  updateTenant: (slug: string, patch: Record<string, unknown>) =>
+    request<{
+      tenant: Tenant;
+      cities: { id: number; name: string; display_order: number }[];
+      shifts: { id: number; time_label: string; display_order: number }[];
+      settings: Record<string, string>;
+      newSlug: string;
+    }>(`/admin/update-tenant.php?slug=${slug}`, {
+      method: 'PATCH',
+      body: JSON.stringify(patch),
+    }),
+
   exportExcel: async (slug: string): Promise<Blob | null> => {
     const token = localStorage.getItem(SESSION_KEY);
     const res = await fetch(`${API_BASE_URL}/admin/export.php?slug=${slug}`, {
