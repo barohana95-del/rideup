@@ -220,6 +220,8 @@ export const adminApi = {
 };
 
 // --- Super-Admin (platform owner only — requires is_admin=1) ---
+// Note: PHP returns snake_case from the DB but Response::ok() auto-converts
+// keys to camelCase, so the types here use camelCase.
 export const saApi = {
   overview: () => request<{
     totals: { tenants: number; users: number; registrations: number; guests: number };
@@ -228,8 +230,8 @@ export const saApi = {
     recent: { newTenants: number; newUsers: number; newRegistrations: number };
     latestTenants: Array<{
       id: number; slug: string; status: string; plan: string;
-      event_title: string | null; event_date: string | null; created_at: string;
-      owner_email: string | null; owner_name: string | null;
+      eventTitle: string | null; eventDate: string | null; createdAt: string;
+      ownerEmail: string | null; ownerName: string | null;
     }>;
   }>('/sa/overview.php'),
 
@@ -241,20 +243,20 @@ export const saApi = {
     const tail = qs.toString();
     return request<Array<{
       id: number; slug: string; status: string; plan: string; theme: string;
-      event_type: string; event_title: string | null; event_date: string | null;
-      event_location: string | null; trial_ends_at: string | null;
-      paid_until: string | null; created_at: string; updated_at: string;
-      owner_id: number | null; owner_email: string | null; owner_name: string | null;
+      eventType: string; eventTitle: string | null; eventDate: string | null;
+      eventLocation: string | null; trialEndsAt: string | null;
+      paidUntil: string | null; createdAt: string; updatedAt: string;
+      ownerId: number | null; ownerEmail: string | null; ownerName: string | null;
       registrations: number; guests: number;
     }>>(`/sa/tenants.php${tail ? '?' + tail : ''}`);
   },
 
   listUsers: (q?: string) =>
     request<Array<{
-      id: number; email: string; display_name: string | null;
-      avatar_url: string | null; is_admin: number;
-      created_at: string; last_login_at: string | null;
-      tenants_count: number;
+      id: number; email: string; displayName: string | null;
+      avatarUrl: string | null; isAdmin: number;
+      createdAt: string; lastLoginAt: string | null;
+      tenantsCount: number;
     }>>(`/sa/users.php${q ? '?q=' + encodeURIComponent(q) : ''}`),
 
   tenantAction: (tenantId: number, action: string, value?: unknown) =>

@@ -51,11 +51,11 @@ DB::exec(
     ]
 );
 
-$id = (int)DB::lastInsertId();
+$id = (int) DB::pdo()->lastInsertId();
 if ($id === 0) {
     // ON DUPLICATE KEY UPDATE might return 0 if no changes were made.
     $row = DB::one("SELECT id FROM registrations WHERE tenant_id = ? AND phone_number = ?", [$tenant['id'], $phoneNumber]);
-    $id = (int)$row['id'];
+    $id = (int) ($row['id'] ?? 0);
 }
 
 Response::ok(['id' => $id]);

@@ -1,7 +1,12 @@
 <?php
 // =====================================================================
-// response.php — תשובות JSON אחידות.
-// כל endpoint צריך לסיים ב-Response::ok(...) או Response::error(...).
+// response.php — uniform JSON responses.
+// Every endpoint should finish with Response::ok(...) or Response::error(...).
+//
+// Response::ok() automatically converts snake_case keys → camelCase
+// recursively before sending, so the React frontend's TypeScript types
+// (camelCase) match the JSON it receives from PHP (which queries DB
+// columns in snake_case).
 // =====================================================================
 declare(strict_types=1);
 
@@ -14,6 +19,14 @@ class Response {
     }
 
     public static function ok(mixed $data = null): never {
+        self::json(['success' => true, 'data' => self::camelize($data)]);
+    }
+
+    /**
+     * Send the data without auto-camelization. Use this for endpoints
+     * that intentionally return mixed/legacy keys (rare).
+     */
+    public static function okRaw(mixed $data = null): never {
         self::json(['success' => true, 'data' => $data]);
     }
 
@@ -34,10 +47,40 @@ class Response {
     public static function forbidden(string $message = 'Forbidden'): never {
         self::error($message, 403, 'forbidden');
     }
+
+    /**
+     * Recursively converts associative-array keys snake_case → camelCase.
+     * Lists (numeric keys) are walked but their structure preserved.
+     * Scalars and non-arrays are returned untouched.
+     */
+    private static function camelize(mixed $value): mixed {
+        if (!is_array($value)) return $value;
+
+        // List (numeric keys) — walk children, keep order.
+        if (array_is_list($value)) {
+            return array_map([self::class, 'camelize'], $value);
+        }
+
+        // Associative — convert each key.
+        $out = [];
+        foreach ($value as $k => $v) {
+            $newKey = is_string($k) ? self::snakeToCamel($k) : $k;
+            $out[$newKey] = self::camelize($v);
+        }
+        return $out;
+    }
+
+    private static function snakeToCamel(string $key): string {
+        if (!str_contains($key, '_')) return $key;
+        // Split, lowercase first part, ucfirst the rest, join.
+        $parts = explode('_', $key);
+        $first = array_shift($parts);
+        return $first . implode('', array_map('ucfirst', $parts));
+    }
 }
 
 /**
- * קורא ומפרש JSON body של בקשה.
+ * Reads + parses the JSON body of the request.
  */
 function read_json_body(): array {
     $raw = file_get_contents('php://input');

@@ -236,16 +236,16 @@ function OverviewTab() {
               <li key={t.id} className="flex items-center justify-between gap-3 py-3">
                 <div className="min-w-0 flex-1">
                   <p className="font-bold truncate" style={{ color: '#0A1F44' }}>
-                    {t.event_title || t.slug}
+                    {t.eventTitle || t.slug}
                   </p>
                   <p className="text-xs truncate" style={{ color: '#6B7C95' }}>
-                    {t.owner_email ?? '—'} · {t.slug}
+                    {t.ownerEmail ?? '—'} · {t.slug}
                   </p>
                 </div>
                 <PlanBadge plan={t.plan} />
                 <StatusBadge status={t.status} />
                 <span className="text-xs font-mono shrink-0" style={{ color: '#6B7C95' }}>
-                  {new Date(t.created_at).toLocaleDateString('he-IL')}
+                  {new Date(t.createdAt).toLocaleDateString('he-IL')}
                 </span>
               </li>
             ))}
@@ -345,15 +345,15 @@ function TenantsTab() {
                   <tr key={r.id} className="border-t" style={{ borderColor: 'rgba(30,99,214,0.06)' }}>
                     <Td>
                       <p className="font-bold" style={{ color: '#0A1F44' }}>
-                        {r.event_title || r.slug}
+                        {r.eventTitle || r.slug}
                       </p>
                       <p className="text-[11px] font-mono" style={{ color: '#6B7C95' }}>
                         /{r.slug}
                       </p>
                     </Td>
                     <Td>
-                      <p className="text-xs" style={{ color: '#0A1F44' }}>{r.owner_name ?? '—'}</p>
-                      <p className="text-[11px]" style={{ color: '#6B7C95' }}>{r.owner_email ?? '—'}</p>
+                      <p className="text-xs" style={{ color: '#0A1F44' }}>{r.ownerName ?? '—'}</p>
+                      <p className="text-[11px]" style={{ color: '#6B7C95' }}>{r.ownerEmail ?? '—'}</p>
                     </Td>
                     <Td><PlanBadge plan={r.plan} /></Td>
                     <Td><StatusBadge status={r.status} /></Td>
@@ -362,13 +362,13 @@ function TenantsTab() {
                       <span className="text-[11px] mr-1" style={{ color: '#6B7C95' }}>· {r.registrations}</span>
                     </Td>
                     <Td>
-                      <span className="text-xs" style={{ color: r.event_date ? '#0A1F44' : '#6B7C95' }}>
-                        {r.event_date ? new Date(r.event_date).toLocaleDateString('he-IL') : '—'}
+                      <span className="text-xs" style={{ color: r.eventDate ? '#0A1F44' : '#6B7C95' }}>
+                        {r.eventDate ? new Date(r.eventDate).toLocaleDateString('he-IL') : '—'}
                       </span>
                     </Td>
                     <Td>
                       <span className="text-[11px] font-mono" style={{ color: '#6B7C95' }}>
-                        {new Date(r.created_at).toLocaleDateString('he-IL')}
+                        {new Date(r.createdAt).toLocaleDateString('he-IL')}
                       </span>
                     </Td>
                     <Td align="center">
@@ -443,7 +443,7 @@ function TenantActionDrawer({ tenant, onClose, onSaved }: {
               ניהול אתר
             </p>
             <h2 className="text-2xl font-black mt-1" style={{ color: '#0A1F44' }}>
-              {tenant.event_title || tenant.slug}
+              {tenant.eventTitle || tenant.slug}
             </h2>
             <p className="text-sm font-mono mt-1" style={{ color: '#6B7C95' }}>
               /{tenant.slug}
@@ -468,19 +468,19 @@ function TenantActionDrawer({ tenant, onClose, onSaved }: {
             <span style={{ color: '#6B7C95' }}>סטטוס</span>
             <StatusBadge status={tenant.status} />
           </div>
-          {tenant.trial_ends_at && (
+          {tenant.trialEndsAt && (
             <div className="flex items-center justify-between text-sm">
               <span style={{ color: '#6B7C95' }}>נסיון פג ב-</span>
               <span className="font-mono text-xs" style={{ color: '#0A1F44' }}>
-                {new Date(tenant.trial_ends_at).toLocaleDateString('he-IL')}
+                {new Date(tenant.trialEndsAt).toLocaleDateString('he-IL')}
               </span>
             </div>
           )}
-          {tenant.paid_until && (
+          {tenant.paidUntil && (
             <div className="flex items-center justify-between text-sm">
               <span style={{ color: '#6B7C95' }}>גישה עד</span>
               <span className="font-mono text-xs" style={{ color: '#0A1F44' }}>
-                {new Date(tenant.paid_until).toLocaleDateString('he-IL')}
+                {new Date(tenant.paidUntil).toLocaleDateString('he-IL')}
               </span>
             </div>
           )}
@@ -638,10 +638,10 @@ function UsersTab() {
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs"
                            style={{ background: '#1E63D6', color: '#fff' }}>
-                        {(u.display_name ?? u.email)[0]?.toUpperCase()}
+                        {(u.displayName ?? u.email)[0]?.toUpperCase()}
                       </div>
                       <span className="font-bold" style={{ color: '#0A1F44' }}>
-                        {u.display_name ?? '—'}
+                        {u.displayName ?? '—'}
                       </span>
                     </div>
                   </Td>
@@ -651,10 +651,10 @@ function UsersTab() {
                     </a>
                   </Td>
                   <Td align="center">
-                    <span className="font-bold" style={{ color: '#0A1F44' }}>{u.tenants_count}</span>
+                    <span className="font-bold" style={{ color: '#0A1F44' }}>{u.tenantsCount}</span>
                   </Td>
                   <Td align="center">
-                    {u.is_admin ? (
+                    {u.isAdmin ? (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
                             style={{ background: '#FCD34D', color: '#0A1F44' }}>
                         <Crown className="w-2.5 h-2.5" />
@@ -666,12 +666,12 @@ function UsersTab() {
                   </Td>
                   <Td>
                     <span className="text-[11px] font-mono" style={{ color: '#6B7C95' }}>
-                      {new Date(u.created_at).toLocaleDateString('he-IL')}
+                      {new Date(u.createdAt).toLocaleDateString('he-IL')}
                     </span>
                   </Td>
                   <Td>
                     <span className="text-[11px] font-mono" style={{ color: '#6B7C95' }}>
-                      {u.last_login_at ? new Date(u.last_login_at).toLocaleDateString('he-IL') : '—'}
+                      {u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleDateString('he-IL') : '—'}
                     </span>
                   </Td>
                 </tr>

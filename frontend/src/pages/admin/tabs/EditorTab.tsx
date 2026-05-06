@@ -50,9 +50,9 @@ export default function EditorTab({
     theme: tenant.theme,
     logoUrl: tenant.logoUrl ?? '',
     coverImageUrl: tenant.coverImageUrl ?? '',
-    primaryColor: settings.primary_color ?? '#1E63D6',
-    secondaryColor: settings.secondary_color ?? '',
-    fontFamily: settings.font_family ?? 'Heebo',
+    primaryColor: settings.primaryColor ?? '#1E63D6',
+    secondaryColor: settings.secondaryColor ?? '',
+    fontFamily: settings.fontFamily ?? 'Heebo',
   }), [tenant, settings]);
 
   const [form, setForm] = useState<FormState>(initial);
@@ -98,11 +98,11 @@ export default function EditorTab({
     if (form.theme !== tenant.theme)                  patch.theme = form.theme;
     if (form.logoUrl !== (tenant.logoUrl ?? ''))      patch.logoUrl = form.logoUrl || null;
     if (form.coverImageUrl !== (tenant.coverImageUrl ?? '')) patch.coverImageUrl = form.coverImageUrl || null;
-    if (form.primaryColor !== (settings.primary_color ?? '#1E63D6'))
+    if (form.primaryColor !== (settings.primaryColor ?? '#1E63D6'))
       patch.primaryColor = form.primaryColor;
-    if (form.secondaryColor !== (settings.secondary_color ?? ''))
+    if (form.secondaryColor !== (settings.secondaryColor ?? ''))
       patch.secondaryColor = form.secondaryColor || null;
-    if (form.fontFamily !== (settings.font_family ?? 'Heebo'))
+    if (form.fontFamily !== (settings.fontFamily ?? 'Heebo'))
       patch.fontFamily = form.fontFamily;
 
     const res = await adminApi.updateTenant(slug, patch);
