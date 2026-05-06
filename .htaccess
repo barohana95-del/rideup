@@ -1,20 +1,21 @@
 # =====================================================================
 # RideUp — Apache config (Hostinger Shared)
+# Path-based routing: /api/* → PHP, everything else → SPA (index.html).
 # =====================================================================
 
-# UTF-8
 AddDefaultCharset UTF-8
 
-# הסתרת קבצים רגישים (.env, .git, וכו')
+# Hide sensitive files
 <FilesMatch "^\.(env|gitignore|gitattributes|htaccess)|composer\.(json|lock)$">
     Require all denied
 </FilesMatch>
 
-# חסימת גישה לתיקיות שלא אמורות להיות נגישות מ-web.
+# Block direct access to non-web dirs
 RedirectMatch 404 ^/lib/.*$
 RedirectMatch 404 ^/migrations/.*$
 RedirectMatch 404 ^/frontend/.*$
 RedirectMatch 404 ^/docs/.*$
+RedirectMatch 404 ^/scripts/.*$
 RedirectMatch 404 ^/\.git/.*$
 RedirectMatch 404 ^/node_modules/.*$
 
@@ -22,4 +23,26 @@ RedirectMatch 404 ^/node_modules/.*$
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
+    # Cache built assets aggressively (filenames are hashed by Vite)
+    <FilesMatch "\.(js|css|woff2?|png|jpg|jpeg|svg|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# ---------------------------------------------------------------------
+# SPA fallback rewrites
+# ---------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Don't rewrite /api/* — those are real PHP files
+    RewriteCond %{REQUEST_URI} ^/api/ [OR]
+    # Don't rewrite if the request is for an actual file
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    # Don't rewrite if the request is for an actual directory
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Otherwise serve the SPA shell — React Router takes over from there.
+    RewriteRule ^ /index.html [L]
 </IfModule>

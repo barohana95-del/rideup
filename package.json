@@ -1,0 +1,10 @@
+{
+  "name": "rideup",
+  "private": true,
+  "version": "0.1.0",
+  "description": "RideUp — event transportation SaaS. Backend (PHP) + Frontend (React/Vite) in one repo, deployed to Hostinger.",
+  "scripts": {
+    "deploy": "node scripts/build-deploy.mjs",
+    "dev": "cd frontend && npm run dev"
+  }
+}
