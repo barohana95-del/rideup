@@ -10,10 +10,11 @@
 //   /:slug             → TenantApp (public RSVP). Reserved slugs hit NotFound.
 //   *                  → NotFound
 // =====================================================================
-import { BrowserRouter, Routes, Route, useParams, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import MarketingApp from './pages/marketing/MarketingApp';
 import OnboardingApp from './pages/onboarding/OnboardingApp';
 import AdminApp from './pages/admin/AdminApp';
+import MyTenants from './pages/admin/MyTenants';
 import TenantApp from './pages/public/TenantApp';
 import ProvidersPage from './pages/providers/ProvidersPage';
 import ExperiencePage from './pages/marketing/ExperiencePage';
@@ -51,10 +52,7 @@ function TenantRoute() {
 /** /admin/:slug → admin app for that tenant. */
 function AdminRoute() {
   const { slug } = useParams<{ slug: string }>();
-  if (!slug) {
-    // /admin without a slug → for now redirect to onboarding (later: tenant list).
-    return <Navigate to="/onboarding" replace />;
-  }
+  if (!slug) return <MyTenants />;
   return <AdminApp slug={slug.toLowerCase()} />;
 }
 

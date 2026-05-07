@@ -2,12 +2,13 @@
 // Onboarding Wizard — orchestrates all 7 steps.
 // Uses mock auth until Stage 2 (real Google OAuth) replaces it.
 // =====================================================================
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, ExternalLink, AlertCircle } from 'lucide-react';
 import { useOnboarding, clearDraft } from './store';
 import { TOTAL_STEPS } from './types';
-import { getMockUser, loginAsDemo } from '../../lib/mockAuth';
+import { getCurrentUser, renderGoogleButton, refreshUser } from '../../lib/auth';
+import { loginAsDemo } from '../../lib/mockAuth';
 import { onboardingApi } from '../../lib/api';
 import ProgressBar from './components/ProgressBar';
 import NavButtons from './components/NavButtons';
@@ -26,8 +27,8 @@ export default function OnboardingApp() {
   const [createdSlug, setCreatedSlug] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Auth gate (mock for now)
-  const user = getMockUser();
+  // Auth gate (real Google + mock fallback for dev)
+  const user = getCurrentUser();
   if (!user) return <AuthGate />;
 
   // Determine if user can advance from current step
@@ -99,7 +100,7 @@ export default function OnboardingApp() {
             className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm"
             style={{ background: '#7D39EB', color: '#fff' }}
           >
-            {user.displayName[0]}
+            {user.displayName?.[0] ?? user.email[0]}
           </div>
         </div>
       </header>
@@ -200,79 +201,80 @@ export default function OnboardingApp() {
   );
 }
 
-/* ===== Auth gate (mock) ===== */
+/* ===== Auth gate (real Google + dev mock fallback) ===== */
 function AuthGate() {
-  const [loading, setLoading] = useState(false);
+  const btnRef = useRef<HTMLDivElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  const hasGoogleId = !!import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-  const handleLogin = async () => {
-    setLoading(true);
-    await new Promise((r) => setTimeout(r, 600));
+  useEffect(() => {
+    if (!btnRef.current || !hasGoogleId) return;
+    renderGoogleButton(
+      btnRef.current,
+      async () => {
+        await refreshUser();
+        window.location.reload();
+      },
+      (msg) => setError(msg),
+    );
+  }, [hasGoogleId]);
+
+  const handleDemoLogin = async () => {
     loginAsDemo();
     window.location.reload();
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-6"
-      style={{ background: '#000000', direction: 'rtl' }}
-    >
+    <div className="min-h-screen flex items-center justify-center px-6" style={{ background: '#000000', direction: 'rtl' }}>
       <div className="max-w-md w-full text-center">
         <div className="mb-8 inline-block">
           <Logo size="lg" />
         </div>
 
-        <div
-          className="rounded-3xl p-8 md:p-10"
-          style={{ background: '#fff', boxShadow: '0 20px 60px -16px rgba(0,0,0,0.3)' }}
-        >
-          <h1 className="display text-3xl mb-2" style={{ color: '#000000' }}>
-            התחברות
-          </h1>
+        <div className="rounded-3xl p-8 md:p-10" style={{ background: '#fff', boxShadow: '0 20px 60px -16px rgba(0,0,0,0.3)' }}>
+          <h1 className="display text-3xl mb-2" style={{ color: '#000000' }}>התחברות</h1>
           <p className="text-sm mb-8" style={{ color: '#6B7280' }}>
             התחבר כדי להמשיך לבניית האתר שלך
           </p>
 
-          <button
-            onClick={handleLogin}
-            disabled={loading}
-            className="w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all disabled:opacity-60"
-            style={{ background: '#7D39EB', color: '#fff' }}
-          >
-            {loading ? (
-              <>טוען...</>
-            ) : (
-              <>
-                <GoogleIcon />
-                המשך כ-Demo
-              </>
-            )}
-          </button>
+          {hasGoogleId ? (
+            <div ref={btnRef} className="flex justify-center" />
+          ) : (
+            <div className="p-4 rounded-xl text-sm" style={{ background: '#FEF3C7', border: '1px solid #FDE68A', color: '#92400E' }}>
+              ⚠️ <code>VITE_GOOGLE_CLIENT_ID</code> לא מוגדר. הוסף ל-<code>.env.local</code> כדי להפעיל Google Sign-In.
+            </div>
+          )}
 
-          <p className="text-xs mt-5" style={{ color: '#6B7280' }}>
-            🔒 בקרוב — Google OAuth אמיתי. בינתיים זה Demo mode.
-          </p>
+          {error && (
+            <div className="mt-4 p-3 rounded-xl text-sm" style={{ background: '#FEE2E2', border: '1px solid #FCA5A5', color: '#991B1B' }}>
+              {error}
+            </div>
+          )}
+
+          {/* Dev-only fallback: demo login */}
+          {import.meta.env.DEV && (
+            <>
+              <div className="my-5 flex items-center gap-3 text-[10px] uppercase tracking-widest" style={{ color: '#9CA3AF' }}>
+                <div className="flex-1 h-px" style={{ background: '#E5E7EB' }} />
+                Dev only
+                <div className="flex-1 h-px" style={{ background: '#E5E7EB' }} />
+              </div>
+              <button
+                onClick={handleDemoLogin}
+                className="w-full py-3 rounded-xl text-sm font-semibold transition-colors"
+                style={{ background: '#F2EBFF', color: '#7D39EB', border: '1px dashed #7D39EB' }}
+              >
+                המשך כ-Demo (mock)
+              </button>
+            </>
+          )}
         </div>
 
-        <a
-          href="/"
-          className="inline-block mt-6 text-sm hover:underline"
-          style={{ color: 'rgba(255,255,255,0.7)' }}
-        >
+        <a href="/" className="inline-block mt-6 text-sm hover:underline" style={{ color: 'rgba(255,255,255,0.7)' }}>
           ← חזרה לעמוד הבית
         </a>
       </div>
     </div>
-  );
-}
-
-function GoogleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18">
-      <path fill="#fff" d="M16.51 8.182c0-.563-.05-1.103-.146-1.622H8.65v3.07h4.42a3.78 3.78 0 0 1-1.638 2.485v2.066h2.65c1.55-1.428 2.443-3.532 2.443-6Z" />
-      <path fill="#fff" d="M8.65 16.5c2.214 0 4.07-.733 5.428-1.99l-2.65-2.066c-.733.49-1.673.78-2.778.78-2.137 0-3.946-1.443-4.59-3.382H1.328v2.13A8.247 8.247 0 0 0 8.65 16.5Z" opacity=".7" />
-      <path fill="#fff" d="M4.06 9.842A4.97 4.97 0 0 1 3.797 8.25c0-.553.094-1.09.263-1.592V4.528H1.328A8.247 8.247 0 0 0 .402 8.25c0 1.332.32 2.595.926 3.722l2.732-2.13Z" opacity=".5" />
-      <path fill="#fff" d="M8.65 3.276c1.207 0 2.29.415 3.144 1.23l2.353-2.353C12.715 1.063 10.86.36 8.65.36A8.247 8.247 0 0 0 1.328 4.528l2.732 2.13C4.704 4.72 6.513 3.276 8.65 3.276Z" opacity=".4" />
-    </svg>
   );
 }
 

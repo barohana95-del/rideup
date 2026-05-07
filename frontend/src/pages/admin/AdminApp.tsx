@@ -18,7 +18,7 @@ import {
   X,
 } from 'lucide-react';
 import { adminApi } from '../../lib/api';
-import { getMockUser, logoutMock } from '../../lib/mockAuth';
+import { getCurrentUser, logout as authLogout } from '../../lib/auth';
 import type { Tenant, Registration, DashboardStats } from '../../types';
 import Logo from '../marketing/components/Logo';
 import DashboardTab from './tabs/DashboardTab';
@@ -39,7 +39,7 @@ const tabs: { key: TabKey; label: string; icon: React.ElementType; comingSoon?: 
 
 export default function AdminApp({ slug }: { slug: string }) {
 
-  const user = getMockUser();
+  const user = getCurrentUser();
   const [activeTab, setActiveTab] = useState<TabKey>('dashboard');
   const [tenant, setTenant] = useState<Tenant | null>(null);
   const [settings, setSettings] = useState<Record<string, string>>({});
@@ -215,7 +215,7 @@ export default function AdminApp({ slug }: { slug: string }) {
             צפה באתר הציבורי
           </a>
           <button
-            onClick={() => { logoutMock(); window.location.href = '/'; }}
+            onClick={() => { authLogout(); window.location.href = '/'; }}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors"
             style={{ color: 'rgba(255,255,255,0.5)' }}
           >
@@ -229,7 +229,7 @@ export default function AdminApp({ slug }: { slug: string }) {
               className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs"
               style={{ background: '#7D39EB', color: '#fff' }}
             >
-              {user.displayName[0]}
+              {user.displayName?.[0] ?? user.email[0]}
             </div>
             <p className="text-xs truncate" style={{ color: 'rgba(255,255,255,0.55)' }}>
               {user.displayName}
@@ -259,7 +259,7 @@ export default function AdminApp({ slug }: { slug: string }) {
               {tabs.find((t) => t.key === activeTab)?.label}
             </p>
             <h1 className="display text-xl sm:text-2xl mt-0.5 truncate" style={{ color: '#000000' }}>
-              ברוך שובך, {user.displayName.split(' ')[0]}
+              ברוך שובך, {(user.displayName ?? user.email).split(' ')[0]}
             </h1>
           </div>
           <a
