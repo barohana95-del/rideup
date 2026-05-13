@@ -217,6 +217,37 @@ export const adminApi = {
     URL.revokeObjectURL(url);
     return true;
   },
+
+  // ── Collaborators ───────────────────────────────────────────────
+  listCollaborators: (slug: string) =>
+    request<Array<{
+      userId: number;
+      role: 'owner' | 'editor' | 'viewer';
+      createdAt: string;
+      acceptedAt: string | null;
+      invitedEmail: string | null;
+      email: string | null;
+      displayName: string | null;
+      avatarUrl: string | null;
+    }>>(`/admin/collaborators.php?slug=${slug}`),
+
+  inviteCollaborator: (slug: string, email: string, role: 'editor' | 'viewer') =>
+    request<{ ok: boolean }>(`/admin/collaborators.php?slug=${slug}`, {
+      method: 'POST',
+      body: JSON.stringify({ email, role }),
+    }),
+
+  changeCollaboratorRole: (slug: string, userId: number, role: 'editor' | 'viewer') =>
+    request<{ ok: boolean }>(`/admin/collaborators.php?slug=${slug}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ userId, role }),
+    }),
+
+  removeCollaborator: (slug: string, userId: number) =>
+    request<{ ok: boolean }>(`/admin/collaborators.php?slug=${slug}`, {
+      method: 'DELETE',
+      body: JSON.stringify({ userId }),
+    }),
 };
 
 // --- Super-Admin (platform owner only — requires is_admin=1) ---

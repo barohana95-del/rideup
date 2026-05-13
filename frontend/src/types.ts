@@ -12,6 +12,7 @@ export type EventType = 'wedding' | 'bar_mitzvah' | 'bat_mitzvah' | 'birthday' |
 export interface Tenant {
   id: number;
   slug: string;
+  ownerUserId: number;
   status: TenantStatus;
   plan: TenantPlan;
   theme: TenantTheme;
