@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/baroh/Desktop/Code/rideup/**)",
+      "Bash(node build-deploy.mjs)",
+      "Bash(ls \"C:/Users/baroh/Desktop/Code/\" 2>&1 | head -10 && echo \"---\" && ls \"C:/Users/baroh/Desktop/Code/rideup\" 2>&1 | head -10)"
+    ]
+  }
+}

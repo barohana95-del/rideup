@@ -5,6 +5,7 @@
   "description": "RideUp — event transportation SaaS. Backend (PHP) + Frontend (React/Vite) in one repo, deployed to Hostinger.",
   "scripts": {
     "deploy": "node scripts/build-deploy.mjs",
-    "dev": "cd frontend && npm run dev"
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build"
   }
 }
