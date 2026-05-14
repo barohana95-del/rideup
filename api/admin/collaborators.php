@@ -40,6 +40,29 @@ if ($method === 'GET') {
          ORDER BY (c.role = 'owner') DESC, c.created_at",
         [$tenantId]
     );
+
+    // Virtually include the owner if they're not already in the table
+    // (handles tenants created before the migration or before the auto-seed).
+    $hasOwnerRow = false;
+    foreach ($rows as $r) {
+        if ((int) $r['user_id'] === (int) $tenant['owner_user_id']) { $hasOwnerRow = true; break; }
+    }
+    if (!$hasOwnerRow) {
+        $ownerUser = DB::one('SELECT id, email, display_name, avatar_url FROM users WHERE id = ?', [(int) $tenant['owner_user_id']]);
+        if ($ownerUser) {
+            array_unshift($rows, [
+                'user_id'       => (int) $ownerUser['id'],
+                'role'          => 'owner',
+                'created_at'    => $tenant['created_at'] ?? null,
+                'accepted_at'   => $tenant['created_at'] ?? null,
+                'invited_email' => null,
+                'email'         => $ownerUser['email'],
+                'display_name'  => $ownerUser['display_name'],
+                'avatar_url'    => $ownerUser['avatar_url'],
+            ]);
+        }
+    }
+
     Response::ok($rows);
 }
 

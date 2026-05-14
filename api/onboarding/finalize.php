@@ -97,6 +97,19 @@ try {
         ]
     );
 
+    // 1b) Register the creating user as the owner-collaborator.
+    // Safe if the table doesn't exist yet (older deployments).
+    try {
+        DB::exec(
+            "INSERT IGNORE INTO tenant_collaborators
+             (tenant_id, user_id, role, invited_by, accepted_at)
+             VALUES (?, ?, 'owner', ?, NOW())",
+            [$tenantId, (int) $user['id'], (int) $user['id']]
+        );
+    } catch (Throwable $e) {
+        error_log('Could not seed owner collaborator: ' . $e->getMessage());
+    }
+
     // 2) cities
     $order = 0;
     foreach ($cities as $city) {

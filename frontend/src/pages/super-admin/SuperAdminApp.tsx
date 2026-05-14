@@ -8,10 +8,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users as UsersIcon, Briefcase, Loader2, AlertCircle,
   Search, ExternalLink, Edit, Trash2, ShieldAlert,
-  TrendingUp, Sparkles, Crown, Menu, X,
+  TrendingUp, Sparkles, Crown, Menu, X, Lock, Mail, ArrowRight,
 } from 'lucide-react';
 import { saApi } from '../../lib/api';
-import { getCurrentUser, logout as authLogout } from '../../lib/auth';
+import { getCurrentUser, logout as authLogout, type AuthUser } from '../../lib/auth';
 import Logo from '../marketing/components/Logo';
 
 type TabKey = 'overview' | 'tenants' | 'users';
@@ -51,6 +51,9 @@ export default function SuperAdminApp() {
         </a>
       </FullPage>
     );
+  }
+  if (!user.isAdmin) {
+    return <NoAccessPage user={user} />;
   }
 
   const tabs: { key: TabKey; label: string; icon: React.ElementType }[] = [
@@ -721,6 +724,64 @@ function FullPage({ children }: { children: React.ReactNode }) {
     <div dir="rtl" className="min-h-screen flex items-center justify-center px-6 text-center"
          style={{ background: '#F2EBFF', color: '#000000' }}>
       <div>{children}</div>
+    </div>
+  );
+}
+
+function NoAccessPage({ user }: { user: AuthUser }) {
+  return (
+    <div dir="rtl" className="min-h-screen flex items-center justify-center px-4 sm:px-6"
+         style={{ background: '#000' }}>
+      <div className="max-w-md w-full">
+        <div className="rounded-3xl p-8 sm:p-10 text-center"
+             style={{ background: '#fff', boxShadow: '0 20px 60px -16px rgba(0,0,0,0.5)' }}>
+          <div className="w-16 h-16 mx-auto mb-5 rounded-full flex items-center justify-center"
+               style={{ background: '#FEF3C7' }}>
+            <Lock className="w-8 h-8" style={{ color: '#92400E' }} />
+          </div>
+
+          <p className="text-xs font-bold uppercase tracking-widest mb-2 inline-flex items-center gap-1"
+             style={{ color: '#92400E' }}>
+            <Crown className="w-3 h-3" />
+            Super-Admin
+          </p>
+          <h1 className="text-2xl font-black mb-2" style={{ color: '#000' }}>
+            הפאנל הזה לבעלי הפלטפורמה בלבד
+          </h1>
+          <p className="text-sm mb-5" style={{ color: '#6B7280' }}>
+            רק משתמשים עם הרשאת Super-Admin יכולים לגשת. אם זה אמור להיות אתה —
+            בקש מבעל הפלטפורמה להעניק לחשבון שלך את ההרשאה.
+          </p>
+
+          <div className="text-right p-4 rounded-xl space-y-2 text-xs"
+               style={{ background: '#FAFAFA', color: '#6B7280' }}>
+            <p className="font-bold" style={{ color: '#000' }}>אתה מחובר כ:</p>
+            <p className="flex items-center gap-2">
+              <Mail className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate" dir="ltr">{user.email}</span>
+            </p>
+          </div>
+
+          <div className="mt-6 flex flex-col sm:flex-row gap-2">
+            <a href="/admin"
+               className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-bold transition-all"
+               style={{ background: '#7D39EB', color: '#fff' }}>
+              <ArrowRight className="w-4 h-4" />
+              לאתרים שלי
+            </a>
+            <button onClick={() => { authLogout(); window.location.href = '/'; }}
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-bold transition-all"
+                    style={{ background: '#F2EBFF', color: '#7D39EB' }}>
+              התחבר מחדש
+            </button>
+          </div>
+        </div>
+
+        <a href="/" className="block text-center mt-5 text-sm hover:underline"
+           style={{ color: 'rgba(255,255,255,0.6)' }}>
+          חזרה לעמוד הבית
+        </a>
+      </div>
     </div>
   );
 }

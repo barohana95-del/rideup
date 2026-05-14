@@ -16,9 +16,12 @@ import {
   ArrowLeft,
   Menu,
   X,
+  Lock,
+  Mail,
+  ArrowRight,
 } from 'lucide-react';
 import { adminApi } from '../../lib/api';
-import { getCurrentUser, logout as authLogout } from '../../lib/auth';
+import { getCurrentUser, logout as authLogout, type AuthUser } from '../../lib/auth';
 import type { Tenant, Registration, DashboardStats } from '../../types';
 import Logo from '../marketing/components/Logo';
 import DashboardTab from './tabs/DashboardTab';
@@ -47,6 +50,7 @@ export default function AdminApp({ slug }: { slug: string }) {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Auto-close sidebar on tab change (mobile)
@@ -69,6 +73,7 @@ export default function AdminApp({ slug }: { slug: string }) {
     if (!slug) return;
     setLoading(true);
     setError(null);
+    setErrorCode(null);
 
     const [tenantRes, statsRes, regRes] = await Promise.all([
       adminApi.getTenant(slug),
@@ -78,6 +83,7 @@ export default function AdminApp({ slug }: { slug: string }) {
 
     if (!tenantRes.success) {
       setError(tenantRes.error ?? 'לא ניתן לטעון את האתר');
+      setErrorCode((tenantRes as { code?: string }).code ?? null);
       setLoading(false);
       return;
     }
@@ -105,6 +111,10 @@ export default function AdminApp({ slug }: { slug: string }) {
     );
   }
   if (error) {
+    const isAccessIssue = errorCode === 'forbidden' || errorCode === 'not_found';
+    if (isAccessIssue) {
+      return <NoAccessPage slug={slug} user={user} reason={errorCode} />;
+    }
     return <FullPageMessage>{error}</FullPageMessage>;
   }
   if (!tenant) return null;
@@ -337,6 +347,77 @@ function FullPageMessage({ children }: { children: React.ReactNode }) {
       style={{ background: '#F2EBFF', color: '#000000' }}
     >
       <div>{children}</div>
+    </div>
+  );
+}
+
+/**
+ * Shown when the user is logged in but doesn't have access to this tenant
+ * (403 forbidden, or 404 not_found — both treated as "no access" here
+ * to avoid leaking which tenants exist).
+ */
+function NoAccessPage({ slug, user, reason }: {
+  slug: string;
+  user: AuthUser;
+  reason: string | null;
+}) {
+  return (
+    <div dir="rtl" className="min-h-screen flex items-center justify-center px-4 sm:px-6"
+         style={{ background: '#000' }}>
+      <div className="max-w-md w-full">
+        <div className="rounded-3xl p-8 sm:p-10 text-center"
+             style={{ background: '#fff', boxShadow: '0 20px 60px -16px rgba(0,0,0,0.5)' }}>
+          <div className="w-16 h-16 mx-auto mb-5 rounded-full flex items-center justify-center"
+               style={{ background: '#F2EBFF' }}>
+            <Lock className="w-8 h-8" style={{ color: '#7D39EB' }} />
+          </div>
+
+          <h1 className="text-2xl font-black mb-2" style={{ color: '#000' }}>
+            אין לך גישה לאתר הזה
+          </h1>
+          <p className="text-sm mb-1" style={{ color: '#6B7280' }}>
+            {reason === 'not_found'
+              ? 'האתר לא קיים, או שאינך משתף בגישה.'
+              : 'רק הבעלים או מי שקיבל הזמנה יכולים לראות את הפאנל.'}
+          </p>
+          <p className="text-xs mt-4 p-3 rounded-xl"
+             style={{ background: '#F2EBFF', color: '#000', fontFamily: 'monospace' }} dir="ltr">
+            /{slug}
+          </p>
+
+          <div className="mt-6 text-right p-4 rounded-xl space-y-2 text-xs"
+               style={{ background: '#FAFAFA', color: '#6B7280' }}>
+            <p className="font-bold" style={{ color: '#000' }}>אתה מחובר כ:</p>
+            <p className="flex items-center gap-2">
+              <Mail className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate" dir="ltr">{user.email}</span>
+            </p>
+            <p>
+              אם זה לא חשבון Google שאליו נשלחה הזמנה — בקש מהבעלים להזמין את האימייל הזה,
+              או התחבר עם חשבון אחר.
+            </p>
+          </div>
+
+          <div className="mt-6 flex flex-col sm:flex-row gap-2">
+            <a href="/admin"
+               className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-bold transition-all"
+               style={{ background: '#7D39EB', color: '#fff' }}>
+              <ArrowRight className="w-4 h-4" />
+              לאתרים שלי
+            </a>
+            <button onClick={() => { authLogout(); window.location.href = '/'; }}
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-bold transition-all"
+                    style={{ background: '#F2EBFF', color: '#7D39EB' }}>
+              התחבר מחדש
+            </button>
+          </div>
+        </div>
+
+        <a href="/" className="block text-center mt-5 text-sm hover:underline"
+           style={{ color: 'rgba(255,255,255,0.6)' }}>
+          חזרה לעמוד הבית
+        </a>
+      </div>
     </div>
   );
 }
