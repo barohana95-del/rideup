@@ -14,16 +14,11 @@ require_once __DIR__ . '/../../lib/auth.php';
 
 $user = Auth::require();
 $slug = strtolower(trim($_GET['slug'] ?? ''));
-if ($slug === '') Response::error('slug required', 400);
 
-$tenant = DB::one(
-    "SELECT id FROM tenants WHERE slug = ? AND owner_user_id = ? AND status != 'deleted'",
-    [$slug, (int) $user['id']]
-);
-if ($tenant === null) Response::notFound('Tenant not found');
-$tenantId = (int) $tenant['id'];
-
-$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+$method  = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+$minRole = $method === 'GET' ? 'viewer' : 'editor';
+$ctx     = TenantAccess::require($slug, $user, $minRole);
+$tenantId = (int) $ctx['tenant']['id'];
 
 // ── GET ───────────────────────────────────────────────────────────────
 if ($method === 'GET') {

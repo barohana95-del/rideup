@@ -11,16 +11,9 @@ require_once __DIR__ . '/../../lib/auth.php';
 
 $user = Auth::require();
 $slug = strtolower(trim($_GET['slug'] ?? ''));
-if ($slug === '') Response::error('slug required', 400);
 
-$tenant = DB::one(
-    "SELECT * FROM tenants WHERE slug = ? AND status != 'deleted'",
-    [$slug]
-);
-if ($tenant === null) Response::notFound('Tenant not found');
-if ((int) $tenant['owner_user_id'] !== (int) $user['id']) {
-    Response::forbidden('You do not own this tenant');
-}
+$ctx    = TenantAccess::require($slug, $user, 'viewer');
+$tenant = $ctx['tenant'];
 
 $cities = DB::all(
     "SELECT id, name, display_order FROM tenant_cities WHERE tenant_id = ? ORDER BY display_order, id",

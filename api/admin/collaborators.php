@@ -33,7 +33,8 @@ if ($method === 'GET') {
     $rows = DB::all(
         "SELECT
             c.user_id, c.role, c.created_at, c.accepted_at, c.invited_email,
-            u.email, u.display_name, u.avatar_url
+            u.email, u.display_name, u.avatar_url,
+            (u.google_id LIKE 'pending_%' OR u.last_login_at IS NULL) AS pending_signin
          FROM tenant_collaborators c
          LEFT JOIN users u ON u.id = c.user_id
          WHERE c.tenant_id = ?
@@ -115,10 +116,13 @@ if ($method === 'POST') {
              VALUES (?, ?, ?, NULL)",
             ['pending_' . $token, $email, null]
         );
+        // Pre-accept the invite: the moment the invitee signs in with Google
+        // using this email, the stub user gets upgraded (auth/google.php
+        // matches by email) and access is already approved.
         DB::exec(
             "INSERT INTO tenant_collaborators
-             (tenant_id, user_id, role, invited_by, invited_email, invite_token)
-             VALUES (?, ?, ?, ?, ?, ?)",
+             (tenant_id, user_id, role, invited_by, invited_email, invite_token, accepted_at)
+             VALUES (?, ?, ?, ?, ?, ?, NOW())",
             [$tenantId, $stubId, $role, (int) $user['id'], $email, $token]
         );
         // TODO: send the invite email (Brevo). For now, return the token in the response so

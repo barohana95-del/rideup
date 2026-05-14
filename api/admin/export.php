@@ -14,14 +14,8 @@ $user = Auth::require();
 $slug = strtolower(trim($_GET['slug'] ?? ''));
 $type = trim($_GET['type'] ?? 'registrations');
 
-if ($slug === '') Response::error('slug required', 400);
-
-$tenant = DB::one(
-    "SELECT id, slug, event_title, event_date FROM tenants
-     WHERE slug = ? AND owner_user_id = ? AND status != 'deleted'",
-    [$slug, (int) $user['id']]
-);
-if ($tenant === null) Response::notFound('Tenant not found');
+$ctx      = TenantAccess::require($slug, $user, 'viewer');
+$tenant   = $ctx['tenant'];
 $tenantId = (int) $tenant['id'];
 
 $today = date('Y-m-d');

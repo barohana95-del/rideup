@@ -117,3 +117,61 @@ class Auth {
         );
     }
 }
+
+// =====================================================================
+// TenantAccess — resolves whether the current user can touch a tenant.
+//
+//   $ctx = TenantAccess::require($slug, $user);              // any role
+//   $ctx = TenantAccess::require($slug, $user, 'editor');    // editor+
+//   $ctx = TenantAccess::require($slug, $user, 'owner');     // owner only
+//
+// Returns: ['tenant' => <full row>, 'role' => 'owner'|'editor'|'viewer']
+// On failure: emits 404 (tenant missing) or 403 (no access).
+//
+// Roles:
+//   - owner   = tenants.owner_user_id matches, OR is_admin=1 (super-admin
+//               bypass — platform owner can manage any tenant).
+//   - editor  = accepted tenant_collaborators row with role='editor'.
+//   - viewer  = accepted tenant_collaborators row with role='viewer'.
+// =====================================================================
+class TenantAccess {
+    private const RANK = ['viewer' => 1, 'editor' => 2, 'owner' => 3];
+
+    public static function require(string $slug, array $user, string $minRole = 'viewer'): array {
+        $slug = strtolower(trim($slug));
+        if ($slug === '') Response::error('slug required', 400);
+
+        $tenant = DB::one(
+            "SELECT * FROM tenants WHERE slug = ? AND status != 'deleted'",
+            [$slug]
+        );
+        if ($tenant === null) Response::notFound('Tenant not found');
+
+        $role = self::roleFor($tenant, $user);
+        if ($role === null) Response::forbidden('No access to this tenant');
+
+        if (self::RANK[$role] < self::RANK[$minRole]) {
+            Response::forbidden('Insufficient permissions');
+        }
+
+        return ['tenant' => $tenant, 'role' => $role];
+    }
+
+    public static function roleFor(array $tenant, array $user): ?string {
+        $uid = (int) $user['id'];
+        // Owner of the tenant
+        if ((int) $tenant['owner_user_id'] === $uid) return 'owner';
+        // Platform admin acts as owner
+        if ((int) ($user['is_admin'] ?? 0) === 1) return 'owner';
+        // Accepted collaborator
+        $row = DB::one(
+            "SELECT role FROM tenant_collaborators
+             WHERE tenant_id = ? AND user_id = ? AND accepted_at IS NOT NULL",
+            [(int) $tenant['id'], $uid]
+        );
+        if ($row && in_array($row['role'], ['owner', 'editor', 'viewer'], true)) {
+            return (string) $row['role'];
+        }
+        return null;
+    }
+}

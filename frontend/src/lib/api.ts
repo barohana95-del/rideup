@@ -229,6 +229,7 @@ export const adminApi = {
       email: string | null;
       displayName: string | null;
       avatarUrl: string | null;
+      pendingSignin?: number | boolean | null;
     }>>(`/admin/collaborators.php?slug=${slug}`),
 
   inviteCollaborator: (slug: string, email: string, role: 'editor' | 'viewer') =>

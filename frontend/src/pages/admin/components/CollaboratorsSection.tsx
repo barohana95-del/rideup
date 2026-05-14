@@ -21,6 +21,7 @@ type Collaborator = {
   email: string | null;
   displayName: string | null;
   avatarUrl: string | null;
+  pendingSignin?: number | boolean | null;
 };
 
 const ROLE_META: Record<Role, { label: string; icon: React.ElementType; color: string; desc: string }> = {
@@ -277,7 +278,9 @@ function CollaboratorRow({
   onRemove: (userId: number, name: string) => void;
 }) {
   const meta = ROLE_META[collab.role];
-  const isPending = !collab.acceptedAt;
+  // "Pending" now means: invitee hasn't signed in yet with Google (still
+  // a stub user) — access is approved but not exercised.
+  const isPending = !!collab.pendingSignin && collab.role !== 'owner';
   const displayName = collab.displayName || collab.email || collab.invitedEmail || 'משתמש';
   const canMutate = isOwner && collab.role !== 'owner';
 
@@ -302,7 +305,7 @@ function CollaboratorRow({
             <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full"
                   style={{ background: '#FEF3C7', color: '#92400E' }}>
               <Clock className="w-2.5 h-2.5" />
-              ממתין
+              טרם נכנס
             </span>
           )}
         </p>

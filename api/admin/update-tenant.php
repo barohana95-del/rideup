@@ -18,16 +18,12 @@ require_once __DIR__ . '/../../lib/auth.php';
 
 $user = Auth::require();
 $slug = strtolower(trim($_GET['slug'] ?? ''));
-if ($slug === '') Response::error('slug required', 400);
 
-$tenant = DB::one(
-    "SELECT * FROM tenants WHERE slug = ? AND status != 'deleted'",
-    [$slug]
-);
-if ($tenant === null) Response::notFound('Tenant not found');
-if ((int) $tenant['owner_user_id'] !== (int) $user['id']) {
-    Response::forbidden('You do not own this tenant');
-}
+// Editors can update event details, theme, cities, shifts, settings.
+// Owner-only checks (e.g. slug change) handled below.
+$ctx    = TenantAccess::require($slug, $user, 'editor');
+$tenant = $ctx['tenant'];
+$myRole = $ctx['role'];
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 if ($method !== 'PATCH' && $method !== 'POST') {
@@ -68,6 +64,7 @@ $newSlug = null;
 if (isset($body['slug']) && is_string($body['slug'])) {
     $newSlug = strtolower(trim($body['slug']));
     if ($newSlug !== $slug) {
+        if ($myRole !== 'owner') Response::forbidden('Only the owner can change the URL slug');
         if (!preg_match('/^[a-z0-9][a-z0-9-]{1,58}[a-z0-9]$/', $newSlug)) {
             Response::error('Invalid slug format', 400, 'bad_slug');
         }

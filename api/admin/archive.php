@@ -15,21 +15,13 @@ require_once __DIR__ . '/../../lib/auth.php';
 
 $user = Auth::require();
 $slug = strtolower(trim($_GET['slug'] ?? ''));
-if ($slug === '') Response::error('slug required', 400);
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     Response::error('Method not allowed', 405);
 }
 
-$tenant = DB::one(
-    "SELECT id, owner_user_id, status, event_title FROM tenants
-     WHERE slug = ? AND status != 'deleted'",
-    [$slug]
-);
-if ($tenant === null) Response::notFound('Tenant not found');
-if ((int) $tenant['owner_user_id'] !== (int) $user['id']) {
-    Response::forbidden('Only the owner can archive this tenant');
-}
+$ctx    = TenantAccess::require($slug, $user, 'owner');
+$tenant = $ctx['tenant'];
 
 $body = read_json_body();
 if (empty($body['confirm'])) {
