@@ -27,9 +27,16 @@ export default function OnboardingApp() {
   const [createdSlug, setCreatedSlug] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Auth gate (real Google + mock fallback for dev)
+  // Auth gate — send guests to the standalone /login page so the design
+  // stays consistent with the marketing site. After login they're sent
+  // back here via ?next=/onboarding.
   const user = getCurrentUser();
-  if (!user) return <AuthGate />;
+  if (!user) {
+    if (typeof window !== 'undefined') {
+      window.location.replace('/login?next=/onboarding');
+    }
+    return <AuthGate />;
+  }
 
   // Determine if user can advance from current step
   const canGoNext =

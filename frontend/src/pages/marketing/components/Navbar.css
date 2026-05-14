@@ -112,6 +112,13 @@
   visibility: visible;
 }
 
+.navbar__mobile-divider {
+  height: 1px;
+  width: 60%;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 0.5rem 0;
+}
+
 @media (max-width: 1024px) {
   .navbar__nav--right, .navbar__left-group { display: none; }
   .navbar__hamburger { display: block; background: none; border: none; cursor: pointer; }

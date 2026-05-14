@@ -1,0 +1,142 @@
+/* =====================================================================
+   UserMenu — dropdown rendered in the navbar when the user is logged in.
+   ===================================================================== */
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.85rem;
+  background: rgba(125, 57, 235, 0.07);
+  border: 1.5px solid rgba(125, 57, 235, 0.18);
+  border-radius: 999px;
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.user-menu__trigger:hover {
+  background: rgba(125, 57, 235, 0.12);
+  border-color: rgba(125, 57, 235, 0.35);
+}
+
+.user-menu__name {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.user-menu__chevron {
+  transition: transform 0.18s ease;
+  color: #6B7280;
+}
+
+.user-menu__avatar {
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.user-menu__avatar--initial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #7D39EB;
+  color: #fff;
+  font-weight: 800;
+}
+
+.user-menu__dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  /* In RTL the menu opens toward the right of the trigger (anchor at the
+     start edge which is the right side). */
+  inset-inline-end: 0;
+  min-width: 260px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 18px;
+  box-shadow: 0 20px 50px -16px rgba(0, 0, 0, 0.18);
+  padding: 0.65rem;
+  z-index: 1100;
+  transform-origin: top center;
+}
+
+.user-menu__header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0.6rem;
+}
+.user-menu__header-text {
+  flex: 1;
+  min-width: 0;
+}
+.user-menu__header-name {
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--color-navy);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-menu__header-email {
+  font-size: 0.75rem;
+  color: #6B7280;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-menu__divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.06);
+  margin: 0.45rem 0;
+}
+
+.user-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: start;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-navy);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.user-menu__item:hover,
+.user-menu__item:focus-visible {
+  background: rgba(125, 57, 235, 0.07);
+  color: #7D39EB;
+}
+.user-menu__item--danger:hover,
+.user-menu__item--danger:focus-visible {
+  background: rgba(220, 38, 38, 0.07);
+  color: #DC2626;
+}
+.user-menu__item svg {
+  flex-shrink: 0;
+  color: #6B7280;
+}
+.user-menu__item:hover svg {
+  color: inherit;
+}
+
+/* Hide name text on small screens */
+@media (max-width: 1100px) {
+  .user-menu__name { display: none; }
+  .user-menu__trigger { padding: 0.3rem 0.45rem; }
+}

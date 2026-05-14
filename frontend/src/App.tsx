@@ -20,12 +20,14 @@ import ProvidersPage from './pages/providers/ProvidersPage';
 import ExperiencePage from './pages/marketing/ExperiencePage';
 import SuperAdminApp from './pages/super-admin/SuperAdminApp';
 import NotFound from './pages/public/NotFound';
+import LoginPage from './pages/auth/LoginPage';
+import AccountApp from './pages/account/AccountApp';
 
 // Slugs the platform reserves. Anything in this set under `/:slug` → 404
 // instead of being interpreted as a tenant. Mirror in DB & PHP.
 const RESERVED = new Set([
   'admin', 'app', 'api', 'onboarding', 'providers',
-  'login', 'signup', 'logout', 'auth',
+  'login', 'signup', 'logout', 'auth', 'account', 'me',
   'pricing', 'about', 'contact', 'help', 'support',
   'blog', 'docs', 'faq', 'terms', 'privacy', 'cookies',
   'www', 'mail', 'static', 'assets', 'public', 'cdn',
@@ -62,6 +64,9 @@ export default function App() {
       <Routes>
         {/* Marketing + meta */}
         <Route path="/" element={<MarketingApp />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/account" element={<AccountApp />} />
+        <Route path="/account/*" element={<AccountApp />} />
         <Route path="/onboarding" element={<OnboardingApp />} />
         <Route path="/onboarding/*" element={<OnboardingApp />} />
         <Route path="/providers" element={<ProvidersPage />} />
