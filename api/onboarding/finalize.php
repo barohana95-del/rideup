@@ -31,7 +31,11 @@ if (!in_array($plan, ['trial', 'basic', 'pro', 'premium'], true)) {
 }
 
 $theme = $body['theme'] ?? '';
-if (!in_array($theme, ['classic', 'modern', 'rustic', 'festive'], true)) {
+// New keys + legacy aliases (legacy normalized to new at render time).
+if (!in_array($theme, [
+    'elegant', 'minimal', 'romantic', 'bold', 'luxe',
+    'classic', 'modern', 'rustic', 'festive',
+], true)) {
     Response::error('Invalid theme', 400, 'bad_theme');
 }
 

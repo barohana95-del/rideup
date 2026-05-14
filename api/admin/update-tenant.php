@@ -45,7 +45,11 @@ $tenantColumnMap = [
     'logoUrl'       => 'logo_url',
     'coverImageUrl' => 'cover_image_url',
 ];
-$themeAllowed     = ['classic', 'modern', 'rustic', 'festive'];
+// New keys + legacy aliases. Legacy keys are normalized to new at render time.
+$themeAllowed     = [
+    'elegant', 'minimal', 'romantic', 'bold', 'luxe',
+    'classic', 'modern', 'rustic', 'festive',
+];
 $fontAllowed      = ['Heebo', 'Shikma', 'Frank Ruhl Libre', 'Assistant'];
 
 // 2. tenant_settings keys

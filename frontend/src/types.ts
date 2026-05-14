@@ -5,7 +5,10 @@
 
 // --- Tenant ---
 export type TenantPlan = 'trial' | 'basic' | 'pro' | 'premium';
-export type TenantTheme = 'classic' | 'modern' | 'rustic' | 'festive';
+// Modern theme keys + legacy aliases (kept so older tenants don't break).
+export type TenantTheme =
+  | 'elegant' | 'minimal' | 'romantic' | 'bold' | 'luxe'
+  | 'classic' | 'modern'  | 'rustic'   | 'festive';
 export type TenantStatus = 'draft' | 'trial' | 'active' | 'expired' | 'archived' | 'suspended' | 'deleted';
 export type EventType = 'wedding' | 'bar_mitzvah' | 'bat_mitzvah' | 'birthday' | 'corporate' | 'other';
 

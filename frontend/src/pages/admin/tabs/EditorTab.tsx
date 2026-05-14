@@ -14,13 +14,18 @@ import {
 } from 'lucide-react';
 import { adminApi, onboardingApi } from '../../../lib/api';
 import type { Tenant, TenantTheme } from '../../../types';
+import { THEMES as REGISTRY, THEME_KEYS, normalizeThemeKey, type ThemeKey } from '../../../lib/themes';
 
-const THEMES: { key: TenantTheme; label: string; vibe: string; bg: string; fg: string; accent: string }[] = [
-  { key: 'classic', label: 'קלאסי',  vibe: 'אלגנטי, נצחי',     bg: '#0a0a0a', fg: '#f5e6c8', accent: '#c9a557' },
-  { key: 'modern',  label: 'מודרני', vibe: 'נקי, גיאומטרי',    bg: '#FFF1E0', fg: '#1A1814', accent: '#FB923C' },
-  { key: 'rustic',  label: 'כפרי',   vibe: 'חמים, טבעי',       bg: '#E8DCC4', fg: '#3D2817', accent: '#74C69D' },
-  { key: 'festive', label: 'חגיגי',  vibe: 'זוהר, צבעוני',     bg: '#2D1B0F', fg: '#FCD34D', accent: '#F9A8D4' },
-];
+// Flatten the registry into the shape the existing UI expects.
+const THEMES: { key: ThemeKey; label: string; vibe: string; bg: string; fg: string; accent: string }[] =
+  THEME_KEYS.map((k) => ({
+    key:    k,
+    label:  REGISTRY[k].label,
+    vibe:   REGISTRY[k].vibe,
+    bg:     REGISTRY[k].palette.bg,
+    fg:     REGISTRY[k].palette.text,
+    accent: REGISTRY[k].palette.accent,
+  }));
 
 const FONTS = ['Heebo', 'Shikma', 'Frank Ruhl Libre', 'Assistant'] as const;
 
@@ -156,9 +161,9 @@ export default function EditorTab({
         {/* Theme */}
         <Section icon={Palette} title="עיצוב" subtitle="ערכת הצבעים והאופי הוויזואלי">
           <Field label="ערכת עיצוב">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               {THEMES.map((t) => {
-                const selected = form.theme === t.key;
+                const selected = normalizeThemeKey(form.theme) === t.key;
                 return (
                   <button
                     key={t.key}
@@ -465,7 +470,8 @@ function ThemePreview({
   eventDate: string | null;
   eventLocation: string | null;
 }) {
-  const themeMeta = THEMES.find((t) => t.key === form.theme)!;
+  // Normalize legacy keys ('classic' → 'elegant' etc.) so the preview always finds a match.
+  const themeMeta = THEMES.find((t) => t.key === normalizeThemeKey(form.theme))!;
   const primary = form.primaryColor || themeMeta.accent;
 
   return (
