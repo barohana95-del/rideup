@@ -13,8 +13,6 @@ import {
   Eye, AlertCircle, Check, Link2, RefreshCw,
 } from 'lucide-react';
 import { adminApi, onboardingApi } from '../../../lib/api';
-import { getCurrentUser } from '../../../lib/auth';
-import CollaboratorsSection from '../components/CollaboratorsSection';
 import type { Tenant, TenantTheme } from '../../../types';
 
 const THEMES: { key: TenantTheme; label: string; vibe: string; bg: string; fg: string; accent: string }[] = [
@@ -236,12 +234,6 @@ export default function EditorTab({
             </div>
           </Field>
         </Section>
-
-        {/* Collaborators */}
-        <CollaboratorsSection
-          slug={tenant.slug}
-          isOwner={getCurrentUser()?.id === tenant.ownerUserId}
-        />
 
         {/* Save bar */}
         <div
