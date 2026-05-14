@@ -470,8 +470,10 @@ function ThemePreview({
   eventDate: string | null;
   eventLocation: string | null;
 }) {
-  // Normalize legacy keys ('classic' → 'elegant' etc.) so the preview always finds a match.
-  const themeMeta = THEMES.find((t) => t.key === normalizeThemeKey(form.theme))!;
+  // Normalize legacy keys ('classic' → 'elegant' etc.) and fall back to the
+  // first theme if normalization somehow returned an unknown key — never crash.
+  const themeMeta =
+    THEMES.find((t) => t.key === normalizeThemeKey(form.theme)) ?? THEMES[0];
   const primary = form.primaryColor || themeMeta.accent;
 
   return (
