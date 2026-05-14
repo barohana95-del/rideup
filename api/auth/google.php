@@ -71,7 +71,12 @@ $avatarUrl = (string)($claims['picture'] ?? '');
 if ($googleId === '' || $email === '') Response::error('Missing identity', 401);
 
 // 5. Upsert user.
-$existing = DB::one('SELECT * FROM users WHERE google_id = ? OR email = ? LIMIT 1', [$googleId, $email]);
+//    Prefer a real user (matched by google_id), then any user with this email.
+//    Stub users created by collaborators.php invites have google_id LIKE 'pending_%'.
+$realExisting = DB::one('SELECT * FROM users WHERE google_id = ? LIMIT 1', [$googleId]);
+$byEmail      = DB::all('SELECT * FROM users WHERE email = ?', [$email]);
+$existing     = $realExisting ?: ($byEmail[0] ?? null);
+
 if ($existing) {
     DB::exec(
         "UPDATE users
@@ -86,6 +91,52 @@ if ($existing) {
          VALUES (?, ?, ?, ?, NOW())",
         [$googleId, $email, $name !== '' ? $name : null, $avatarUrl !== '' ? $avatarUrl : null]
     );
+}
+
+// 5b. Claim any orphan stub users with the same email (other than this one).
+//     Re-point their tenant_collaborators rows to this user, then delete the stubs.
+//     This handles the case where the user already existed at the time of an
+//     invite AND a stub got created anyway, or any pre-existing data drift.
+$orphans = DB::all(
+    "SELECT id FROM users
+     WHERE email = ? AND id != ?
+       AND (google_id LIKE 'pending_%' OR last_login_at IS NULL)",
+    [$email, $userId]
+);
+foreach ($orphans as $orphan) {
+    $orphanId = (int) $orphan['id'];
+    try {
+        // For each collab row on the orphan: if (tenant_id, $userId) already
+        // exists, drop the orphan's row; otherwise reassign it.
+        $orphanCollabs = DB::all(
+            'SELECT tenant_id, role, accepted_at, invited_email, invite_token, invited_by, created_at
+             FROM tenant_collaborators WHERE user_id = ?',
+            [$orphanId]
+        );
+        foreach ($orphanCollabs as $oc) {
+            $dup = DB::one(
+                'SELECT 1 FROM tenant_collaborators WHERE tenant_id = ? AND user_id = ?',
+                [(int) $oc['tenant_id'], $userId]
+            );
+            if ($dup) {
+                DB::exec(
+                    'DELETE FROM tenant_collaborators WHERE tenant_id = ? AND user_id = ?',
+                    [(int) $oc['tenant_id'], $orphanId]
+                );
+            } else {
+                // Mark as accepted now if it wasn't already.
+                DB::exec(
+                    "UPDATE tenant_collaborators
+                     SET user_id = ?, accepted_at = COALESCE(accepted_at, NOW())
+                     WHERE tenant_id = ? AND user_id = ?",
+                    [$userId, (int) $oc['tenant_id'], $orphanId]
+                );
+            }
+        }
+        DB::exec('DELETE FROM users WHERE id = ?', [$orphanId]);
+    } catch (Throwable $e) {
+        error_log('Could not claim orphan user ' . $orphanId . ': ' . $e->getMessage());
+    }
 }
 
 $user = DB::one('SELECT * FROM users WHERE id = ?', [$userId]);

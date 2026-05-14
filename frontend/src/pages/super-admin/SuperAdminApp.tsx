@@ -11,7 +11,7 @@ import {
   TrendingUp, Sparkles, Crown, Menu, X, Lock, Mail, ArrowRight,
 } from 'lucide-react';
 import { saApi } from '../../lib/api';
-import { getCurrentUser, logout as authLogout, type AuthUser } from '../../lib/auth';
+import { getCurrentUser, refreshUser, logout as authLogout, type AuthUser } from '../../lib/auth';
 import Logo from '../marketing/components/Logo';
 
 type TabKey = 'overview' | 'tenants' | 'users';
@@ -36,12 +36,30 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function SuperAdminApp() {
-  const user = getCurrentUser();
+  const [user, setUser] = useState<AuthUser | null>(() => getCurrentUser());
+  const [userLoading, setUserLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Always re-verify the user on mount — localStorage may be stale
+  // (e.g. is_admin flipped to 1 in the DB after the last login).
+  useEffect(() => {
+    refreshUser().then((u) => {
+      setUser(u);
+      setUserLoading(false);
+    });
+  }, []);
+
   const onTabChange = (t: TabKey) => { setActiveTab(t); setSidebarOpen(false); };
 
+  if (userLoading) {
+    return (
+      <FullPage>
+        <div className="w-8 h-8 rounded-full border-2 animate-spin"
+             style={{ borderColor: '#7D39EB', borderTopColor: 'transparent' }} />
+      </FullPage>
+    );
+  }
   if (!user) {
     return (
       <FullPage>

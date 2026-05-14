@@ -21,7 +21,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { adminApi } from '../../lib/api';
-import { getCurrentUser, logout as authLogout, type AuthUser } from '../../lib/auth';
+import { getCurrentUser, refreshUser, logout as authLogout, type AuthUser } from '../../lib/auth';
 import type { Tenant, Registration, DashboardStats } from '../../types';
 import Logo from '../marketing/components/Logo';
 import DashboardTab from './tabs/DashboardTab';
@@ -42,7 +42,7 @@ const tabs: { key: TabKey; label: string; icon: React.ElementType; comingSoon?: 
 
 export default function AdminApp({ slug }: { slug: string }) {
 
-  const user = getCurrentUser();
+  const [user, setUser] = useState<AuthUser | null>(() => getCurrentUser());
   const [activeTab, setActiveTab] = useState<TabKey>('dashboard');
   const [tenant, setTenant] = useState<Tenant | null>(null);
   const [settings, setSettings] = useState<Record<string, string>>({});
@@ -58,6 +58,11 @@ export default function AdminApp({ slug }: { slug: string }) {
     setActiveTab(tab);
     setSidebarOpen(false);
   };
+
+  // Re-verify the user on mount (localStorage may be stale after role/admin changes).
+  useEffect(() => {
+    refreshUser().then((u) => setUser(u));
+  }, []);
 
   useEffect(() => {
     if (!slug) {
