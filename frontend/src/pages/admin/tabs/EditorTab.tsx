@@ -124,6 +124,29 @@ export default function EditorTab({
 
   const handleReset = () => setForm(initial);
 
+  // Quick-save a single field without requiring the Save button (used for
+  // theme tiles — clicking should "just work").
+  async function quickSave(patch: Record<string, unknown>) {
+    setSaving(true);
+    setError(null);
+    setSuccess(false);
+    const res = await adminApi.updateTenant(slug, patch);
+    setSaving(false);
+    if (!res.success || !res.data) {
+      setError(res.error ?? 'שגיאה בשמירה');
+      return;
+    }
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 2200);
+    onSaved(res.data.newSlug);
+  }
+
+  function pickTheme(key: TenantTheme) {
+    if (normalizeThemeKey(form.theme) === key) return; // no-op
+    setForm({ ...form, theme: key });
+    quickSave({ theme: key });
+  }
+
   return (
     <div className="grid lg:grid-cols-12 gap-6">
       {/* ── LEFT: form ─────────────────────────────────────────── */}
@@ -160,15 +183,16 @@ export default function EditorTab({
 
         {/* Theme */}
         <Section icon={Palette} title="עיצוב" subtitle="ערכת הצבעים והאופי הוויזואלי">
-          <Field label="ערכת עיצוב">
+          <Field label="ערכת עיצוב" hint="בחירה נשמרת מיד">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               {THEMES.map((t) => {
                 const selected = normalizeThemeKey(form.theme) === t.key;
                 return (
                   <button
                     key={t.key}
-                    onClick={() => setForm({ ...form, theme: t.key })}
-                    className="relative rounded-xl overflow-hidden transition-all text-right"
+                    onClick={() => pickTheme(t.key)}
+                    disabled={saving}
+                    className="relative rounded-xl overflow-hidden transition-all text-right disabled:opacity-60"
                     style={{
                       border: selected ? '2px solid #7D39EB' : '1px solid rgba(125,57,235,0.15)',
                       boxShadow: selected ? '0 6px 20px -4px rgba(125,57,235,0.35)' : 'none',
@@ -190,6 +214,12 @@ export default function EditorTab({
                         style={{ background: '#7D39EB' }}
                       >
                         <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                      </span>
+                    )}
+                    {saving && (
+                      <span className="absolute inset-0 flex items-center justify-center"
+                            style={{ background: 'rgba(255,255,255,0.55)' }}>
+                        <Loader2 className="w-5 h-5 animate-spin" style={{ color: '#7D39EB' }} />
                       </span>
                     )}
                   </button>
