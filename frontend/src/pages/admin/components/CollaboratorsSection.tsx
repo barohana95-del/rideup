@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   UserPlus, Crown, Edit, Eye, Trash2, Loader2, AlertCircle,
-  Check, X, Mail, Clock, Users as UsersIcon,
+  Check, X, Mail, Clock, Users as UsersIcon, Copy, CheckCircle2,
 } from 'lucide-react';
 import { adminApi } from '../../../lib/api';
 
@@ -44,6 +44,8 @@ export default function CollaboratorsSection({
   const [inviteRole, setInviteRole] = useState<'editor' | 'viewer'>('editor');
   const [inviting, setInviting] = useState(false);
   const [busy, setBusy] = useState<number | null>(null);
+  const [lastInvitedEmail, setLastInvitedEmail] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [slug]);
 
@@ -67,9 +69,21 @@ export default function CollaboratorsSection({
     const res = await adminApi.inviteCollaborator(slug, email, inviteRole);
     setInviting(false);
     if (!res.success) { setError(res.error ?? 'שגיאה בהזמנה'); return; }
+    setLastInvitedEmail(email);
+    setCopied(false);
     setInviteEmail('');
-    setShowInvite(false);
     await load();
+  }
+
+  async function copyInviteLink() {
+    const link = `${window.location.origin}/login?invited=${encodeURIComponent(lastInvitedEmail ?? '')}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {
+      setError('לא ניתן להעתיק — העתק ידנית: ' + link);
+    }
   }
 
   async function handleChangeRole(userId: number, newRole: 'editor' | 'viewer') {
@@ -123,6 +137,37 @@ export default function CollaboratorsSection({
           <button onClick={() => setError(null)} className="px-1">×</button>
         </div>
       )}
+
+      {/* Success: invitation sent */}
+      <AnimatePresence>
+        {lastInvitedEmail && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            className="mb-4 p-3.5 rounded-xl"
+            style={{ background: '#ECFDF5', border: '1px solid #6EE7B7' }}
+          >
+            <div className="flex items-start gap-2 mb-2">
+              <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: '#059669' }} />
+              <div className="flex-1 text-sm" style={{ color: '#065F46' }}>
+                <p className="font-bold mb-0.5">ההזמנה נוצרה</p>
+                <p className="text-xs">
+                  שלח/י את הקישור הבא ל-<span dir="ltr" className="font-mono">{lastInvitedEmail}</span> כדי שיוכל/תוכל להתחבר ולקבל גישה.
+                </p>
+              </div>
+              <button onClick={() => setLastInvitedEmail(null)} className="px-1 text-sm" style={{ color: '#065F46' }}>×</button>
+            </div>
+            <button
+              onClick={copyInviteLink}
+              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-bold rounded-full transition-all"
+              style={{ background: copied ? '#059669' : '#fff', color: copied ? '#fff' : '#059669', border: '1.5px solid #059669' }}
+            >
+              {copied ? <><Check className="w-3.5 h-3.5" /> הקישור הועתק!</> : <><Copy className="w-3.5 h-3.5" /> העתק קישור הזמנה</>}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Invite form */}
       <AnimatePresence>

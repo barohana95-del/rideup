@@ -248,6 +248,13 @@ export const adminApi = {
       method: 'DELETE',
       body: JSON.stringify({ userId }),
     }),
+
+  // ── Danger Zone ─────────────────────────────────────────────────
+  archiveTenant: (slug: string) =>
+    request<{ archived: boolean }>(`/admin/archive.php?slug=${slug}`, {
+      method: 'POST',
+      body: JSON.stringify({ confirm: true }),
+    }),
 };
 
 // --- Super-Admin (platform owner only — requires is_admin=1) ---
