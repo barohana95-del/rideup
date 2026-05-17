@@ -125,29 +125,52 @@ export default function EditorTab({
   const handleReset = () => setForm(initial);
 
   // Quick-save a single field without requiring the Save button (used for
-  // theme tiles — clicking should "just work").
+  // theme tiles — clicking should "just work"). Logs every step to the
+  // console with a recognizable prefix so we can debug invisible failures.
   async function quickSave(patch: Record<string, unknown>) {
+    console.log('[RideUp.EditorTab] quickSave →', patch);
     setSaving(true);
     setError(null);
     setSuccess(false);
     const res = await adminApi.updateTenant(slug, patch);
     setSaving(false);
+    console.log('[RideUp.EditorTab] quickSave response', res);
     if (!res.success || !res.data) {
       setError(res.error ?? 'שגיאה בשמירה');
+      console.error('[RideUp.EditorTab] save FAILED:', res.error, res.code);
       return;
     }
     setSuccess(true);
-    setTimeout(() => setSuccess(false), 2200);
+    setTimeout(() => setSuccess(false), 2500);
     onSaved(res.data.newSlug);
   }
 
   function pickTheme(key: TenantTheme) {
-    if (normalizeThemeKey(form.theme) === key) return; // no-op
+    const current = normalizeThemeKey(form.theme);
+    console.log('[RideUp.EditorTab] pickTheme', { clicked: key, current, formTheme: form.theme });
+    if (current === key) {
+      console.log('[RideUp.EditorTab] same theme — skipping save');
+      return;
+    }
     setForm({ ...form, theme: key });
     quickSave({ theme: key });
   }
 
   return (
+    <>
+    {/* Global save status banner — impossible to miss. */}
+    {(saving || success || error) && (
+      <div className="sticky top-0 z-30 mb-4 px-4 py-3 rounded-2xl flex items-center gap-3 text-sm font-bold animate-in fade-in slide-in-from-top-2"
+           style={{
+             background: error ? '#FEE2E2' : success ? '#ECFDF5' : '#F2EBFF',
+             border: `1.5px solid ${error ? '#FCA5A5' : success ? '#6EE7B7' : 'rgba(125,57,235,0.25)'}`,
+             color: error ? '#991B1B' : success ? '#065F46' : '#7D39EB',
+           }}>
+        {saving && <><Loader2 className="w-4 h-4 animate-spin" /> שומר שינוי...</>}
+        {success && !saving && <><Check className="w-4 h-4" /> נשמר בהצלחה</>}
+        {error && !saving && <><AlertCircle className="w-4 h-4" /> {error}</>}
+      </div>
+    )}
     <div className="grid lg:grid-cols-12 gap-6">
       {/* ── LEFT: form ─────────────────────────────────────────── */}
       <div className="lg:col-span-7 space-y-5">
@@ -352,6 +375,7 @@ export default function EditorTab({
         </div>
       </div>
     </div>
+    </>
   );
 }
 
