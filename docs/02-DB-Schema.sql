@@ -53,7 +53,8 @@ CREATE TABLE IF NOT EXISTS `tenants` (
   `owner_user_id`    INT(11)      NOT NULL,
   `status`           ENUM('draft','trial','active','expired','suspended','deleted') NOT NULL DEFAULT 'draft',
   `plan`             ENUM('trial','basic','pro','premium') NOT NULL DEFAULT 'trial',
-  `theme`            ENUM('classic','modern','rustic','festive') NOT NULL DEFAULT 'classic',
+  `theme`            ENUM('elegant','minimal','romantic','bold','luxe',
+                          'classic','modern','rustic','festive') NOT NULL DEFAULT 'elegant',
 
   -- פרטי האירוע (מה שהמשתמש מילא ב-onboarding)
   `event_type`       ENUM('wedding','bar_mitzvah','bat_mitzvah','birthday','corporate','other') NOT NULL DEFAULT 'wedding',
